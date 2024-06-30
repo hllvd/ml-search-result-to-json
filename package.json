@@ -1,13 +1,13 @@
 {
-  "name": "ml-search-result",
+  "name": "ml-content-to-json",
   "version": "1.0.0",
   "description": "Fetch search result from ML and save to json format.",
   "author": "Hudson Van-Dal <vandal.hudson@gmail.com>",
-  "main": "index.js",
+  "main": "src/app.js",
   "license": "ISC",
   "scripts": {
     "build": "rimraf dist && tsc",
-    "start": "nodemon --watch src -e ts --exec \"rimraf dist && tsc && npx kill-port 3000 3001 3002 && serverless offline start\" ",
+    "start": "nodemon --watch src -e ts --exec \"rimraf dist && tsc && npx kill-port 3000 3001 3002 && node dist/app.js \" ",
     "start_old": "rimraf dist && tsc && npx kill-port 3000 3001 3002 && serverless offline start",
     "kill": "kill -9 $(lsof -ti:3000,3001)",
     "stop": "serverless offline stop",
@@ -15,16 +15,22 @@
     "test": "mocha --require ts-node/register 'src/**/*.test.ts'"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.405.0",
-    "@types/node-rsa": "^1.1.2",
-    "aws-sdk": "^2.1454.0",
     "body-parser": "^1.20.2",
-    "electrodb": "^2.13.1",
     "express": "^4.18.2",
     "express-validator": "^7.0.1",
-    "jsonwebtoken": "^9.0.2",
-    "reflect-metadata": "^0.2.1",
-    "serverless": "^3.34.0",
-    "serverless-http": "^3.2.0"
+    "reflect-metadata": "^0.2.1"
+  },
+  "devDependencies": {
+    "@types/body-parser": "^1.19.3",
+    "@types/chai": "^4.3.6",
+    "@types/express": "^4.17.18",
+    "@types/express-validator": "^3.0.0",
+    "@types/jest": "^29.5.5",
+    "chai": "^4.3.9",
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "rimraf": "^4.4.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.2"
   }
 }

@@ -1,8 +1,11 @@
 import { Router } from "express"
-import searchResult from "./sr"
+import authenticationController from "../controller/authentication.controller"
+import mlRoute from "./ml.route"
 
 const router = Router()
 
-router.use("/ml-search-result", searchResult)
+router.get("/login", authenticationController.login)
+router.get("/redirect", authenticationController.authentication)
+router.use("/ml", mlRoute)
 
 export default router

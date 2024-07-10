@@ -1,9 +1,11 @@
-import { AxiosRequestConfig, AxiosResponse } from "axios"
+import { AxiosRequestConfig } from "axios"
 import axios from "axios"
 
 const httpGet = async (url: string) => {
-  const r = await axios.get(url)
-  return r.data
+  const response = await axios.get(url)
+  if (response.status != 200)
+    throw new HttpResponseError(response.status, response.data)
+  return response.data
 }
 
 const httpPost = async <T>(
@@ -18,7 +20,10 @@ const httpPost = async <T>(
   const config: AxiosRequestConfig = {
     headers: header ? { ...defaultHeader, ...header } : defaultHeader,
   }
-  return (await axios.post(url, body, config)).data
+  const response = await axios.post(url, body, config)
+  if (response.status != 200)
+    throw new HttpResponseError(response.status, response.data)
+  return response.data
 }
 
 export { httpGet, httpPost }

@@ -1,21 +1,16 @@
 import { Request, Response } from "express"
 import { setAppConfig } from "../repository/app-config.repository"
-import mlService from "../services/ml"
+import mlAuthService from "../services/ml/auth.ml.service"
 
 const authentication = async (req: Request, res: Response) => {
   const code = req.query?.code.toString()
-  const { access_token, user_id } = await mlService.authentication(code)
-  console.log(access_token, user_id)
-  await setAppConfig({
-    domain: user_id.toString(),
-    key: "access_token",
-    value: access_token,
-  })
-  res.status(200).json({ access_token, user_id })
+  const { access_token, user_id, refresh_token } =
+    await mlAuthService.authentication(code)
+  res.status(204).json({ access_token, user_id, refresh_token })
 }
 
 const login = async (req: Request, res: Response) => {
-  const mlLoginUrl = await mlService.loginUrl()
+  const mlLoginUrl = await mlAuthService.loginUrl()
   res.redirect(mlLoginUrl.toString())
 }
 

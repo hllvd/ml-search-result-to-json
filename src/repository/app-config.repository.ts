@@ -7,7 +7,7 @@ const setAppConfig = async ({
 }: {
   domain: string
   key: string
-  value: string
+  value: string | number
 }) => {
   await appConfigRepository
     .upsert({

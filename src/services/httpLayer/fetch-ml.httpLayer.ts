@@ -10,7 +10,7 @@ const httpPost = async <T>(
   url: string,
   body: unknown,
   header?: any
-): Promise<AxiosResponse<T>> => {
+): Promise<T> => {
   const defaultHeader = {
     "Content-Type": " application/x-www-form-urlencoded",
     accept: "application/json",

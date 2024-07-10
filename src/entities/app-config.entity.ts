@@ -37,7 +37,7 @@ export const appConfigRepository = new Entity(
         required: true,
       },
       configValue: {
-        type: "string",
+        type: "any",
       },
     },
     indexes: {

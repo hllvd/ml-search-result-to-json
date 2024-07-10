@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-import { setAppConfig } from "../repository/app-config.repository"
 import mlAuthService from "../services/ml/auth.ml.service"
 
 const authentication = async (req: Request, res: Response) => {

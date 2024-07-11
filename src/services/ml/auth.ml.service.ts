@@ -37,22 +37,6 @@ const authentication = async (code: string): Promise<OAuthTokenResponse> => {
   const { user_id, access_token, refresh_token } =
     await httpPost<OAuthTokenResponse>(authUrl, payloadAuthToken)
 
-  const domain = user_id.toString()
-  await setAppConfig({
-    domain,
-    key: "access_token",
-    value: access_token,
-  })
-  await setAppConfig({
-    domain,
-    key: "refresh_token",
-    value: refresh_token,
-  })
-  await setAppConfig({
-    domain,
-    key: "refresh_token_ttl",
-    value: 1,
-  })
   return { user_id, access_token, refresh_token }
 }
 
@@ -61,22 +45,8 @@ const reAuthentication = async (code: string): Promise<OAuthTokenResponse> => {
   const { user_id, access_token, refresh_token } =
     await httpPost<OAuthTokenResponse>(authUrl, payloadRefreshToken)
 
+  _permanentSave({ user_id, access_token, refresh_token })
   const domain = user_id.toString()
-  await setAppConfig({
-    domain,
-    key: "access_token",
-    value: access_token,
-  })
-  await setAppConfig({
-    domain,
-    key: "refresh_token",
-    value: refresh_token,
-  })
-  await setAppConfig({
-    domain,
-    key: "refresh_token_ttl",
-    value: 1,
-  })
 
   return { user_id, access_token, refresh_token }
 }
@@ -88,6 +58,18 @@ const loginUrl = () => {
     url.searchParams.append(key, value)
   })
   return url
+}
+
+const _permanentSave = async ({
+  user_id,
+  access_token,
+  refresh_token,
+}: {
+  user_id: string
+  access_token: string
+  refresh_token: string
+}) => {
+  _permanentSave({ user_id, access_token, refresh_token })
 }
 
 export default { authentication, loginUrl, reAuthentication }

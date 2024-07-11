@@ -3,7 +3,7 @@ import axios from "axios"
 
 const httpGet = async (url: string) => {
   const response = await axios.get(url)
-  if (response.status != 200)
+  if (response.status > 399)
     throw new HttpResponseError(response.status, response.data)
   return response.data
 }
@@ -21,7 +21,7 @@ const httpPost = async <T>(
     headers: header ? { ...defaultHeader, ...header } : defaultHeader,
   }
   const response = await axios.post(url, body, config)
-  if (response.status != 200)
+  if (response.status > 399)
     throw new HttpResponseError(response.status, response.data)
   return response.data
 }

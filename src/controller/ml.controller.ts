@@ -7,10 +7,12 @@ const me = async (req: Request, res: Response) => {
   res.status(200).json({ message: "Hello", ...r })
 }
 
+const notification = async (req: Request, res: Response) => {}
+
 const logSearchResult = async (req: Request, res: Response) => {
   console.log("here")
   const r = "ok"
   res.status(200).json({ r })
 }
 
-export default { logSearchResult, me }
+export default { logSearchResult, me, notification }

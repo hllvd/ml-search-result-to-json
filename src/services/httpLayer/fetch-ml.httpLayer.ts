@@ -1,8 +1,15 @@
 import { AxiosRequestConfig } from "axios"
 import axios from "axios"
 
-const httpGet = async (url: string) => {
-  const response = await axios.get(url)
+const httpGet = async (url: string, header?: any) => {
+  const defaultHeader = {
+    "Content-Type": " application/x-www-form-urlencoded",
+    accept: "application/json",
+  }
+  const config: AxiosRequestConfig = {
+    headers: header ? { ...defaultHeader, ...header } : defaultHeader,
+  }
+  const response = await axios.get(url, config)
   if (response.status > 399)
     throw new HttpResponseError(response.status, response.data)
   return response.data

@@ -18,4 +18,29 @@ const setAppConfig = async ({
     .go()
 }
 
-export { setAppConfig }
+const getAppConfigValue = async ({
+  domain,
+  key,
+}: {
+  domain: string
+  key: string
+}) => {
+  const resultData = getAppConfig({ domain, key })
+  return (await resultData).data?.configValue
+}
+const getAppConfig = async ({
+  domain,
+  key,
+}: {
+  domain: string
+  key: string
+}) => {
+  return await appConfigRepository
+    .get({
+      clientId: domain,
+      configKey: key,
+    })
+    .go()
+}
+
+export { setAppConfig, getAppConfig, getAppConfigValue }

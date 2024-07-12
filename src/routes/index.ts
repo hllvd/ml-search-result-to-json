@@ -6,6 +6,7 @@ const router = Router()
 
 router.get("/login", authenticationController.login)
 router.get("/redirect", authenticationController.authentication)
+
 router.use("/ml", mlRoute)
 
 export default router

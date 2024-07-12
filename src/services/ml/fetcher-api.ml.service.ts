@@ -9,6 +9,7 @@ const fetchMl = async (url: string, options: any = {}) => {
     domain: MY_USER_ID,
     key: "access_token",
   })
+  console.log("userAccessToken", userAccessToken)
 
   const bearerTokenAuthorization = {
     Authorization: `Bearer ${userAccessToken}`,

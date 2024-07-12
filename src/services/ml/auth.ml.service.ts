@@ -69,7 +69,7 @@ const _permanentSave = async ({
   await setAppConfig({
     domain,
     key: "refresh_token_ttl",
-    value: refresh_token_ttl,
+    value: refresh_token_ttl.toString(),
   })
 }
 

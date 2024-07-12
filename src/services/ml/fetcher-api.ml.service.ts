@@ -23,13 +23,14 @@ const fetchMl = async (url: string, options: any = {}) => {
       domain: MY_USER_ID,
       key: "refresh_token_ttl",
     })
+    if ((refreshTokenTtl as number) < 1) return
     const refreshToken = await getAppConfigValue({
       domain: MY_USER_ID,
       key: "refresh_token",
     })
     console.log("refreshTokenTtl", refreshTokenTtl)
     await authMlService.reAuthentication(refreshToken)
-    if ((refreshTokenTtl as number) > 0) return await fetchMl(url, options)
+    return await fetchMl(url, options)
   }
 }
 

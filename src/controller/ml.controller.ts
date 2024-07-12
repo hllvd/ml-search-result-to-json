@@ -10,7 +10,6 @@ const me = async (req: Request, res: Response) => {
 const logSearchResult = async (req: Request, res: Response) => {
   console.log("here")
   const r = "ok"
-  console.log(r)
   res.status(200).json({ r })
 }
 

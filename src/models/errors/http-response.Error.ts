@@ -1,4 +1,4 @@
-class HttpResponseError extends Error {
+export class HttpResponseError extends Error {
   public status: number
   public message: string
   public data?: any

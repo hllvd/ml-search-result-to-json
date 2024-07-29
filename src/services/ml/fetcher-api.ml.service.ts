@@ -1,4 +1,6 @@
-import { MY_USER_ID } from "../../constants"
+import { AxiosError, isAxiosError } from "axios"
+import { HttpResponseError } from "../../models/errors/http-response.error"
+import { FetchMlOptionsModel } from "../../models/fetch-ml-options.model"
 import {
   getAppConfigValue,
   setAppConfig,
@@ -7,37 +9,60 @@ import { httpGet, httpPost } from "../httpLayer/fetch-ml.httpLayer"
 import authMlService from "./auth.ml.service"
 
 const base_url = "https://api.mercadolibre.com"
-const fetchMl = async (url: string, options: any = {}) => {
-  const userAccessToken = await _getAppConfigValueFromKey("access_token")
+const fetchMl = async (url: string, options: FetchMlOptionsModel = {}) => {
+  const { data, method, userId }: FetchMlOptionsModel = options
+  const retry = 3
+  let counter = 0
+  let response: any
 
-  const bearerTokenAuthorization = {
-    Authorization: `Bearer ${userAccessToken}`,
+  while (counter < retry) {
+    console.log("counter retries", counter)
+    try {
+      const userAccessToken = await _getAppConfigValueFromKey(
+        userId,
+        "access_token"
+      )
+      const headers = options.headers
+      const optionsWithAuthorization = {
+        Authorization: `Bearer ${userAccessToken}`,
+        ...headers,
+      }
+      console.log(userAccessToken)
+      const result =
+        method === "POST" || data != null
+          ? await httpPost(`${base_url}${url}`, data, optionsWithAuthorization)
+          : await httpGet(`${base_url}${url}`, optionsWithAuthorization)
+      setAppConfig({
+        domain: userId,
+        key: "refresh_token_ttl",
+        value: 3,
+      })
+      return result
+    } catch (e) {
+      if (isAxiosError(e)) {
+        const refreshTokenTtl = await _getAppConfigValueFromKey(
+          userId,
+          "refresh_token_ttl"
+        )
+        console.log(" ", refreshTokenTtl)
+        if ((refreshTokenTtl as number) < 1) return
+        const refreshToken = await _getAppConfigValueFromKey(
+          userId,
+          "refresh_token"
+        )
+        console.log("refreshToken", refreshToken)
+        await authMlService.reAuthentication(refreshToken)
+        counter++
+      }
+      response = e?.response?.data
+    }
   }
-  const { data, method } = options
-  try {
-    const result =
-      method === "POST" || data === null
-        ? await httpPost(`${base_url}${url}`, data, bearerTokenAuthorization)
-        : await httpGet(`${base_url}${url}`, bearerTokenAuthorization)
-    setAppConfig({
-      domain: MY_USER_ID,
-      key: "refresh_token_ttl",
-      value: 3,
-    })
-    return result
-  } catch (e) {
-    const refreshTokenTtl = await _getAppConfigValueFromKey("refresh_token_ttl")
-    if ((refreshTokenTtl as number) < 1) return
-    const refreshToken = await _getAppConfigValueFromKey("refresh_token")
-    console.log("refreshTokenTtl", refreshTokenTtl)
-    await authMlService.reAuthentication(refreshToken)
-    return await fetchMl(url, options)
-  }
+  return response
 }
 
-const _getAppConfigValueFromKey = async (key: string) => {
+const _getAppConfigValueFromKey = async (userId: string, key: string) => {
   const value = await getAppConfigValue({
-    domain: MY_USER_ID,
+    domain: userId,
     key,
   })
   return value

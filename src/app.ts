@@ -1,5 +1,5 @@
 import express from "express"
-import routes from "./routes"
+import routes from "./routes/index.route"
 import "reflect-metadata"
 import https from "https"
 import fs from "fs"

@@ -5,7 +5,7 @@ const authentication = async (req: Request, res: Response) => {
   const code = req.query?.code.toString()
   const { access_token, user_id, refresh_token } =
     await mlAuthService.authentication(code)
-  res.status(204).json({ access_token, user_id, refresh_token })
+  res.status(202).json({ access_token, user_id, refresh_token })
 }
 
 const login = async (req: Request, res: Response) => {

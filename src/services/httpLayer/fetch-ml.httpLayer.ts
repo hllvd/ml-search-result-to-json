@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from "axios"
 import axios from "axios"
+import { HttpResponseError } from "../../models/errors/http-response.error"
 
 const httpGet = async (url: string, header?: any) => {
   const defaultHeader = {
@@ -10,7 +11,8 @@ const httpGet = async (url: string, header?: any) => {
     headers: header ? { ...defaultHeader, ...header } : defaultHeader,
   }
   const response = await axios.get(url, config)
-  if (response.status > 399)
+  console.log(url, response.status)
+  if (response.status === 401)
     throw new HttpResponseError(response.status, response.data)
   return response.data
 }
@@ -21,14 +23,15 @@ const httpPost = async <T>(
   header?: any
 ): Promise<T> => {
   const defaultHeader = {
-    "Content-Type": " application/x-www-form-urlencoded",
+    "Content-Type": "application/x-www-form-urlencoded",
     accept: "application/json",
   }
   const config: AxiosRequestConfig = {
     headers: header ? { ...defaultHeader, ...header } : defaultHeader,
   }
   const response = await axios.post(url, body, config)
-  if (response.status > 399)
+  console.log(url, response.status)
+  if (response.status === 401)
     throw new HttpResponseError(response.status, response.data)
   return response.data
 }

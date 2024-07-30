@@ -1,4 +1,4 @@
-import { appConfigRepository } from "../entities/app-config.entity"
+import { appConfigRepository } from "../entities/ddb/app-config.entity"
 
 const setAppConfig = async ({
   domain,

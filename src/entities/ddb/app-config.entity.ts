@@ -6,7 +6,7 @@ import {
   AWS_REGION,
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
-} from "../constants"
+} from "../../constants"
 
 const dynamoDBClient = new DynamoDB.DocumentClient({
   region: AWS_REGION,

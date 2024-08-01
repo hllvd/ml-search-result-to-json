@@ -1,4 +1,7 @@
 import { Request, Response } from "express"
+import { ScrapeType } from "../enums/scrap-type.enum"
+import { webScrapeCatalogPredicate } from "../services/ml/scraper/predicate/catalog.predicate.service"
+import { webScrapeMlPage } from "../services/ml/scraper/web.scraper.service"
 
 /** Catalog info
  * - Densidade de Líder
@@ -23,9 +26,15 @@ import { Request, Response } from "express"
  */
 
 const catalog = async (req: Request, res: Response) => {
-  console.log("here")
-  const r = "ok"
-  res.status(200).json({ r })
+  const productId = req.query?.productId?.toString()
+  const catalogId = req.query?.catalogId?.toString()
+  const result = await webScrapeMlPage(webScrapeCatalogPredicate, {
+    productId,
+    catalogId,
+    scrapeType: ScrapeType.Catalog,
+  })
+  console.log(result)
+  res.status(200).json({ productId, catalogId })
 }
 
 export default { catalog }

@@ -3,6 +3,7 @@ import "dotenv/config"
 import { OAuthTokenResponse } from "../../models/authentication.model"
 import {
   getAppConfigValue,
+  setAppConfigStr,
   setAppConfig,
 } from "../../repository/app-config.repository"
 import { payloadAuthToken, payloadRefreshToken } from "./constants/payloads"
@@ -27,7 +28,9 @@ const reAuthentication = async (code: string): Promise<OAuthTokenResponse> => {
     (await getAppConfigValue({
       domain: user_id,
       key: "refresh_token_ttl",
-    })) && 0
+    })) ?? 0
+
+  console.log("refreshTokenTtl", refreshTokenTtl)
   const refresh_token_ttl = Number(refreshTokenTtl) - 1
   _permanentSave({ user_id, access_token, refresh_token, refresh_token_ttl })
   const domain = user_id.toString()
@@ -55,13 +58,14 @@ const _permanentSave = async ({
   refresh_token: string
   refresh_token_ttl: number
 }) => {
+  console.log("_permanentSave", refresh_token_ttl)
   const domain = user_id.toString()
-  await setAppConfig({
+  await setAppConfigStr({
     domain,
     key: "access_token",
     value: access_token,
   })
-  await setAppConfig({
+  await setAppConfigStr({
     domain,
     key: "refresh_token",
     value: refresh_token,
@@ -69,7 +73,7 @@ const _permanentSave = async ({
   await setAppConfig({
     domain,
     key: "refresh_token_ttl",
-    value: refresh_token_ttl.toString(),
+    value: refresh_token_ttl,
   })
 }
 

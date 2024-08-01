@@ -1,4 +1,5 @@
 import { AxiosError, isAxiosError } from "axios"
+import { version } from "chai"
 import { HttpResponseError } from "../../models/errors/http-response.error"
 import { FetchMlOptionsModel } from "../../models/fetch-ml-options.model"
 import {
@@ -11,10 +12,10 @@ import authMlService from "./auth.ml.service"
 const base_url = "https://api.mercadolibre.com"
 const fetchMl = async (url: string, options: FetchMlOptionsModel = {}) => {
   const { data, method, userId }: FetchMlOptionsModel = options
+  if (!userId) throw new Error("userId is required")
   const retry = 3
   let counter = 0
-  let response: any
-
+  let dataResponse
   while (counter < retry) {
     console.log("counter retries", counter)
     try {
@@ -39,12 +40,20 @@ const fetchMl = async (url: string, options: FetchMlOptionsModel = {}) => {
       })
       return result
     } catch (e) {
-      if (isAxiosError(e)) {
+      if (!isAxiosError(e) || !e?.response) return JSON.stringify(e)
+      /** Tenho que verificar se o código é 401 e sse tem "messagem":invalid access token. Só assim podera entrar nesse escope abaixo.
+       * Agora mesmo tudo entr e está causando erro
+       */
+      dataResponse = e.response && e.response?.data
+      console.log("DRRRRRRR", dataResponse)
+      if (dataResponse?.message === "invalid_token") {
+        console.log("is axios", userId)
         const refreshTokenTtl = await _getAppConfigValueFromKey(
           userId,
           "refresh_token_ttl"
         )
         console.log(" ", refreshTokenTtl)
+        console.log(typeof refreshTokenTtl)
         if ((refreshTokenTtl as number) < 1) return
         const refreshToken = await _getAppConfigValueFromKey(
           userId,
@@ -52,12 +61,11 @@ const fetchMl = async (url: string, options: FetchMlOptionsModel = {}) => {
         )
         console.log("refreshToken", refreshToken)
         await authMlService.reAuthentication(refreshToken)
-        counter++
       }
-      response = e?.response?.data
+      counter++
     }
   }
-  return response
+  return dataResponse
 }
 
 const _getAppConfigValueFromKey = async (userId: string, key: string) => {

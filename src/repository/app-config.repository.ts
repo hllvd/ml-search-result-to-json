@@ -1,6 +1,6 @@
 import { appConfigRepository } from "../entities/ddb/app-config.entity"
 
-const setAppConfig = async ({
+const setAppConfigStr = async ({
   domain,
   key,
   value,
@@ -14,6 +14,24 @@ const setAppConfig = async ({
       clientId: domain.toString(),
       configKey: key.toString(),
       configValue: value.toString(),
+    })
+    .go()
+}
+
+const setAppConfig = async ({
+  domain,
+  key,
+  value,
+}: {
+  domain: string
+  key: string
+  value: string | number
+}) => {
+  await appConfigRepository
+    .upsert({
+      clientId: domain.toString(),
+      configKey: key.toString(),
+      configValue: value,
     })
     .go()
 }
@@ -43,4 +61,4 @@ const getAppConfig = async ({
     .go()
 }
 
-export { setAppConfig, getAppConfig, getAppConfigValue }
+export { setAppConfig, setAppConfigStr, getAppConfig, getAppConfigValue }

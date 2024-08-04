@@ -12,7 +12,7 @@
     "kill": "kill -9 $(lsof -ti:3000,3001)",
     "stop": "serverless offline stop",
     "deploy": "rimraf dist && tsc && serverless deploy",
-    "test": "mocha --require ts-node/register 'src/**/*.test.ts'"
+    "test": "jest"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.609.0",
@@ -38,13 +38,14 @@
     "@types/chai": "^4.3.6",
     "@types/express": "^4.17.18",
     "@types/express-validator": "^3.0.0",
-    "@types/jest": "^29.5.5",
+    "@types/jest": "^29.5.12",
     "chai": "^4.3.9",
     "dotenv": "^16.4.5",
     "jest": "^29.7.0",
     "mocha": "^10.2.0",
     "nodemon": "^3.0.1",
     "rimraf": "^4.4.0",
+    "ts-jest": "^29.2.4",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.2"
   }

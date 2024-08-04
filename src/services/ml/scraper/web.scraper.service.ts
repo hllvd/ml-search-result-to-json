@@ -8,6 +8,7 @@ import { ScrapeType } from "../../../enums/scrap-type.enum"
  */
 const webScrapeMlPage = async (predicateSelector: Function, options) => {
   const url = webScrapeMlUrlBuilder(options)
+  console.log("url", url)
   const r = await fetchWithRetry(url, 10, predicateSelector)
   return r
 }
@@ -20,7 +21,6 @@ const fetchWithRetry = async (
   let predicateResponse
   let count = 0
   while (count < retries) {
-    console.log("count ", count)
     try {
       predicateResponse = await predicateSelector(url)
       if (predicateResponse == null)

@@ -2,7 +2,9 @@ import axios from "axios"
 import { JSDOM } from "jsdom"
 import { ProductId } from "../../../../models/dto/ml-product.models"
 
-const webScrapeCatalogPredicate = async (url: string): Promise<ProductId[]> => {
+const webScrapeCatalogToProductStrsPredicate = async (
+  url: string
+): Promise<ProductId[]> => {
   const response = await axios.get(url, {
     headers: {
       "User-Agent":
@@ -24,4 +26,4 @@ const webScrapeCatalogPredicate = async (url: string): Promise<ProductId[]> => {
   return productIds
 }
 
-export { webScrapeCatalogPredicate }
+export { webScrapeCatalogToProductStrsPredicate }

@@ -17,7 +17,6 @@ const fetchMl = async (url: string, options: FetchMlOptionsModel = {}) => {
   let counter = 0
   let dataResponse
   while (counter < retry) {
-    console.log("counter retries", counter)
     try {
       const userAccessToken = await _getAppConfigValueFromKey(
         userId,
@@ -45,8 +44,9 @@ const fetchMl = async (url: string, options: FetchMlOptionsModel = {}) => {
        * Agora mesmo tudo entr e está causando erro
        */
       dataResponse = e.response && e.response?.data
-      console.log("DRRRRRRR", dataResponse)
-      if (dataResponse?.message === "invalid_token") {
+      console.log("ERRR", dataResponse)
+      const invalidTokenMessage = ["invalid_token", "mlauth: invalid token"]
+      if (invalidTokenMessage.includes(dataResponse?.message)) {
         console.log("is axios", userId)
         const refreshTokenTtl = await _getAppConfigValueFromKey(
           userId,

@@ -1,5 +1,4 @@
-import { MLProduct } from "../../../models/dto/ml-product.models"
-import { MLUser, PowerSellerStatus } from "../../../models/dto/ml-user.models"
+import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
 import { catalogReducer } from "./catalog.reducer"
 
 describe("userReducer", () => {
@@ -19,7 +18,7 @@ describe("userReducer", () => {
         ...commonProperties,
         price: 60,
         shipping: {
-          logistic_type: "fulfillment",
+          logistic_type: LogisticType.full,
         },
       },
     ]

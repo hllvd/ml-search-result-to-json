@@ -4,7 +4,8 @@ export const catalogReducer = (catalog: Array<MLProduct>) => {
   return catalog.reduce(
     (acc, curr, i) => {
       const isFull = curr.shipping?.logistic_type == LogisticType.full
-      acc.firstPlace = i == 0 ? curr.price : acc.firstPlace
+
+      acc.firstPlacePrice = i == 0 ? curr.price : acc.firstPlacePrice
 
       acc.sumPrice += curr.price
 
@@ -32,13 +33,14 @@ export const catalogReducer = (catalog: Array<MLProduct>) => {
         isFull && acc.fullBestPosition == null ? i : acc.fullBestPosition
 
       acc.length += 1
+
       return acc
     },
     {
       sumPrice: 0,
       bestPrice: null,
       secondBestPrice: null,
-      firstPlace: 0,
+      firstPlacePrice: 0,
       bestPriceFull: null,
       fullBestPosition: null,
       length: 0,

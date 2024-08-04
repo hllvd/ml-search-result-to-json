@@ -31,7 +31,7 @@ describe("userReducer", () => {
       sumPrice: 165,
       bestPrice: 50,
       secondBestPrice: 55,
-      firstPlace: 50,
+      firstPlacePrice: 50,
       bestPriceFull: 60,
       fullBestPosition: 2,
       length: 3,

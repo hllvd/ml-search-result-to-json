@@ -26,10 +26,7 @@ const test = async (req: Request, res: Response) => {
    * document.querySelectorAll(".ui-pdp-action--secondary").forEach(e => { console.log(e.getAttribute('formaction'))})
    */
   //const r = await fetchMl("/sites/MLB/search?q=celular", options)
-  const r = await fetchMl(
-    "/items/MLB2627784031?pdp_filters=item_id:MLB1018500853",
-    options
-  )
+  const r = await fetchMl("/items?ids=MLB19564320", options)
   console.log("r", r)
   res.status(200).json({ ...r })
 }

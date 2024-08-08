@@ -21,7 +21,7 @@ import { webScrapeMlPage } from "../services/ml/scraper/web.scraper.service"
  * - catalog_title
  * - catalog_brand
  * - product_id
- *
+ * -
  * - summary_created
  * - summary_userId
  * - summary_ttl
@@ -31,9 +31,19 @@ const catalog = async (req: Request, res: Response) => {
   const productId = req.query?.productId?.toString()
   const catalogId = req.query?.catalogId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
-  const summary = await catalogSummary({ productId, catalogId, userId })
+  const { catalogReducerValues, userReducerValues } = await catalogSummary({
+    catalogId,
+    userId,
+  })
 
-  res.status(200).json({ productId, catalogId, ...summary })
+  res
+    .status(200)
+    .json({
+      productId,
+      catalogId,
+      ...userReducerValues,
+      ...catalogReducerValues,
+    })
 }
 
 export default { catalog }

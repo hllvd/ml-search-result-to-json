@@ -9,10 +9,16 @@ describe("userReducer", () => {
       {
         ...commonProperties,
         price: 50,
+        shipping: {
+          logistic_type: LogisticType.correios,
+        },
       },
       {
         ...commonProperties,
         price: 55,
+        shipping: {
+          logistic_type: LogisticType.coleta,
+        },
       },
       {
         ...commonProperties,
@@ -35,6 +41,11 @@ describe("userReducer", () => {
       bestPriceFull: 60,
       fullBestPosition: 2,
       length: 3,
+      shipment: {
+        full: 1,
+        correios: 1,
+        coleta: 1,
+      },
     })
   })
 })

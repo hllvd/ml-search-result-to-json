@@ -1,4 +1,6 @@
+import axios from "axios"
 import { ScrapeType } from "../../../enums/scrap-type.enum"
+import { ProductId } from "../../../models/dto/ml-product.models"
 
 /**
  * read more https://scrapfly.io/blog/web-scraping-with-nodejs/
@@ -7,40 +9,90 @@ import { ScrapeType } from "../../../enums/scrap-type.enum"
  * @returns
  */
 const webScrapeMlPage = async (predicateSelector: Function, options) => {
-  const url = webScrapeMlUrlBuilder(options)
-  console.log("url", url)
-  const r = await fetchWithRetry(url, 10, predicateSelector)
+  console.log("options url", options)
+  const r = await fetchWithRetry({ options, retries: 10, predicateSelector })
   return r
 }
+//li.andes-pagination__button.andes-pagination__button--next a.andes-pagination__link
 
-const fetchWithRetry = async (
-  url: string,
-  retries: number,
+const fetchWithRetry = async ({
+  options,
+  retries,
+  predicateSelector,
+}: {
+  options: { scrapType: ScrapeType; page?: number; catalogId: string }
+  retries: number
   predicateSelector: Function
-) => {
-  let predicateResponse
-  let count = 0
-  while (count < retries) {
+}): Promise<Array<ProductId>> => {
+  const urlBuilder = webScrapeMlUrlBuilder(options)
+  let productIds: Array<ProductId> = []
+  let areTherePages = true
+  while (areTherePages) {
     try {
-      predicateResponse = await predicateSelector(url)
-      if (predicateResponse == null)
-        throw new Error("Predicate response is null")
-      break
+      const response = await webScrapeFetcher(
+        urlBuilder.getCurrentUrl(),
+        retries
+      )
+      const { nextPage, response: newProductIds } = await predicateSelector(
+        response
+      )
+
+      if (productIds == null) throw new Error("Predicate response is null")
+      productIds = [...productIds, ...newProductIds]
+      urlBuilder.nextPage()
+      console.log("nextPage", nextPage)
+      if (nextPage === false) break
     } catch (e) {
-      console.error(`Retrying ${count}`)
+      console.log("ERRRR", e)
+      areTherePages = false
     }
-    count++
   }
-  return predicateResponse ?? null
+  console.log("productIds", productIds)
+  return productIds ?? null
+}
+
+const webScrapeFetcher = async (url: string, retries: number) => {
+  let counter = 0
+  let response = null
+  console.log("url", url)
+  while (counter < retries) {
+    try {
+      response = await axios.get(url, {
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+          Accept:
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+        },
+      })
+      break
+    } catch {
+      counter++
+    }
+  }
+  return response
 }
 
 const webScrapeMlUrlBuilder = (options) => {
-  switch (options.scrapeType) {
-    case ScrapeType.Catalog:
-      const { productId, catalogId } = options
-      return `https://www.mercadolivre.com.br/p/${catalogId}/s?product_trigger_id=${productId}`
-    default:
-      throw new Error("Invalid scrape type")
+  let currentPage
+  let page = options.page ?? 1
+
+  const getCurrentUrlScope = () => {
+    switch (options.scrapeType) {
+      case ScrapeType.Catalog:
+        const { catalogId } = options
+        currentPage = `https://www.mercadolivre.com.br/p/${catalogId}/s?page=${page}`
+        return currentPage
+      default:
+        throw new Error("Invalid scrape type")
+    }
+  }
+  return {
+    getCurrentUrl: () => getCurrentUrlScope(),
+    nextPage: () => {
+      page++
+      return getCurrentUrlScope()
+    },
   }
 }
 

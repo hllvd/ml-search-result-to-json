@@ -29,6 +29,7 @@ export interface MLProduct {
   catalog_product_id?: string
   date_created?: string
   last_updated?: string
+  seller_address?: any
 }
 
 export interface Shipping {
@@ -44,6 +45,9 @@ export interface Shipping {
 
 export enum LogisticType {
   full = "fulfillment",
+  correios = "drop_off",
+  coleta2 = "xd_drop_off",
+  coleta = "cross_docking",
 }
 
 export interface Location {}

@@ -47,9 +47,7 @@ describe("userReducer", () => {
     //Act
     const result = userReducer(sellers)
     expect(result).toEqual({
-      medalLider: 2,
-      medalGold: 2,
-      medalPlatinum: 0,
+      medal: { medalLider: 2, medalGold: 2, medalPlatinum: 0 },
       state: {
         "BR-SP": 2,
         "BR-RJ": 1,

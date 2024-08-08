@@ -4,8 +4,12 @@ export const catalogReducer = (catalog: Array<MLProduct>) => {
   return catalog.reduce(
     (acc, curr, i) => {
       const isFull = curr.shipping?.logistic_type == LogisticType.full
+      const isColeta =
+        curr.shipping?.logistic_type == LogisticType.coleta ||
+        curr.shipping?.logistic_type == LogisticType.coleta2
+      const isCorreios = curr.shipping?.logistic_type == LogisticType.correios
 
-      acc.firstPlacePrice = i == 0 ? curr.price : acc.firstPlacePrice
+      acc.firstPlacePrice = i === 0 ? curr.price : acc.firstPlacePrice
 
       acc.sumPrice += curr.price
 
@@ -30,9 +34,17 @@ export const catalogReducer = (catalog: Array<MLProduct>) => {
         : acc.bestPriceFull
 
       acc.fullBestPosition =
-        isFull && acc.fullBestPosition == null ? i : acc.fullBestPosition
+        isFull && acc.fullBestPosition === null ? i : acc.fullBestPosition
 
       acc.length += 1
+
+      acc.shipment.full = isFull ? ++acc.shipment.full : acc.shipment.full
+      acc.shipment.coleta = isColeta
+        ? ++acc.shipment.coleta
+        : acc.shipment.coleta
+      acc.shipment.correios = isCorreios
+        ? ++acc.shipment.correios
+        : acc.shipment.correios
 
       return acc
     },
@@ -44,6 +56,11 @@ export const catalogReducer = (catalog: Array<MLProduct>) => {
       bestPriceFull: null,
       fullBestPosition: null,
       length: 0,
+      shipment: {
+        full: 0,
+        correios: 0,
+        coleta: 0,
+      },
     }
   )
 }

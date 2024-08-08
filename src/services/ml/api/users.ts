@@ -10,7 +10,7 @@ const getMe = async (userId) => {
   return r
 }
 
-const getUser = async ({
+const getSeller = async ({
   sellerId,
   userId,
 }: {
@@ -25,4 +25,4 @@ const getUser = async ({
   return r
 }
 
-export { getMe, getUser }
+export { getMe, getSeller }

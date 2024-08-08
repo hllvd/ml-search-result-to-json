@@ -1,21 +1,26 @@
 import { MLUser, PowerSellerStatus } from "../../../models/dto/ml-user.models"
+import { UserReducerResult } from "../../../models/reducers/user-reducer.models"
 
-const userReducer = (sellers: Array<MLUser>) => {
+const userReducer = (sellers: Array<MLUser>): UserReducerResult => {
   return sellers.reduce(
     (acc, curr) => {
-      acc.medalGold =
+      acc.medal.medalGold =
         curr.seller_reputation.power_seller_status === PowerSellerStatus.Gold
-          ? ++acc.medalGold
-          : acc.medalGold
-      acc.medalPlatinum =
+          ? ++acc.medal.medalGold
+          : acc.medal.medalGold
+      acc.medal.medalPlatinum =
         curr.seller_reputation.power_seller_status ===
         PowerSellerStatus.Platinum
-          ? ++acc.medalPlatinum
-          : acc.medalPlatinum
-      acc.medalLider =
+          ? ++acc.medal.medalPlatinum
+          : acc.medal.medalPlatinum
+      acc.medal.medalLider =
         curr.seller_reputation.power_seller_status === PowerSellerStatus.Silver
-          ? ++acc.medalLider
-          : acc.medalLider
+          ? ++acc.medal.medalLider
+          : acc.medal.medalLider
+      acc.medal.noMedal =
+        curr.seller_reputation.power_seller_status === null
+          ? ++acc.medal.noMedal
+          : acc.medal.noMedal
       const state = curr.address?.state
 
       if (state) {
@@ -25,9 +30,13 @@ const userReducer = (sellers: Array<MLUser>) => {
       return acc
     },
     {
-      medalLider: 0,
-      medalGold: 0,
-      medalPlatinum: 0,
+      medal: {
+        medalLider: 0,
+        medalGold: 0,
+        medalPlatinum: 0,
+        noMedal: 0,
+      },
+      medalByState: {},
       state: {},
     }
   )

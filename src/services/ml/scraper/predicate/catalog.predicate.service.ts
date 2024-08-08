@@ -1,29 +1,30 @@
-import axios from "axios"
+import { AxiosResponse } from "axios"
 import { JSDOM } from "jsdom"
 import { ProductId } from "../../../../models/dto/ml-product.models"
 
+/**
+ *
+ * @param response
+ * @returns list of product ids and a boolean indicating if there is a next page
+ */
 const webScrapeCatalogToProductStrsPredicate = async (
-  url: string
-): Promise<ProductId[]> => {
-  const response = await axios.get(url, {
-    headers: {
-      "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
-      Accept:
-        "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
-    },
-  })
-
+  response: AxiosResponse
+): Promise<{ nextPage: boolean; response: ProductId[] }> => {
   const regex = /\/p\/([^/]+)\//
   const dom = new JSDOM(await response.data)
   const document = dom.window.document
   const buttonWithUrls = Array.from(
     document.querySelectorAll(".andes-button.ui-pdp-action--secondary")
   ).map((el: any) => el.getAttribute("formaction"))
-
+  const nextPage =
+    Array.from(
+      document.querySelectorAll(
+        ".li.andes-pagination__button.andes-pagination__button--next.andes-pagination__button--disabled"
+      )
+    ).length === 0
   const productIds = buttonWithUrls.map((e) => e.match(regex)[1])
   if (productIds.length === 0) throw new Error("No products found")
-  return productIds
+  return { nextPage, response: productIds }
 }
 
 export { webScrapeCatalogToProductStrsPredicate }

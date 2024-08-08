@@ -1,12 +1,9 @@
 export interface UserReducerResult {
-  medal: {
-    medalLider: number
-    medalGold: number
-    medalPlatinum: number
-    noMedal: number
-  }
   medalByState: {
-    [state: string]: number // {BR-SC:}
+    medalLider: { [state: string]: number }
+    medalGold: { [state: string]: number }
+    medalPlatinum: { [state: string]: number }
+    noMedal: { [state: string]: number }
   }
   state: { [key: string]: string }
 }

@@ -9,15 +9,24 @@ const getProducts = async (
 ): Promise<MLProduct[]> => {
   const productIdMatrix = productIdsReducer(productIds)
 
-  const results = await Promise.all(
-    productIdMatrix.map(async (productIds): Promise<MLProduct[]> => {
-      const productIdStrs: string = productIds.join(", ")
-      return await _fetchProducts(userId, productIdStrs)
-    })
-  )
-  console.log(results)
-  console.log("flat", results.flat(1).length)
-  return results.flat(1)
+  return (
+    await Promise.all(
+      productIdMatrix.map(async (productIds): Promise<MLProduct[]> => {
+        const productIdStrs: string = productIds.join(", ")
+        return await _fetchProducts(userId, productIdStrs)
+      })
+    )
+  ).flat(1)
+}
+
+const getProductInCorrectOrder = (
+  productIds: ProductId[],
+  products: MLProduct[]
+): MLProduct[] => {
+  return productIds.map((productId) => {
+    const product = products.find((product) => product.id === productId)
+    return product
+  })
 }
 
 const _fetchProducts = async (
@@ -34,4 +43,4 @@ const _fetchProducts = async (
     .map((product) => product.body)
 }
 
-export { getProducts }
+export { getProducts, getProductInCorrectOrder }

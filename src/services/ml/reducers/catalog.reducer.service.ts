@@ -9,7 +9,6 @@ export const catalogReducer = (
     (acc, curr, i) => {
       const mlUser = curr.mlUser
       const isFull = curr.shipping?.logistic_type == LogisticType.full
-
       const price = curr.price
       const state = curr.seller_address?.state?.id
       const currentDateCreated = new Date(curr.date_created)
@@ -19,6 +18,9 @@ export const catalogReducer = (
       const { isMedalPlatinum, isMedalGold, isMedalLider } = _getMedalBooleans(
         mlUser.seller_reputation?.power_seller_status
       )
+      delete curr.pictures
+      delete curr.attributes
+      console.log(curr)
       acc.medalGoldBestPosition = _getBestPosition({
         currentPosition: i,
         currentValue: acc.medalGoldBestPosition,

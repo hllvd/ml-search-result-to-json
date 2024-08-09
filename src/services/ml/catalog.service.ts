@@ -1,6 +1,6 @@
 import { ProductId } from "aws-sdk/clients/sagemaker"
 import { ScrapeType } from "../../enums/scrap-type.enum"
-import { getProducts } from "./api/search.api.service"
+import { getProductInCorrectOrder, getProducts } from "./api/search.api.service"
 import { getSeller } from "./api/users"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
 import {
@@ -37,8 +37,11 @@ const catalogSummary = async ({
       return { ...c, mlUser }
     })
   )
-
-  const catalogReducerValues = catalogReducer(catalogSellers)
+  const productsWithSellersInCorrectOrder = getProductInCorrectOrder(
+    productList,
+    catalogSellers
+  )
+  const catalogReducerValues = catalogReducer(productsWithSellersInCorrectOrder)
 
   return { catalogReducerValues }
 }

@@ -6,6 +6,8 @@ export interface MLProduct {
   id: ProductId
   site_id?: string
   user?: any
+  pictures?: any
+  attributes?: any
   mlUser?: MLUser
   title?: string
   seller_id?: number

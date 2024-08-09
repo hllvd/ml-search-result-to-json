@@ -15,6 +15,7 @@ const getProducts = async (
       return await _fetchProducts(userId, productIdStrs)
     })
   )
+  console.log(results)
   console.log("flat", results.flat(1).length)
   return results.flat(1)
 }

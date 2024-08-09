@@ -5,5 +5,5 @@ export interface UserReducerResult {
     medalPlatinum: { [state: string]: number }
     noMedal: { [state: string]: number }
   }
-  state: { [key: string]: string }
+  state: { [key: string]: number }
 }

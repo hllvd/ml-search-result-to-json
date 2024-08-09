@@ -31,19 +31,20 @@ const catalog = async (req: Request, res: Response) => {
   const productId = req.query?.productId?.toString()
   const catalogId = req.query?.catalogId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
-  const { catalogReducerValues, userReducerValues } = await catalogSummary({
-    catalogId,
-    userId,
-  })
 
-  res
-    .status(200)
-    .json({
-      productId,
-      catalogId,
-      ...userReducerValues,
-      ...catalogReducerValues,
-    })
+  const productProduct = await getProducts(userId, [catalogId])
+  res.status(200).json(productProduct)
+  // const { catalogReducerValues, userReducerValues } = await catalogSummary({
+  //   catalogId,
+  //   userId,
+  // })
+
+  // res.status(200).json({
+  //   productId,
+  //   catalogId,
+  //   ...userReducerValues,
+  //   ...catalogReducerValues,
+  // })
 }
 
 export default { catalog }

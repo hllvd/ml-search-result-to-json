@@ -29,7 +29,11 @@ export interface MLProduct {
   catalog_product_id?: string
   date_created?: string
   last_updated?: string
-  seller_address?: any
+  seller_address?: MLProductSellerAddress
+}
+
+interface MLProductSellerAddress {
+  state: { id: string }
 }
 
 export interface Shipping {

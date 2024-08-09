@@ -3,7 +3,7 @@ import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
 export const catalogReducer = (
   catalog: Array<MLProduct>
 ): CatalogReducerResponse => {
-  return (catalog.reduce(
+  const catalogReducer = catalog.reduce(
     (acc, curr, i) => {
       const isFull = curr.shipping?.logistic_type == LogisticType.full
       const isColeta =
@@ -40,7 +40,7 @@ export const catalogReducer = (
       const shipmentKey = _getShipmentKeyByLogisticType(
         curr.shipping?.logistic_type as LogisticType
       )
-      console.log("shipmentKey", shipmentKey, "state", state)
+
       acc.shipmentByState[shipmentKey][state] =
         acc.shipmentByState[shipmentKey][state] === undefined
           ? 1
@@ -71,7 +71,9 @@ export const catalogReducer = (
         others: {},
       },
     }
-  ).priceList = null)
+  )
+  delete catalogReducer.priceList
+  return catalogReducer
 }
 
 const _getShipmentKeyByLogisticType = (logisticType: LogisticType | string) => {

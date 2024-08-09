@@ -73,7 +73,10 @@ describe("catalogReducer", () => {
       secondBestPrice: 55,
       firstPlacePrice: 50,
       bestPriceFull: 60,
-      fullBestPosition: 2,
+      medalGoldBestPosition: 2,
+      medalPlatinumBestPosition: 1,
+      medalLiderBestPosition: null,
+      fullBestPosition: 3,
       length: 4,
       dateCreated: "2022-06-13T11:23:59.000Z",
       shipmentByState: {

@@ -1,4 +1,4 @@
-import { Any } from "typeorm"
+import { Any, PrimaryColumnCannotBeNullableError } from "typeorm"
 import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
 import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
 
@@ -7,14 +7,34 @@ export const catalogReducer = (
 ): CatalogReducerResponse => {
   const catalogReducer = catalog.reduce(
     (acc, curr, i) => {
-      const isFull = curr.shipping?.logistic_type == LogisticType.full
-      const price = curr.price
       const mlUser = curr.mlUser
+      const isFull = curr.shipping?.logistic_type == LogisticType.full
+
+      const price = curr.price
       const state = curr.seller_address?.state?.id
       const currentDateCreated = new Date(curr.date_created)
       const shipmentKey = _getShipmentKeyByLogisticType(
         curr.shipping?.logistic_type as LogisticType
       )
+      const { isMedalPlatinum, isMedalGold, isMedalLider } = _getMedalBooleans(
+        mlUser.seller_reputation?.power_seller_status
+      )
+      acc.medalGoldBestPosition = _getBestPosition({
+        currentPosition: i,
+        currentValue: acc.medalGoldBestPosition,
+        isType: isMedalGold,
+      })
+      acc.medalPlatinumBestPosition = _getBestPosition({
+        currentPosition: i,
+        currentValue: acc.medalPlatinumBestPosition,
+        isType: isMedalPlatinum,
+      })
+
+      acc.medalLiderBestPosition = _getBestPosition({
+        currentPosition: i,
+        currentValue: acc.medalLiderBestPosition,
+        isType: isMedalLider,
+      })
 
       const currentMedal = _getMedalKey(
         mlUser.seller_reputation?.power_seller_status
@@ -49,7 +69,7 @@ export const catalogReducer = (
         : acc.bestPriceFull
 
       acc.fullBestPosition =
-        isFull && acc.fullBestPosition === null ? i : acc.fullBestPosition
+        isFull && acc.fullBestPosition === null ? i + 1 : acc.fullBestPosition
 
       acc.shipmentByState[shipmentKey][state] =
         acc.shipmentByState[shipmentKey][state] === undefined
@@ -69,6 +89,9 @@ export const catalogReducer = (
       firstPlacePrice: 0,
       bestPriceFull: null,
       fullBestPosition: null,
+      medalGoldBestPosition: null,
+      medalPlatinumBestPosition: null,
+      medalLiderBestPosition: null,
       length: 0,
       priceList: [],
       dateCreated: "",
@@ -118,6 +141,23 @@ const _getMedalKey = (powerSellerStatus: string) => {
   }
 }
 
+const _getMedalBooleans = (powerSellerStatus: string) => {
+  const isMedalPlatinum = powerSellerStatus == PowerSellerStatus.Platinum
+  const isMedalGold = powerSellerStatus == PowerSellerStatus.Gold
+  const isMedalLider = powerSellerStatus == PowerSellerStatus.Silver
+  return { isMedalPlatinum, isMedalGold, isMedalLider }
+}
+
+const _getBestPosition = ({
+  currentPosition,
+  isType,
+  currentValue,
+}: {
+  currentPosition: number
+  isType: boolean
+  currentValue: number | number
+}) => (isType && currentValue === null ? currentPosition + 1 : currentValue)
+
 interface CatalogReducerResponse {
   sumPrice: number
   bestPrice: number | null
@@ -125,6 +165,9 @@ interface CatalogReducerResponse {
   firstPlacePrice: number
   bestPriceFull: number | null
   fullBestPosition: number | null
+  medalGoldBestPosition: number | null
+  medalPlatinumBestPosition: number | null
+  medalLiderBestPosition: number | null
   length: number
   priceList: Array<number>
   dateCreated: string

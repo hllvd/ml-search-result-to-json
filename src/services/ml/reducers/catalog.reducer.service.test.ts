@@ -63,6 +63,10 @@ describe("catalogReducer", () => {
         coleta: { "BR-SP": 1 },
         others: {},
       },
+      state: {
+        "BR-SC": 1,
+        "BR-SP": 3,
+      },
     })
   })
 })

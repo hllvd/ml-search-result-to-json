@@ -1,9 +1,12 @@
+import { MLUser } from "./ml-user.models"
+
 export type ProductId = string
 
 export interface MLProduct {
   id: ProductId
   site_id?: string
   user?: any
+  mlUser?: MLUser
   title?: string
   seller_id?: number
   category_id?: string

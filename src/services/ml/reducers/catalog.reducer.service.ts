@@ -1,3 +1,4 @@
+import { Any } from "typeorm"
 import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
 
 export const catalogReducer = (
@@ -6,16 +7,28 @@ export const catalogReducer = (
   const catalogReducer = catalog.reduce(
     (acc, curr, i) => {
       const isFull = curr.shipping?.logistic_type == LogisticType.full
-      const isColeta =
-        curr.shipping?.logistic_type == LogisticType.coleta ||
-        curr.shipping?.logistic_type == LogisticType.coleta2
-      const isCorreios = curr.shipping?.logistic_type == LogisticType.correios
-
       const price = curr.price
+      const mlUser = curr.mlUser
+      const state = curr.seller_address?.state?.id
+      const currentDateCreated = new Date(curr.date_created)
+      const shipmentKey = _getShipmentKeyByLogisticType(
+        curr.shipping?.logistic_type as LogisticType
+      )
+
+      // const currentMedal = _getMedalKey(
+      //   curr.seller_reputation.power_seller_status
+      // )
+      // acc.medalByState[currentMedal][state] =
+      //   acc.medalByState[currentMedal][state] === undefined
+      //     ? 1
+      //     : acc.medalByState[currentMedal][state] + 1
+
+      if (state) {
+        acc.state[state] = (acc.state[state] || 0) + 1
+      }
+
       acc.firstPlacePrice = i === 0 ? price : acc.firstPlacePrice
       acc.length += 1
-
-      const state = curr.seller_address?.state?.id
 
       acc.priceList.push(price)
       acc.priceList.sort((a, b) => a - b)
@@ -37,16 +50,10 @@ export const catalogReducer = (
       acc.fullBestPosition =
         isFull && acc.fullBestPosition === null ? i : acc.fullBestPosition
 
-      const shipmentKey = _getShipmentKeyByLogisticType(
-        curr.shipping?.logistic_type as LogisticType
-      )
-
       acc.shipmentByState[shipmentKey][state] =
         acc.shipmentByState[shipmentKey][state] === undefined
           ? 1
           : ++acc.shipmentByState[shipmentKey][state]
-
-      const currentDateCreated = new Date(curr.date_created)
 
       acc.dateCreated =
         !acc.dateCreated || currentDateCreated < new Date(acc.dateCreated)
@@ -64,6 +71,7 @@ export const catalogReducer = (
       length: 0,
       priceList: [],
       dateCreated: "",
+      state: {},
       shipmentByState: {
         full: {},
         correios: {},
@@ -100,6 +108,7 @@ interface CatalogReducerResponse {
   length: number
   priceList: Array<number>
   dateCreated: string
+  state: { [key: string]: number }
   shipmentByState: {
     full: { [state: string]: number }
     correios: { [state: string]: number }

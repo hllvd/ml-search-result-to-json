@@ -1,4 +1,5 @@
 import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
+import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
 import { catalogReducer } from "./catalog.reducer.service"
 
 describe("catalogReducer", () => {
@@ -14,6 +15,12 @@ describe("catalogReducer", () => {
         shipping: {
           logistic_type: LogisticType.correios,
         },
+        mlUser: {
+          id: 1,
+          seller_reputation: {
+            power_seller_status: PowerSellerStatus.Platinum,
+          },
+        },
       },
       {
         ...commonProperties,
@@ -22,6 +29,10 @@ describe("catalogReducer", () => {
         price: 55,
         shipping: {
           logistic_type: LogisticType.coleta,
+        },
+        mlUser: {
+          id: 1,
+          seller_reputation: { power_seller_status: PowerSellerStatus.Gold },
         },
       },
       {
@@ -32,6 +43,10 @@ describe("catalogReducer", () => {
         shipping: {
           logistic_type: LogisticType.full,
         },
+        mlUser: {
+          id: 1,
+          seller_reputation: { power_seller_status: PowerSellerStatus.Gold },
+        },
       },
       {
         ...commonProperties,
@@ -40,6 +55,10 @@ describe("catalogReducer", () => {
         price: 60,
         shipping: {
           logistic_type: LogisticType.full,
+        },
+        mlUser: {
+          id: 1,
+          seller_reputation: null,
         },
       },
     ]
@@ -62,6 +81,12 @@ describe("catalogReducer", () => {
         correios: { "BR-SP": 1 },
         coleta: { "BR-SP": 1 },
         others: {},
+      },
+      medalByState: {
+        medalLider: {},
+        medalGold: { "BR-SP": 1, "BR-SC": 1 },
+        medalPlatinum: { "BR-SP": 1 },
+        noMedal: { "BR-SP": 1 },
       },
       state: {
         "BR-SC": 1,

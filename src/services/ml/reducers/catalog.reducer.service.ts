@@ -1,5 +1,6 @@
 import { Any } from "typeorm"
 import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
+import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
 
 export const catalogReducer = (
   catalog: Array<MLProduct>
@@ -15,13 +16,13 @@ export const catalogReducer = (
         curr.shipping?.logistic_type as LogisticType
       )
 
-      // const currentMedal = _getMedalKey(
-      //   curr.seller_reputation.power_seller_status
-      // )
-      // acc.medalByState[currentMedal][state] =
-      //   acc.medalByState[currentMedal][state] === undefined
-      //     ? 1
-      //     : acc.medalByState[currentMedal][state] + 1
+      const currentMedal = _getMedalKey(
+        mlUser.seller_reputation?.power_seller_status
+      )
+      acc.medalByState[currentMedal][state] =
+        acc.medalByState[currentMedal][state] === undefined
+          ? 1
+          : acc.medalByState[currentMedal][state] + 1
 
       if (state) {
         acc.state[state] = (acc.state[state] || 0) + 1
@@ -78,6 +79,12 @@ export const catalogReducer = (
         coleta: {},
         others: {},
       },
+      medalByState: {
+        medalLider: {},
+        medalGold: {},
+        medalPlatinum: {},
+        noMedal: {},
+      },
     }
   )
   delete catalogReducer.priceList
@@ -98,6 +105,19 @@ const _getShipmentKeyByLogisticType = (logisticType: LogisticType | string) => {
   }
 }
 
+const _getMedalKey = (powerSellerStatus: string) => {
+  switch (powerSellerStatus) {
+    case PowerSellerStatus.Gold:
+      return "medalGold"
+    case PowerSellerStatus.Silver:
+      return "medalLider"
+    case PowerSellerStatus.Platinum:
+      return "medalPlatinum"
+    default:
+      return "noMedal"
+  }
+}
+
 interface CatalogReducerResponse {
   sumPrice: number
   bestPrice: number | null
@@ -114,5 +134,11 @@ interface CatalogReducerResponse {
     correios: { [state: string]: number }
     coleta: { [state: string]: number }
     others: { [state: string]: number }
+  }
+  medalByState: {
+    medalLider: { [state: string]: number }
+    medalGold: { [state: string]: number }
+    medalPlatinum: { [state: string]: number }
+    noMedal: { [state: string]: number }
   }
 }

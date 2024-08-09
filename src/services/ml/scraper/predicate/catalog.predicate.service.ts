@@ -27,4 +27,19 @@ const webScrapeCatalogToProductStrsPredicate = async (
   return { nextPage, response: productIds }
 }
 
-export { webScrapeCatalogToProductStrsPredicate }
+const webScrapeCatalogToMetadata = async (
+  response: AxiosResponse
+): Promise<{ response: ProductId[] }> => {
+  const regex = /\/p\/([^/]+)\//
+  const dom = new JSDOM(await response.data)
+  const document = dom.window.document
+  const buttonWithUrls = Array.from(
+    document.querySelectorAll(".andes-button.ui-pdp-action--secondary")
+  ).map((el: any) => el.getAttribute("formaction"))
+
+  const productIds = buttonWithUrls.map((e) => e.match(regex)[1])
+  if (productIds.length === 0) throw new Error("No products found")
+  return { response: productIds }
+}
+
+export { webScrapeCatalogToProductStrsPredicate, webScrapeCatalogToMetadata }

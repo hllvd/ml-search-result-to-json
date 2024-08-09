@@ -3,7 +3,7 @@ import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
 export const catalogReducer = (
   catalog: Array<MLProduct>
 ): CatalogReducerResponse => {
-  return catalog.reduce(
+  return (catalog.reduce(
     (acc, curr, i) => {
       const isFull = curr.shipping?.logistic_type == LogisticType.full
       const isColeta =
@@ -45,14 +45,13 @@ export const catalogReducer = (
         acc.shipmentByState[shipmentKey][state] === undefined
           ? 1
           : ++acc.shipmentByState[shipmentKey][state]
-      // acc.shipment.full = isFull ? ++acc.shipment.full : acc.shipment.full
-      // acc.shipment.coleta = isColeta
-      //   ? ++acc.shipment.coleta
-      //   : acc.shipment.coleta
-      // acc.shipment.correios = isCorreios
-      //   ? ++acc.shipment.correios
-      //   : acc.shipment.correios
 
+      const currentDateCreated = new Date(curr.date_created)
+
+      acc.dateCreated =
+        !acc.dateCreated || currentDateCreated < new Date(acc.dateCreated)
+          ? currentDateCreated.toISOString()
+          : acc.dateCreated
       return acc
     },
     {
@@ -64,6 +63,7 @@ export const catalogReducer = (
       fullBestPosition: null,
       length: 0,
       priceList: [],
+      dateCreated: "",
       shipmentByState: {
         full: {},
         correios: {},
@@ -71,7 +71,7 @@ export const catalogReducer = (
         others: {},
       },
     }
-  )
+  ).priceList = null)
 }
 
 const _getShipmentKeyByLogisticType = (logisticType: LogisticType | string) => {
@@ -97,6 +97,7 @@ interface CatalogReducerResponse {
   fullBestPosition: number | null
   length: number
   priceList: Array<number>
+  dateCreated: string
   shipmentByState: {
     full: { [state: string]: number }
     correios: { [state: string]: number }

@@ -13,7 +13,6 @@ const webScrapeMlPage = async (predicateSelector: Function, options) => {
   const r = await fetchWithRetry({ options, retries: 10, predicateSelector })
   return r
 }
-//li.andes-pagination__button.andes-pagination__button--next a.andes-pagination__link
 
 const fetchWithRetry = async ({
   options,
@@ -39,11 +38,11 @@ const fetchWithRetry = async ({
 
       if (productIds == null) throw new Error("Predicate response is null")
       productIds = [...productIds, ...newProductIds]
-      urlBuilder.nextPage()
       console.log("nextPage", nextPage)
-      if (nextPage === false) break
+      if (!nextPage) break
+      urlBuilder.nextPage()
     } catch (e) {
-      console.log("ERRRR", e)
+      console.error("ERRRR", e)
       areTherePages = false
     }
   }
@@ -75,13 +74,18 @@ const webScrapeFetcher = async (url: string, retries: number) => {
 
 const webScrapeMlUrlBuilder = (options) => {
   let currentPage
+  let isPagerWorking = true
   let page = options.page ?? 1
+  const { catalogId } = options
 
   const getCurrentUrlScope = () => {
     switch (options.scrapeType) {
-      case ScrapeType.Catalog:
-        const { catalogId } = options
+      case ScrapeType.CatalogProductList:
         currentPage = `https://www.mercadolivre.com.br/p/${catalogId}/s?page=${page}`
+        return currentPage
+      case ScrapeType.CatalogMetadata:
+        isPagerWorking = false
+        currentPage = `https://www.mercadolivre.com.br/p/${catalogId}`
         return currentPage
       default:
         throw new Error("Invalid scrape type")
@@ -90,6 +94,7 @@ const webScrapeMlUrlBuilder = (options) => {
   return {
     getCurrentUrl: () => getCurrentUrlScope(),
     nextPage: () => {
+      if (!isPagerWorking) return
       page++
       return getCurrentUrlScope()
     },

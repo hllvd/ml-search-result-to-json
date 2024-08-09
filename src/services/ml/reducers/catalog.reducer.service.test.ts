@@ -1,5 +1,5 @@
 import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
-import { catalogReducer } from "./catalog.reducer"
+import { catalogReducer } from "./catalog.reducer.service"
 
 describe("userReducer", () => {
   it("Should correctly reduce the seller array", () => {

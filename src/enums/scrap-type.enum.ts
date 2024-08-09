@@ -1,3 +1,4 @@
 export enum ScrapeType {
-  Catalog = "catalog",
+  CatalogProductList = "catalogProductList",
+  CatalogMetadata = "catalogMetadata",
 }

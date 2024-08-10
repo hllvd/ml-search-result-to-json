@@ -1,6 +1,9 @@
 import { AxiosResponse } from "axios"
 import { JSDOM } from "jsdom"
-import { ProductId } from "../../../../models/dto/ml-product.models"
+import {
+  PredicateResponse,
+  ProductIdStrAndPriceResponse,
+} from "../../../../models/predicate/predicate-response.models"
 
 /**
  *
@@ -9,11 +12,7 @@ import { ProductId } from "../../../../models/dto/ml-product.models"
  */
 const webScrapeCatalogToProductIdAndPricePredicate = async (
   response: AxiosResponse
-): Promise<{
-  nextPage: boolean
-  response: ProductId[]
-  prices: Array<number>
-}> => {
+): Promise<PredicateResponse<ProductIdStrAndPriceResponse>> => {
   const regex = /\/p\/([^/]+)\//
   const dom = new JSDOM(await response.data)
   const document = dom.window.document
@@ -35,7 +34,10 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
     ).length === 0
   const productIds = buttonWithUrls.map((e) => e.match(regex)[1])
   if (productIds.length === 0) throw new Error("No products found")
-  return { nextPage, response: productIds, prices }
+  const productIdsAndPricesJoin = productIds.map((e, i) => {
+    return { productIdStr: e, price: prices[i] }
+  })
+  return { nextPage, response: productIdsAndPricesJoin }
 }
 
 const webScrapeCatalogToMetadataPredicate = async (
@@ -67,6 +69,7 @@ const _sanitizeAmounSold = (amountSold: string): number => {
   const matches = addZerosToAmountStr.match(numbersRegex)
   if (matches) return parseInt(matches.join(""))
 }
+
 export {
   webScrapeCatalogToProductIdAndPricePredicate,
   webScrapeCatalogToMetadataPredicate,

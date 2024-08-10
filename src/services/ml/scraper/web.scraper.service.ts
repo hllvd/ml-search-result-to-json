@@ -9,7 +9,7 @@ import { ProductId } from "../../../models/dto/ml-product.models"
  * @returns
  */
 const webScrapeMlPage = async (predicateSelector: Function, options) => {
-  const r = await fetchProductIdAndPricesWithRetry({
+  const r = await fetchWithRetry({
     options,
     retries: 10,
     predicateSelector,
@@ -17,17 +17,22 @@ const webScrapeMlPage = async (predicateSelector: Function, options) => {
   return r
 }
 
-const fetchProductIdAndPricesWithRetry = async ({
+const fetchWithRetry = async ({
   options,
   retries,
   predicateSelector,
 }: {
-  options: { scrapType: ScrapeType; page?: number; catalogId: string }
+  options: {
+    scrapType: ScrapeType
+    page?: number
+    catalogId?: string
+    productId?: string
+  }
   retries: number
   predicateSelector: Function
 }): Promise<Array<{ productIdStr: string; price: number }>> => {
   const urlBuilder = webScrapeMlUrlBuilder(options)
-  let productIdsAndPrice: Array<{ productIdStr: string; price: number }> = []
+  let resultArray: Array<any> = []
   let areTherePages = true
   while (areTherePages) {
     try {
@@ -37,17 +42,13 @@ const fetchProductIdAndPricesWithRetry = async ({
       )
       const {
         nextPage,
-        response: newProductIds,
+        response: currentPageResult,
         prices,
       } = await predicateSelector(response)
 
-      const productIdsAndPricesJoin = newProductIds.map((e, i) => {
-        return { productIdStr: e, price: prices[i] }
-      })
-
-      if (productIdsAndPrice == null)
+      if (currentPageResult == null)
         throw new Error("Predicate response is null")
-      productIdsAndPrice = [...productIdsAndPrice, ...productIdsAndPricesJoin]
+      resultArray = [...resultArray, ...currentPageResult]
       if (!nextPage) break
       urlBuilder.nextPage()
     } catch (e) {
@@ -55,7 +56,7 @@ const fetchProductIdAndPricesWithRetry = async ({
       areTherePages = false
     }
   }
-  return productIdsAndPrice ?? null
+  return resultArray ?? null
 }
 
 const webScrapeFetcher = async (url: string, retries: number) => {
@@ -69,7 +70,7 @@ const webScrapeFetcher = async (url: string, retries: number) => {
           "User-Agent":
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
           Accept:
-            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
+            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/png,*/*;q=0.8",
         },
       })
       break

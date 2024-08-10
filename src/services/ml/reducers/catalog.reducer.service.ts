@@ -7,20 +7,21 @@ export const catalogReducer = (
 ): CatalogReducerResponse => {
   const catalogReducer = catalog.reduce(
     (acc, curr, i) => {
-      const mlUser = curr.mlUser
+      const { mlUser, price, title } = curr
       const isFull = curr.shipping?.logistic_type == LogisticType.full
-      const price = curr.price
       const state = curr.seller_address?.state?.id
       const currentDateCreated = new Date(curr.date_created)
+      delete curr.pictures
+      delete curr.attributes
+      acc.title = title
+
       const shipmentKey = _getShipmentKeyByLogisticType(
         curr.shipping?.logistic_type as LogisticType
       )
       const { isMedalPlatinum, isMedalGold, isMedalLider } = _getMedalBooleans(
         mlUser.seller_reputation?.power_seller_status
       )
-      delete curr.pictures
-      delete curr.attributes
-      console.log(curr)
+
       acc.medalGoldBestPosition = _getBestPosition({
         currentPosition: i,
         currentValue: acc.medalGoldBestPosition,
@@ -31,7 +32,6 @@ export const catalogReducer = (
         currentValue: acc.medalPlatinumBestPosition,
         isType: isMedalPlatinum,
       })
-
       acc.medalLiderBestPosition = _getBestPosition({
         currentPosition: i,
         currentValue: acc.medalLiderBestPosition,
@@ -93,6 +93,7 @@ export const catalogReducer = (
       fullBestPosition: null,
       medalGoldBestPosition: null,
       medalPlatinumBestPosition: null,
+      title: "",
       medalLiderBestPosition: null,
       length: 0,
       priceList: [],

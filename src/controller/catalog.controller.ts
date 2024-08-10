@@ -1,9 +1,5 @@
 import { Request, Response } from "express"
-import { ScrapeType } from "../enums/scrap-type.enum"
-import { getProducts } from "../services/ml/api/search.api.service"
 import { catalogSummary } from "../services/ml/catalog.service"
-import { webScrapeCatalogToProductStrsPredicate } from "../services/ml/scraper/predicate/catalog.predicate.service"
-import { webScrapeMlPage } from "../services/ml/scraper/web.scraper.service"
 
 /** Catalog info
  * - Densidade de Líder

@@ -9,12 +9,15 @@ import { ProductId } from "../../../models/dto/ml-product.models"
  * @returns
  */
 const webScrapeMlPage = async (predicateSelector: Function, options) => {
-  console.log("options url", options)
-  const r = await fetchWithRetry({ options, retries: 10, predicateSelector })
+  const r = await fetchProductIdAndPricesWithRetry({
+    options,
+    retries: 10,
+    predicateSelector,
+  })
   return r
 }
 
-const fetchWithRetry = async ({
+const fetchProductIdAndPricesWithRetry = async ({
   options,
   retries,
   predicateSelector,
@@ -22,9 +25,9 @@ const fetchWithRetry = async ({
   options: { scrapType: ScrapeType; page?: number; catalogId: string }
   retries: number
   predicateSelector: Function
-}): Promise<Array<ProductId>> => {
+}): Promise<Array<{ productIdStr: string; price: number }>> => {
   const urlBuilder = webScrapeMlUrlBuilder(options)
-  let productIds: Array<ProductId> = []
+  let productIdsAndPrice: Array<{ productIdStr: string; price: number }> = []
   let areTherePages = true
   while (areTherePages) {
     try {
@@ -32,12 +35,19 @@ const fetchWithRetry = async ({
         urlBuilder.getCurrentUrl(),
         retries
       )
-      const { nextPage, response: newProductIds } = await predicateSelector(
-        response
-      )
+      const {
+        nextPage,
+        response: newProductIds,
+        prices,
+      } = await predicateSelector(response)
 
-      if (productIds == null) throw new Error("Predicate response is null")
-      productIds = [...productIds, ...newProductIds]
+      const productIdsAndPricesJoin = newProductIds.map((e, i) => {
+        return { productIdStr: e, price: prices[i] }
+      })
+
+      if (productIdsAndPrice == null)
+        throw new Error("Predicate response is null")
+      productIdsAndPrice = [...productIdsAndPrice, ...productIdsAndPricesJoin]
       console.log("nextPage", nextPage)
       if (!nextPage) break
       urlBuilder.nextPage()
@@ -46,8 +56,8 @@ const fetchWithRetry = async ({
       areTherePages = false
     }
   }
-  console.log("productIds", productIds)
-  return productIds ?? null
+  console.log("productIds", productIdsAndPrice)
+  return productIdsAndPrice ?? null
 }
 
 const webScrapeFetcher = async (url: string, retries: number) => {

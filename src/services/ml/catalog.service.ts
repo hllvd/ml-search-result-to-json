@@ -5,7 +5,7 @@ import { getSeller } from "./api/users"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
 import {
   webScrapeCatalogToMetadata,
-  webScrapeCatalogToProductStrsPredicate,
+  webScrapeCatalogToProductIdAndPricePredicate,
 } from "./scraper/predicate/catalog.predicate.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
@@ -13,21 +13,20 @@ const catalogSummary = async ({
   catalogId,
   userId,
 }): Promise<{ catalogReducerValues: object }> => {
-  const productList: Array<ProductId> = await webScrapeMlPage(
-    webScrapeCatalogToProductStrsPredicate,
-    {
+  const productList: Array<{ productIdStr: string; price: number }> =
+    await webScrapeMlPage(webScrapeCatalogToProductIdAndPricePredicate, {
       catalogId,
       scrapeType: ScrapeType.CatalogProductList,
-    }
-  )
-  const productMeta: Array<ProductId> = await webScrapeMlPage(
-    webScrapeCatalogToMetadata,
-    {
-      catalogId,
-      scrapeType: ScrapeType.CatalogMetadata,
-    }
-  )
-  const catalog = await getProducts(userId, productList)
+    })
+  // const productMeta: Array<ProductId> = await webScrapeMlPage(
+  //   webScrapeCatalogToMetadata,
+  //   {
+  //     catalogId,
+  //     scrapeType: ScrapeType.CatalogMetadata,
+  //   }
+  // )
+  const productListOnlyIds = productList.map((e) => e.productIdStr)
+  const catalog = await getProducts(userId, productListOnlyIds)
   const catalogSellers = await Promise.all(
     catalog.map(async (c): Promise<any> => {
       const mlUser = await getSeller({
@@ -38,10 +37,17 @@ const catalogSummary = async ({
     })
   )
   const productsWithSellersInCorrectOrder = getProductInCorrectOrder(
-    productList,
+    productListOnlyIds,
     catalogSellers
   )
-  const catalogReducerValues = catalogReducer(productsWithSellersInCorrectOrder)
+  const productsWithSellersAndPricesInCorrectOrder =
+    productsWithSellersInCorrectOrder.map((p, i) => ({
+      ...p,
+      price: productList[i].price,
+    }))
+  const catalogReducerValues = catalogReducer(
+    productsWithSellersAndPricesInCorrectOrder
+  )
 
   return { catalogReducerValues }
 }

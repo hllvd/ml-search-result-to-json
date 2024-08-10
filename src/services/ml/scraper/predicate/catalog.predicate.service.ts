@@ -7,15 +7,26 @@ import { ProductId } from "../../../../models/dto/ml-product.models"
  * @param response
  * @returns list of product ids and a boolean indicating if there is a next page
  */
-const webScrapeCatalogToProductStrsPredicate = async (
+const webScrapeCatalogToProductIdAndPricePredicate = async (
   response: AxiosResponse
-): Promise<{ nextPage: boolean; response: ProductId[] }> => {
+): Promise<{
+  nextPage: boolean
+  response: ProductId[]
+  prices: Array<number>
+}> => {
   const regex = /\/p\/([^/]+)\//
   const dom = new JSDOM(await response.data)
   const document = dom.window.document
   const buttonWithUrls = Array.from(
     document.querySelectorAll(".andes-button.ui-pdp-action--secondary")
   ).map((el: any) => el.getAttribute("formaction"))
+
+  const prices = Array.from(
+    document.querySelectorAll(
+      ".andes-money-amount.ui-pdp-price__part.andes-money-amount--cents-superscript.andes-money-amount--compact"
+    )
+  ).map((el: HTMLElement) => _convertCurrencyStrings(el.textContent))
+
   const nextPage =
     Array.from(
       document.querySelectorAll(
@@ -24,7 +35,7 @@ const webScrapeCatalogToProductStrsPredicate = async (
     ).length === 0
   const productIds = buttonWithUrls.map((e) => e.match(regex)[1])
   if (productIds.length === 0) throw new Error("No products found")
-  return { nextPage, response: productIds }
+  return { nextPage, response: productIds, prices }
 }
 
 const webScrapeCatalogToMetadata = async (
@@ -42,4 +53,14 @@ const webScrapeCatalogToMetadata = async (
   return { response: productIds }
 }
 
-export { webScrapeCatalogToProductStrsPredicate, webScrapeCatalogToMetadata }
+const _convertCurrencyStrings = (currencyStrings: string): number => {
+  let numberString = currencyStrings.replace(/R\$\s*/, "").replace(",", ".")
+  const parsedfloat = parseFloat(numberString)
+  console.log("parsedfloat", currencyStrings, parsedfloat)
+  return parsedfloat
+}
+
+export {
+  webScrapeCatalogToProductIdAndPricePredicate,
+  webScrapeCatalogToMetadata,
+}

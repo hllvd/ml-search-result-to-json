@@ -3,7 +3,7 @@ import { JSDOM } from "jsdom"
 import {
   PredicateResponse,
   ProductIdStrAndPriceResponse,
-} from "../../../../models/predicate/predicate-response.models"
+} from "../../../../../models/predicate/predicate-response.models"
 
 /**
  *
@@ -25,7 +25,6 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
       ".andes-money-amount.ui-pdp-price__part.andes-money-amount--cents-superscript.andes-money-amount--compact"
     )
   ).map((el: HTMLElement) => _convertCurrencyStrings(el.textContent))
-
   const nextPage =
     Array.from(
       document.querySelectorAll(
@@ -40,37 +39,10 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
   return { nextPage, response: productIdsAndPricesJoin }
 }
 
-const webScrapeCatalogToMetadataPredicate = async (
-  response: AxiosResponse
-): Promise<{ response: number }> => {
-  const dom = new JSDOM(await response.data)
-  const document = dom.window.document
-  const amountStr = document.querySelectorAll(
-    ".ui-pdp-container__col.col-2.mr-32 .ui-pdp-header .ui-pdp-subtitle"
-  ).innerHTML
-  if (amountStr == null) throw new Error("No catalog amount found")
-
-  const amountInt = _sanitizeAmounSold(amountStr)
-
-  return { response: amountInt }
-}
-
 const _convertCurrencyStrings = (currencyStrings: string): number => {
   let numberString = currencyStrings.replace(/R\$\s*/, "").replace(",", ".")
   const parsedfloat = parseFloat(numberString)
   return parsedfloat
 }
 
-const _sanitizeAmounSold = (amountSold: string): number => {
-  const addZerosToAmountStr = amountSold
-    .replaceAll("mil", "000")
-    .replaceAll("mi", "000000")
-  const numbersRegex = /\d+/g // Regular expression to match one or more digits
-  const matches = addZerosToAmountStr.match(numbersRegex)
-  if (matches) return parseInt(matches.join(""))
-}
-
-export {
-  webScrapeCatalogToProductIdAndPricePredicate,
-  webScrapeCatalogToMetadataPredicate,
-}
+export { webScrapeCatalogToProductIdAndPricePredicate }

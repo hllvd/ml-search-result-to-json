@@ -1,12 +1,9 @@
-import { ProductId } from "aws-sdk/clients/sagemaker"
 import { ScrapeType } from "../../enums/scrap-type.enum"
 import { getProductInCorrectOrder, getProducts } from "./api/search.api.service"
 import { getSeller } from "./api/users"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
-import {
-  webScrapeCatalogToMetadataPredicate,
-  webScrapeCatalogToProductIdAndPricePredicate,
-} from "./scraper/predicate/catalog.predicate.service"
+import { webScrapeCatalogToMetadataPredicate } from "./scraper/predicate/catalog/catalog-metadata.predicate.service"
+import { webScrapeCatalogToProductIdAndPricePredicate } from "./scraper/predicate/catalog/catalog-producIds-price.predicate.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
 const catalogSummary = async ({

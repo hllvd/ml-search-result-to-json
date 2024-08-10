@@ -27,12 +27,10 @@ const test = async (req: Request, res: Response) => {
    */
   //const r = await fetchMl("/sites/MLB/search?q=celular", options)
   const r = await fetchMl("/items?ids=MLB19564320", options)
-  console.log("r", r)
   res.status(200).json({ ...r })
 }
 
 const logSearchResult = async (req: Request, res: Response) => {
-  console.log("here")
   const r = "ok"
   res.status(200).json({ r })
 }

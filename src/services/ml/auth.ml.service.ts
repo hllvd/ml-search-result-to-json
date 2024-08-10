@@ -41,7 +41,6 @@ const reAuthentication = async (code: string): Promise<OAuthTokenResponse> => {
 const loginUrl = () => {
   const url = new URL(authorizationBaseUrl)
   Object.entries(searchParams).forEach(([key, value]) => {
-    console.log(key, value)
     url.searchParams.append(key, value)
   })
   return url

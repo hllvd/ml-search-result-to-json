@@ -27,7 +27,7 @@ const fetchMl = async (url: string, options: FetchMlOptionsModel = {}) => {
         Authorization: `Bearer ${userAccessToken}`,
         ...headers,
       }
-      console.log(userAccessToken)
+      console.log(userAccessToken, `${base_url}${url}`)
       const result =
         method === "POST" || data != null
           ? await httpPost(`${base_url}${url}`, data, optionsWithAuthorization)
@@ -44,7 +44,6 @@ const fetchMl = async (url: string, options: FetchMlOptionsModel = {}) => {
        * Agora mesmo tudo entr e está causando erro
        */
       dataResponse = e.response && e.response?.data
-      console.log("ERRR", dataResponse)
       const invalidTokenMessage = ["invalid_token", "mlauth: invalid token"]
       if (invalidTokenMessage.includes(dataResponse?.message)) {
         console.log("is axios", userId)

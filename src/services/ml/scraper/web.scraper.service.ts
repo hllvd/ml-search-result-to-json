@@ -48,22 +48,20 @@ const fetchProductIdAndPricesWithRetry = async ({
       if (productIdsAndPrice == null)
         throw new Error("Predicate response is null")
       productIdsAndPrice = [...productIdsAndPrice, ...productIdsAndPricesJoin]
-      console.log("nextPage", nextPage)
       if (!nextPage) break
       urlBuilder.nextPage()
     } catch (e) {
-      console.error("ERRRR", e)
+      console.error(e)
       areTherePages = false
     }
   }
-  console.log("productIds", productIdsAndPrice)
   return productIdsAndPrice ?? null
 }
 
 const webScrapeFetcher = async (url: string, retries: number) => {
   let counter = 0
   let response = null
-  console.log("url", url)
+  console.log("scrap", url)
   while (counter < retries) {
     try {
       response = await axios.get(url, {

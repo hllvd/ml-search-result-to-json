@@ -4,7 +4,7 @@ import { getProductInCorrectOrder, getProducts } from "./api/search.api.service"
 import { getSeller } from "./api/users"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
 import {
-  webScrapeCatalogToMetadata,
+  webScrapeCatalogToMetadataPredicate,
   webScrapeCatalogToProductIdAndPricePredicate,
 } from "./scraper/predicate/catalog.predicate.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
@@ -18,17 +18,19 @@ const catalogSummary = async ({
       catalogId,
       scrapeType: ScrapeType.CatalogProductList,
     })
-  // const productMeta: Array<ProductId> = await webScrapeMlPage(
-  //   webScrapeCatalogToMetadata,
-  //   {
-  //     catalogId,
-  //     scrapeType: ScrapeType.CatalogMetadata,
-  //   }
-  // )
+  const productMeta = await webScrapeMlPage(
+    webScrapeCatalogToMetadataPredicate,
+    {
+      catalogId,
+      scrapeType: ScrapeType.CatalogMetadata,
+    }
+  )
+
+  console.log("productMeta", productMeta)
   const productListOnlyIds = productList.map((e) => e.productIdStr)
-  const catalog = await getProducts(userId, productListOnlyIds)
-  const catalogSellers = await Promise.all(
-    catalog.map(async (c): Promise<any> => {
+  const products = await getProducts(userId, productListOnlyIds)
+  const productsWithSellers = await Promise.all(
+    products.map(async (c): Promise<any> => {
       const mlUser = await getSeller({
         userId,
         sellerId: c.seller_id.toString(),
@@ -36,15 +38,18 @@ const catalogSummary = async ({
       return { ...c, mlUser }
     })
   )
+
   const productsWithSellersInCorrectOrder = getProductInCorrectOrder(
     productListOnlyIds,
-    catalogSellers
+    productsWithSellers
   )
+
   const productsWithSellersAndPricesInCorrectOrder =
     productsWithSellersInCorrectOrder.map((p, i) => ({
       ...p,
       price: productList[i].price,
     }))
+
   const catalogReducerValues = catalogReducer(
     productsWithSellersAndPricesInCorrectOrder
   )

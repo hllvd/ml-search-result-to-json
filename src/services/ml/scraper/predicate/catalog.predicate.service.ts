@@ -38,29 +38,36 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
   return { nextPage, response: productIds, prices }
 }
 
-const webScrapeCatalogToMetadata = async (
+const webScrapeCatalogToMetadataPredicate = async (
   response: AxiosResponse
-): Promise<{ response: ProductId[] }> => {
-  const regex = /\/p\/([^/]+)\//
+): Promise<{ response: number }> => {
   const dom = new JSDOM(await response.data)
   const document = dom.window.document
-  const buttonWithUrls = Array.from(
-    document.querySelectorAll(".andes-button.ui-pdp-action--secondary")
-  ).map((el: any) => el.getAttribute("formaction"))
+  const amountStr = document.querySelectorAll(
+    ".ui-pdp-container__col.col-2.mr-32 .ui-pdp-header .ui-pdp-subtitle"
+  ).innerHTML
+  if (amountStr == null) throw new Error("No catalog amount found")
 
-  const productIds = buttonWithUrls.map((e) => e.match(regex)[1])
-  if (productIds.length === 0) throw new Error("No products found")
-  return { response: productIds }
+  const amountInt = _sanitizeAmounSold(amountStr)
+
+  return { response: amountInt }
 }
 
 const _convertCurrencyStrings = (currencyStrings: string): number => {
   let numberString = currencyStrings.replace(/R\$\s*/, "").replace(",", ".")
   const parsedfloat = parseFloat(numberString)
-  console.log("parsedfloat", currencyStrings, parsedfloat)
   return parsedfloat
 }
 
+const _sanitizeAmounSold = (amountSold: string): number => {
+  const addZerosToAmountStr = amountSold
+    .replaceAll("mil", "000")
+    .replaceAll("mi", "000000")
+  const numbersRegex = /\d+/g // Regular expression to match one or more digits
+  const matches = addZerosToAmountStr.match(numbersRegex)
+  if (matches) return parseInt(matches.join(""))
+}
 export {
   webScrapeCatalogToProductIdAndPricePredicate,
-  webScrapeCatalogToMetadata,
+  webScrapeCatalogToMetadataPredicate,
 }

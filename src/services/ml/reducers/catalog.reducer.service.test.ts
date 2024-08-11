@@ -29,6 +29,7 @@ describe("catalogReducer", () => {
         date_created: "2022-06-13T11:23:59.000Z",
         price: 55,
         mlOwner: false,
+        official_store_id: 123,
         shipping: {
           logistic_type: LogisticType.coleta,
         },
@@ -72,7 +73,7 @@ describe("catalogReducer", () => {
 
     //Assert
     expect(result).toEqual({
-      sumPrice: 225,
+      top5AvgPrice: 56.25,
       bestPrice: 50,
       secondBestPrice: 55,
       firstPlacePrice: 50,
@@ -80,6 +81,7 @@ describe("catalogReducer", () => {
       medalGoldBestPosition: 2,
       medalPlatinumBestPosition: 1,
       medalLiderBestPosition: null,
+      officialStoreBestPosition: 2,
       fullBestPosition: 3,
       length: 4,
       mlOwner: false,

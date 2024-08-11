@@ -1,5 +1,5 @@
 interface CatalogReducerResponse {
-  sumPrice: number
+  top5AvgPrice: number | null
   bestPrice: number | null
   secondBestPrice: number | null
   firstPlacePrice: number
@@ -8,6 +8,7 @@ interface CatalogReducerResponse {
   medalGoldBestPosition: number | null
   medalPlatinumBestPosition: number | null
   medalLiderBestPosition: number | null
+  officialStoreBestPosition: number | null
   length: number
   mlOwner: boolean
   priceList: Array<number>

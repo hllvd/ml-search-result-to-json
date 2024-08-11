@@ -39,6 +39,11 @@ export const catalogReducer = (
         currentValue: acc.medalLiderBestPosition,
         isType: isMedalLider,
       })
+      acc.officialStoreBestPosition = _getBestPosition({
+        currentPosition: i,
+        currentValue: acc.officialStoreBestPosition,
+        isType: curr.official_store_id != null,
+      })
 
       const currentMedal = _getMedalKey(
         mlUser.seller_reputation?.power_seller_status
@@ -58,7 +63,10 @@ export const catalogReducer = (
       acc.priceList.push(price)
       acc.priceList.sort((a, b) => a - b)
 
-      acc.sumPrice += price
+      acc.top5AvgPrice =
+        i < 5
+          ? acc.priceList.reduce((ac, cur) => ac + cur, 0) / (i + 1)
+          : acc.top5AvgPrice
 
       acc.bestPrice =
         acc.bestPrice === null ? price : Math.min(acc.bestPrice, price)
@@ -87,7 +95,8 @@ export const catalogReducer = (
       return acc
     },
     {
-      sumPrice: 0,
+      title: "",
+      top5AvgPrice: null,
       bestPrice: null,
       secondBestPrice: null,
       firstPlacePrice: 0,
@@ -95,8 +104,8 @@ export const catalogReducer = (
       fullBestPosition: null,
       medalGoldBestPosition: null,
       medalPlatinumBestPosition: null,
-      title: "",
       medalLiderBestPosition: null,
+      officialStoreBestPosition: null,
       length: 0,
       priceList: [],
       dateCreated: "",

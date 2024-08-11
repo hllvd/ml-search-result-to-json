@@ -35,6 +35,7 @@ export interface MLProduct {
   date_created?: string
   last_updated?: string
   seller_address?: MLProductSellerAddress
+  mlOwner: boolean
 }
 
 interface MLProductSellerAddress {

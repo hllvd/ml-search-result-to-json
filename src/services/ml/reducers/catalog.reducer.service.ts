@@ -1,3 +1,4 @@
+import { ML_OWN_USER_ID } from "../../../constants"
 import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
 import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
 
@@ -13,6 +14,8 @@ export const catalogReducer = (
       delete curr.pictures
       delete curr.attributes
       acc.title = title
+
+      acc.mlOwner = mlUser.id.toString() === ML_OWN_USER_ID ? true : acc.mlOwner
 
       const shipmentKey = _getShipmentKeyByLogisticType(
         curr.shipping?.logistic_type as LogisticType
@@ -98,6 +101,8 @@ export const catalogReducer = (
       priceList: [],
       dateCreated: "",
       state: {},
+      mlOwner: false,
+
       shipmentByState: {
         full: {},
         correios: {},

@@ -9,6 +9,7 @@ interface CatalogReducerResponse {
   medalPlatinumBestPosition: number | null
   medalLiderBestPosition: number | null
   length: number
+  mlOwner: boolean
   priceList: Array<number>
   dateCreated: string
   state: { [key: string]: number }

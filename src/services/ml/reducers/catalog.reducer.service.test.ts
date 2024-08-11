@@ -12,6 +12,7 @@ describe("catalogReducer", () => {
         seller_address: { state: { id: "BR-SP" } },
         date_created: "2022-06-13T11:23:59.000Z",
         price: 50,
+        mlOwner: false,
         shipping: {
           logistic_type: LogisticType.correios,
         },
@@ -27,6 +28,7 @@ describe("catalogReducer", () => {
         seller_address: { state: { id: "BR-SP" } },
         date_created: "2022-06-13T11:23:59.000Z",
         price: 55,
+        mlOwner: false,
         shipping: {
           logistic_type: LogisticType.coleta,
         },
@@ -40,6 +42,7 @@ describe("catalogReducer", () => {
         seller_address: { state: { id: "BR-SC" } },
         date_created: "2022-06-13T11:23:59.000Z",
         price: 60,
+        mlOwner: false,
         shipping: {
           logistic_type: LogisticType.full,
         },
@@ -53,6 +56,7 @@ describe("catalogReducer", () => {
         seller_address: { state: { id: "BR-SP" } },
         date_created: "2022-06-13T11:23:59.000Z",
         price: 60,
+        mlOwner: false,
         shipping: {
           logistic_type: LogisticType.full,
         },
@@ -78,6 +82,7 @@ describe("catalogReducer", () => {
       medalLiderBestPosition: null,
       fullBestPosition: 3,
       length: 4,
+      mlOwner: false,
       dateCreated: "2022-06-13T11:23:59.000Z",
       shipmentByState: {
         full: { "BR-SC": 1, "BR-SP": 1 },

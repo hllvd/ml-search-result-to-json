@@ -32,9 +32,7 @@ const catalogSummary = async ({
         userId,
         sellerId: c.seller_id.toString(),
       })
-      if (c.seller_id.toString() == ML_OWN_USER_ID) {
-        return { ...c, mlUser, mlOwner: true }
-      }
+
       return { ...c, mlUser }
     })
   )

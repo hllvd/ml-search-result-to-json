@@ -24,24 +24,29 @@ export const catalogReducer = (
         mlUser.seller_reputation?.power_seller_status
       )
 
-      acc.medalGoldBestPosition = _getBestPosition({
+      acc.position.medalGold = _getBestPosition({
         currentPosition: i,
-        currentValue: acc.medalGoldBestPosition,
+        currentValue: acc.position.medalGold,
         isType: isMedalGold,
       })
-      acc.medalPlatinumBestPosition = _getBestPosition({
+      acc.position.medalPlatinum = _getBestPosition({
         currentPosition: i,
-        currentValue: acc.medalPlatinumBestPosition,
+        currentValue: acc.position.medalPlatinum,
         isType: isMedalPlatinum,
       })
-      acc.medalLiderBestPosition = _getBestPosition({
+      acc.position.medalLider = _getBestPosition({
         currentPosition: i,
-        currentValue: acc.medalLiderBestPosition,
+        currentValue: acc.position.medalLider,
         isType: isMedalLider,
       })
-      acc.officialStoreBestPosition = _getBestPosition({
+      acc.position.full = _getBestPosition({
         currentPosition: i,
-        currentValue: acc.officialStoreBestPosition,
+        currentValue: acc.position.full,
+        isType: isFull,
+      })
+      acc.position.officialStore = _getBestPosition({
+        currentPosition: i,
+        currentValue: acc.position.officialStore,
         isType: curr.official_store_id != null,
       })
 
@@ -63,15 +68,15 @@ export const catalogReducer = (
       acc.priceList.push(price)
       acc.priceList.sort((a, b) => a - b)
 
-      acc.top5AvgPrice =
+      acc.price.top5Avg =
         i < 5
           ? acc.priceList.reduce((ac, cur) => ac + cur, 0) / (i + 1)
-          : acc.top5AvgPrice
+          : acc.price.top5Avg
 
-      acc.bestPrice =
-        acc.bestPrice === null ? price : Math.min(acc.bestPrice, price)
+      acc.price.best =
+        acc.price.best === null ? price : Math.min(acc.price.best, price)
 
-      acc.secondBestPrice = acc.priceList[1] ?? null
+      acc.price.secondBest = acc.priceList[1] ?? null
 
       acc.bestPriceFull =
         isFull && acc.bestPriceFull === null ? price : acc.bestPriceFull
@@ -79,9 +84,6 @@ export const catalogReducer = (
       acc.bestPriceFull = isFull
         ? Math.min(acc.bestPriceFull, price)
         : acc.bestPriceFull
-
-      acc.fullBestPosition =
-        isFull && acc.fullBestPosition === null ? i + 1 : acc.fullBestPosition
 
       acc.shipmentByState[shipmentKey][state] =
         acc.shipmentByState[shipmentKey][state] === undefined
@@ -96,16 +98,16 @@ export const catalogReducer = (
     },
     {
       title: "",
-      top5AvgPrice: null,
-      bestPrice: null,
-      secondBestPrice: null,
+      price: { top5Avg: null, best: null, secondBest: null },
       firstPlacePrice: 0,
       bestPriceFull: null,
-      fullBestPosition: null,
-      medalGoldBestPosition: null,
-      medalPlatinumBestPosition: null,
-      medalLiderBestPosition: null,
-      officialStoreBestPosition: null,
+      position: {
+        full: null,
+        medalGold: null,
+        medalPlatinum: null,
+        medalLider: null,
+        officialStore: null,
+      },
       length: 0,
       priceList: [],
       dateCreated: "",

@@ -1,14 +1,18 @@
 interface CatalogReducerResponse {
-  top5AvgPrice: number | null
-  bestPrice: number | null
-  secondBestPrice: number | null
+  price: {
+    top5Avg: number | null
+    best: number | null
+    secondBest: number | null
+  }
   firstPlacePrice: number
   bestPriceFull: number | null
-  fullBestPosition: number | null
-  medalGoldBestPosition: number | null
-  medalPlatinumBestPosition: number | null
-  medalLiderBestPosition: number | null
-  officialStoreBestPosition: number | null
+  position: {
+    full: number | null
+    medalGold: number | null
+    medalPlatinum: number | null
+    medalLider: number | null
+    officialStore: number | null
+  }
   length: number
   mlOwner: boolean
   priceList: Array<number>

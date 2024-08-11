@@ -12,4 +12,5 @@ export const {
   AWS_REGION,
   AWS_ACCESS_KEY_ID,
   AWS_SECRET_ACCESS_KEY,
+  ML_OWN_USER_ID,
 } = process.env

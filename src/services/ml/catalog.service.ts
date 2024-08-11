@@ -1,3 +1,4 @@
+import { ML_OWN_USER_ID } from "../../constants"
 import { ScrapeType } from "../../enums/scrap-type.enum"
 import { getProductInCorrectOrder, getProducts } from "./api/search.api.service"
 import { getSeller } from "./api/users"
@@ -15,7 +16,7 @@ const catalogSummary = async ({
       catalogId,
       scrapeType: ScrapeType.CatalogProductList,
     })
-  const productMeta = await webScrapeMlPage(
+  const productSales = await webScrapeMlPage(
     webScrapeCatalogToMetadataPredicate,
     {
       catalogId,
@@ -23,7 +24,6 @@ const catalogSummary = async ({
     }
   )
 
-  console.log("productMeta", productMeta)
   const productListOnlyIds = productList.map((e) => e.productIdStr)
   const products = await getProducts(userId, productListOnlyIds)
   const productsWithSellers = await Promise.all(
@@ -32,6 +32,9 @@ const catalogSummary = async ({
         userId,
         sellerId: c.seller_id.toString(),
       })
+      if (c.seller_id.toString() == ML_OWN_USER_ID) {
+        return { ...c, mlUser, mlOwner: true }
+      }
       return { ...c, mlUser }
     })
   )
@@ -47,26 +50,41 @@ const catalogSummary = async ({
       price: productList[i].price,
     }))
 
+  const productsWithSellersPricesAndAmountInCorrectOrder =
+    productsWithSellersAndPricesInCorrectOrder.map((p) => ({
+      ...p,
+    }))
+
   const catalogReducerValues = catalogReducer(
-    productsWithSellersAndPricesInCorrectOrder
+    productsWithSellersPricesAndAmountInCorrectOrder
   )
 
-  return { catalogReducerValues }
+  const catalogRecuderWithSummary = _summarizeCatalog({
+    catalog: catalogReducerValues,
+    sales: productSales,
+  })
+
+  return { catalogReducerValues: catalogRecuderWithSummary }
 }
 
-//   const catalogReducer = catalog.reduce(
-//     (acc, curr) => {
-//       acc.price += curr.price
-//       return acc
-//     },
-//     {
-//       shipmentFull: 0,
-//       shipmentColeta: 0,
-//       price: 0,
-//     }
-//   )
+const _summarizeCatalog = (options: {
+  catalog: CatalogReducerResponse
+  sales: number
+}) => {
+  const revenue = options.sales * options.catalog.firstPlacePrice
 
-//   return { catalogReducer, sellerReducer }
-// }
+  const dateCreated = new Date(options?.catalog?.dateCreated) ?? null
+  const today = new Date()
+  const timeDiff = today.getTime() - dateCreated.getTime()
+  const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24))
+  const dailyRevenue = revenue / daysDiff
+
+  const catalogWithSummary = {
+    ...options.catalog,
+    revenue,
+    dailyRevenue,
+  }
+  return catalogWithSummary
+}
 
 export { catalogSummary }

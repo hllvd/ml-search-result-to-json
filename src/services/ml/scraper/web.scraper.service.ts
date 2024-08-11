@@ -8,7 +8,10 @@ import { ProductId } from "../../../models/dto/ml-product.models"
  * @param options
  * @returns
  */
-const webScrapeMlPage = async (predicateSelector: Function, options) => {
+const webScrapeMlPage = async (
+  predicateSelector: Function,
+  options
+): Promise<any> => {
   const r = await fetchWithRetry({
     options,
     retries: 10,
@@ -40,14 +43,16 @@ const fetchWithRetry = async ({
         urlBuilder.getCurrentUrl(),
         retries
       )
-      const {
-        nextPage,
-        response: currentPageResult,
-        prices,
-      } = await predicateSelector(response)
+      const { nextPage, response: currentPageResult } = await predicateSelector(
+        response
+      )
+
+      if (!Array.isArray(currentPageResult)) return currentPageResult
 
       if (currentPageResult == null)
         throw new Error("Predicate response is null")
+      //check if currentPageResult is an array
+
       resultArray = [...resultArray, ...currentPageResult]
       if (!nextPage) break
       urlBuilder.nextPage()

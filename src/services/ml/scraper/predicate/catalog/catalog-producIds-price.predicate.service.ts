@@ -17,7 +17,9 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
   const dom = new JSDOM(await response.data)
   const document = dom.window.document
   const buttonWithUrls = Array.from(
-    document.querySelectorAll(".andes-button.ui-pdp-action--secondary")
+    document.querySelectorAll(
+      "[formaction^='https://www.mercadolivre.com.br/p/']"
+    )
   ).map((el: any) => el.getAttribute("formaction"))
 
   const prices = Array.from(

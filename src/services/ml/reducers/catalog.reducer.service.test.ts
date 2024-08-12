@@ -118,6 +118,11 @@ describe("catalogReducer", () => {
         medalLider: null,
         officialStore: 2,
       },
+      brandModel: {
+        brand: null,
+        model: null,
+        color: null,
+      },
       length: 4,
       mlOwner: false,
       dateCreated: "2022-06-13T11:23:59.000Z",
@@ -181,6 +186,11 @@ describe("catalogReducer", () => {
         medalPlatinum: 1,
         medalLider: null,
         officialStore: null,
+      },
+      brandModel: {
+        brand: null,
+        model: null,
+        color: null,
       },
       length: 1,
       mlOwner: false,

@@ -174,7 +174,7 @@ const _getMedalKey = (powerSellerStatus: string) => {
 }
 
 const _getEanIfExist = (attributes): string | null => {
-  return attributes?.find((attr) => attr.id == "GTIN").value_name
+  return attributes?.find((attr) => attr.id == "GTIN")?.value_name ?? null
 }
 
 const _getMedalBooleans = (powerSellerStatus: string) => {
@@ -185,7 +185,7 @@ const _getMedalBooleans = (powerSellerStatus: string) => {
 }
 
 const _getAttributeValueName = (attributes, name) =>
-  attributes?.find((attr) => attr.id == name.toUpperCase())?.value_name
+  attributes?.find((attr) => attr.id == name.toUpperCase())?.value_name ?? null
 
 const _getBestPosition = ({
   currentPosition,

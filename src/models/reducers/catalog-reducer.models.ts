@@ -1,10 +1,18 @@
-interface CatalogReducerResponse {
+import { String } from "aws-sdk/clients/sagemaker"
+
+export interface CatalogReducerResponse {
+  title: String
+  ean: string | null
+  brandModel: {
+    brand: string | null
+    model: string | null
+    color: string | null
+  }
   price: {
     top5Avg: number | null
     best: number | null
     secondBest: number | null
   }
-  firstPlacePrice: number
   bestPriceFull: number | null
   position: {
     full: number | null
@@ -17,7 +25,6 @@ interface CatalogReducerResponse {
   mlOwner: boolean
   priceList: Array<number>
   dateCreated: string
-  state: { [key: string]: number }
   shipmentByState: {
     full: { [state: string]: number }
     correios: { [state: string]: number }
@@ -30,4 +37,5 @@ interface CatalogReducerResponse {
     medalPlatinum: { [state: string]: number }
     noMedal: { [state: string]: number }
   }
+  state: { [key: string]: number }
 }

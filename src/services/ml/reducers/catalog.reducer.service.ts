@@ -1,6 +1,7 @@
 import { ML_OWN_USER_ID } from "../../../constants"
 import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
 import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
+import { CatalogReducerResponse } from "../../../models/reducers/catalog-reducer.models"
 
 export const catalogReducer = (
   catalog: Array<MLProduct>
@@ -11,6 +12,7 @@ export const catalogReducer = (
       const isFull = curr.shipping?.logistic_type == LogisticType.full
       const state = curr.seller_address?.state?.id
       const currentDateCreated = new Date(curr.date_created)
+      const attributes = curr.attributes
       delete curr.pictures
       delete curr.attributes
       acc.title = title
@@ -62,7 +64,6 @@ export const catalogReducer = (
         acc.state[state] = (acc.state[state] || 0) + 1
       }
 
-      acc.firstPlacePrice = i === 0 ? price : acc.firstPlacePrice
       acc.length += 1
 
       acc.priceList.push(price)
@@ -94,12 +95,26 @@ export const catalogReducer = (
         !acc.dateCreated || currentDateCreated < new Date(acc.dateCreated)
           ? currentDateCreated.toISOString()
           : acc.dateCreated
+
+      acc.brandModel.brand =
+        acc.brandModel.brand || _getAttributeValueName(attributes, "BRAND")
+      acc.brandModel.color =
+        acc.brandModel.color || _getAttributeValueName(attributes, "COLOR")
+      acc.brandModel.model =
+        acc.brandModel.model || _getAttributeValueName(attributes, "MODEL")
+
+      acc.ean = acc.ean === null ? _getEanIfExist(attributes) : acc.ean
       return acc
     },
     {
       title: "",
+      ean: null,
+      brandModel: {
+        brand: null,
+        model: null,
+        color: null,
+      },
       price: { top5Avg: null, best: null, secondBest: null },
-      firstPlacePrice: 0,
       bestPriceFull: null,
       position: {
         full: null,
@@ -111,9 +126,7 @@ export const catalogReducer = (
       length: 0,
       priceList: [],
       dateCreated: "",
-      state: {},
       mlOwner: false,
-
       shipmentByState: {
         full: {},
         correios: {},
@@ -126,6 +139,7 @@ export const catalogReducer = (
         medalPlatinum: {},
         noMedal: {},
       },
+      state: {},
     }
   )
   delete catalogReducer.priceList
@@ -159,12 +173,19 @@ const _getMedalKey = (powerSellerStatus: string) => {
   }
 }
 
+const _getEanIfExist = (attributes): string | null => {
+  return attributes?.find((attr) => attr.id == "GTIN").value_name
+}
+
 const _getMedalBooleans = (powerSellerStatus: string) => {
   const isMedalPlatinum = powerSellerStatus == PowerSellerStatus.Platinum
   const isMedalGold = powerSellerStatus == PowerSellerStatus.Gold
   const isMedalLider = powerSellerStatus == PowerSellerStatus.Silver
   return { isMedalPlatinum, isMedalGold, isMedalLider }
 }
+
+const _getAttributeValueName = (attributes, name) =>
+  attributes?.find((attr) => attr.id == name.toUpperCase())?.value_name
 
 const _getBestPosition = ({
   currentPosition,

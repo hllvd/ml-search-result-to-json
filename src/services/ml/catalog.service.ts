@@ -1,5 +1,6 @@
 import { ML_OWN_USER_ID } from "../../constants"
 import { ScrapeType } from "../../enums/scrap-type.enum"
+import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.models"
 import { getProductInCorrectOrder, getProducts } from "./api/search.api.service"
 import { getSeller } from "./api/users"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
@@ -57,19 +58,19 @@ const catalogSummary = async ({
     productsWithSellersPricesAndAmountInCorrectOrder
   )
 
-  const catalogRecuderWithSummary = _summarizeCatalog({
+  const catalogReducerWithSummary = _summarizeCatalog({
     catalog: catalogReducerValues,
     sales: productSales,
   })
 
-  return { catalogReducerValues: catalogRecuderWithSummary }
+  return { catalogReducerValues: catalogReducerWithSummary }
 }
 
 const _summarizeCatalog = (options: {
   catalog: CatalogReducerResponse
   sales: number
 }) => {
-  const revenue = options.sales * options.catalog.firstPlacePrice
+  const revenue = options.sales * options?.catalog?.price?.best
 
   const dateCreated = new Date(options?.catalog?.dateCreated) ?? null
   const today = new Date()

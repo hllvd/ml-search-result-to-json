@@ -4,6 +4,7 @@ import "reflect-metadata"
 import https from "https"
 import fs from "fs"
 import path from "path"
+import cors from "cors"
 
 var env = process.env.NODE_ENV || "development"
 // Load your SSL certificate and private key
@@ -26,7 +27,9 @@ const credentials =
     : null
 
 const app = express()
+
 const httpsServer = https.createServer(credentials, app)
+app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(encodeValidation)

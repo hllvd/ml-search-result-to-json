@@ -16,7 +16,8 @@ export const catalogReducer = (
       delete curr.pictures
       delete curr.attributes
       acc.title = title
-
+      acc.permalink = acc.permalink || curr.permalink
+      acc.thumbnail = acc.thumbnail || curr.thumbnail
       acc.mlOwner = mlUser.id.toString() === ML_OWN_USER_ID ? true : acc.mlOwner
 
       const shipmentKey = _getShipmentKeyByLogisticType(
@@ -114,6 +115,8 @@ export const catalogReducer = (
         model: null,
         color: null,
       },
+      permalink: null,
+      thumbnail: null,
       price: { top5Avg: null, best: null, secondBest: null },
       bestPriceFull: null,
       position: {

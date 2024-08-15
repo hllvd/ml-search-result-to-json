@@ -4,6 +4,7 @@ import { useQuery } from "react-query"
 import Meta from "antd/es/card/Meta"
 import { fetchCatalogInformation } from "../../services/api/ml-catalog.api.service"
 import { CatalogInformationResponse } from "../../models/dto/catalog-api-response.model"
+import { LoadingOutlined } from "@ant-design/icons"
 
 // const catalogData = {
 //   catalogId: "MLB18580665",
@@ -42,7 +43,11 @@ const CatalogInformationPage: React.FC = () => {
   return (
     <div>
       {status === "error" && <p>Error fetching data</p>}
-      {status === "loading" && <p>Fetching data...</p>}
+      {status === "loading" && (
+        <p>
+          <LoadingOutlined />
+        </p>
+      )}
       {status === "success" && (
         <Row gutter={16}>
           <Col span={12}>

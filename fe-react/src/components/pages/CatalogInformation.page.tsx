@@ -6,25 +6,11 @@ import useFetchCatalogInformation from "../../hooks/useFetchCatalogInformation"
 import { statusChecker } from "../../utils/StatusChecker.util"
 import { CatalogInformationResponse } from "../../models/dto/CatalogApiResponse.model"
 
-let isError: boolean,
-  isLoading: boolean,
-  isSuccess: boolean = false
-let data: CatalogInformationResponse
-function fetchCatalogData() {
-  const { status, data, error } = useFetchCatalogInformation("MLB25575176")
-  const {
-    isSuccess: isSuccessFetch,
-    isLoading: isLoadingFetch,
-    isError: isErrorFetch,
-  } = statusChecker(status)
-  isError = isErrorFetch
-  isLoading = isLoadingFetch
-  isSuccess = isSuccessFetch
-}
 const CatalogInformationPage: React.FC = () => {
+  const { status, data, error } = useFetchCatalogInformation("MLB25575176")
+  const { isError, isLoading, isSuccess } = statusChecker(status)
   return (
     <div>
-      <button onClick={fetchCatalogData}>Fetch the data</button>
       {isError && <p>Error fetching data</p>}
       {isLoading && <LoadingOutlined />}
       {status === "success" && (

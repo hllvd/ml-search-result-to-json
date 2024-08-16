@@ -1,55 +1,37 @@
 import React from "react"
 import { Col, Row } from "antd"
-import { useQuery } from "react-query"
 import Meta from "antd/es/card/Meta"
-import { fetchCatalogInformation } from "../../services/api/ml-catalog.api.service"
-import { CatalogInformationResponse } from "../../models/dto/catalog-api-response.model"
 import { LoadingOutlined } from "@ant-design/icons"
+import useFetchCatalogInformation from "../../hooks/useFetchCatalogInformation"
+import { statusChecker } from "../../utils/statusChecker"
+import { CatalogInformationResponse } from "../../models/dto/catalog-api-response.model"
 
-// const catalogData = {
-//   catalogId: "MLB18580665",
-//   title: "Taiff Black Ion Secador De Cabelo Profissional 2000w Cor Preto 110v",
-//   ean: "7898588111590",
-//   brandModel: {
-//     brand: "Taiff",
-//     model: "Black Ion",
-//     color: "Preto",
-//   },
-//   revenue: 11950000,
-//   dailyRevenue: 12672.322375397667,
-// }
-
-// const onFinish: CountdownProps["onFinish"] = () => {
-//   console.log("finished!")
-// }
-
-// const onChange: CountdownProps["onChange"] = (val) => {
-//   console.log("onchange")
-// }
-
+let isError: boolean,
+  isLoading: boolean,
+  isSuccess: boolean = false
+let data: CatalogInformationResponse
+function fetchCatalogData() {
+  const { status, data, error } = useFetchCatalogInformation("MLB25575176")
+  const {
+    isSuccess: isSuccessFetch,
+    isLoading: isLoadingFetch,
+    isError: isErrorFetch,
+  } = statusChecker(status)
+  isError = isErrorFetch
+  isLoading = isLoadingFetch
+  isSuccess = isSuccessFetch
+}
 const CatalogInformationPage: React.FC = () => {
-  const { data, status, error } = useQuery<CatalogInformationResponse>(
-    [
-      "catalogInformationFetcher",
-      { userId: "1231084821", catalogId: "MLB25575176" },
-    ],
-    () =>
-      fetchCatalogInformation({
-        userId: "1231084821",
-        catalogId: "MLB25575176",
-      })
-  )
-
   return (
     <div>
-      {status === "error" && <p>Error fetching data</p>}
-      {status === "loading" && (
-        <p>
-          <LoadingOutlined />
-        </p>
-      )}
+      <button onClick={fetchCatalogData}>Fetch the data</button>
+      {isError && <p>Error fetching data</p>}
+      {isLoading && <LoadingOutlined />}
       {status === "success" && (
         <Row gutter={16}>
+          <Col span={12}>
+            <img src={data?.thumbnail} alt={data?.title} />
+          </Col>
           <Col span={12}>
             <h2>{data?.title}</h2>
           </Col>

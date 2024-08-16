@@ -3,8 +3,8 @@ import { Col, Row } from "antd"
 import Meta from "antd/es/card/Meta"
 import { LoadingOutlined } from "@ant-design/icons"
 import useFetchCatalogInformation from "../../hooks/useFetchCatalogInformation"
-import { statusChecker } from "../../utils/statusChecker"
-import { CatalogInformationResponse } from "../../models/dto/catalog-api-response.model"
+import { statusChecker } from "../../utils/StatusChecker.util"
+import { CatalogInformationResponse } from "../../models/dto/CatalogApiResponse.model"
 
 let isError: boolean,
   isLoading: boolean,

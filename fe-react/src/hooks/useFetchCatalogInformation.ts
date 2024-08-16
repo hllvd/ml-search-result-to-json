@@ -1,5 +1,5 @@
 import { useQuery } from "react-query"
-import { CatalogInformationResponse } from "../models/dto/catalog-api-response.model"
+import { CatalogInformationResponse } from "../models/dto/CatalogApiResponse.model"
 import { fetchCatalogInformation } from "../services/api/ml-catalog.api.service"
 
 export default function useFetchCatalogInformation(catalogId: string) {

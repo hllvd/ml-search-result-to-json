@@ -1,4 +1,4 @@
-import { CatalogInformationResponse } from "../../models/dto/catalog-api-response.model"
+import { CatalogInformationResponse } from "../../models/dto/CatalogApiResponse.model"
 
 interface FetchCatalogParam {
   userId: string

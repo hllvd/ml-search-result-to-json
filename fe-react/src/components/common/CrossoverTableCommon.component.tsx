@@ -38,7 +38,16 @@ export default function CrossoverTable({ data }: Props) {
     title: "Estado",
     dataIndex: "estado",
     key: "estado",
-    render: (text: any) => <span>{text}</span>,
+    render: (text: string) => {
+      switch (text) {
+        case "BR-SC":
+          return <i className="highlighted">{text}</i>
+        case "Tipos de envio / total":
+          return <strong>{text}</strong>
+        default:
+          return <span>{text}</span>
+      }
+    },
   })
 
   mappedCol.push({
@@ -87,6 +96,7 @@ export default function CrossoverTable({ data }: Props) {
         columns={columns2}
         dataSource={structuredRowsStateSums}
         pagination={{ hideOnSinglePage: true }}
+        className={"m-zoom"}
       />
     </div>
   )

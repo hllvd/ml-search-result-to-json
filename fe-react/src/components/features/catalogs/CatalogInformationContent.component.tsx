@@ -18,7 +18,7 @@ export default function CatalogInformationContent({
 }: Props) {
   return (
     <>
-      <Row gutter={16} className="row-with-margin">
+      <Row gutter={16} className="row-with-margin m-zoom">
         <Col span={8}>
           <a href={catalogData?.permalink} target="_blank">
             <img src={catalogData?.thumbnail} alt={catalogData?.title} />
@@ -28,7 +28,7 @@ export default function CatalogInformationContent({
           <h2>{catalogData?.title}</h2>
         </Col>
       </Row>
-      <Row gutter={16} className="row-with-margin">
+      <Row gutter={16} className="row-with-margin m-zoom">
         <Col span={6}>
           <Meta title="EAN" description={catalogData?.ean} />
           <Meta
@@ -42,8 +42,13 @@ export default function CatalogInformationContent({
             description={catalogData?.length}
           />
           <Meta
-            title="Disputa com ML"
+            title="Mercado Livre no catálogo"
             description={catalogData?.mlOwner ? "Sim" : "Não"}
+            className={
+              catalogData?.mlOwner
+                ? "red-highlighted-description"
+                : "highlighted-description"
+            }
           />
           <Meta title="Id do produto" description={productId ?? ""}></Meta>
         </Col>
@@ -70,6 +75,7 @@ export default function CatalogInformationContent({
               catalogData?.price.best &&
               currencyFormatter(catalogData?.price.best, true)
             }
+            className="highlighted-description"
           />
           <Meta
             title="Top5 preço médio"
@@ -95,37 +101,37 @@ export default function CatalogInformationContent({
         </Col>
         <Col span={6}>
           <Meta
-            title="Posição full"
-            description={
+            title="Full"
+            description={`${
               catalogData?.position.full && catalogData?.position.full
-            }
+            }ª  posição`}
           />
           <Meta
-            title="Posição Gold"
+            title="Gold"
             description={
               catalogData?.position?.medalGold &&
-              catalogData?.position.medalGold
+              `${catalogData?.position.medalGold}ª  posição`
             }
           />
           <Meta
-            title="Posição Platinum"
+            title="Platinum"
             description={
               catalogData?.position?.medalPlatinum &&
-              catalogData?.position?.medalPlatinum
+              `${catalogData?.position?.medalPlatinum}ª  posição`
             }
           />
           <Meta
-            title="Posição Lider"
+            title="Lider"
             description={
               catalogData?.position?.medalLider &&
-              catalogData?.position.medalLider
+              `${catalogData?.position.medalLider}ª  posição`
             }
           />
           <Meta
-            title="Posição loja oficinal"
+            title="Loja oficial"
             description={
               catalogData?.position?.officialStore &&
-              catalogData?.position.officialStore
+              `${catalogData?.position.officialStore}ª  posição`
             }
           />
         </Col>

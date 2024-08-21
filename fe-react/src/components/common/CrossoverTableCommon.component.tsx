@@ -1,10 +1,12 @@
 import React from "react"
 import { Space, Table, Tag } from "antd"
 import type { TableProps } from "antd"
+import { capitalizeFirstLetter } from "../../utils/StringHandler.util"
+import {
+  getMappedColumn,
+  getTableContentWithSateSums,
+} from "../../services/shipment-table-array.service"
 
-type Props1 = {
-  data?: { [key: string]: { [key: string]: { [key: string]: number } } }
-}
 type Props = {
   data?: any[]
 }
@@ -18,21 +20,8 @@ interface DataType {
   totalEstado: AlphaNumeric | null
 }
 
-function capitalizeFirstLetter(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1)
-}
-
 export default function CrossoverTable({ data }: Props) {
-  const columns = Array.from(
-    new Set(data?.map(([firstElement]) => firstElement))
-  )
-
-  const mappedCol = columns.map((key) => ({
-    title: capitalizeFirstLetter(key),
-    dataIndex: key,
-    key: key,
-    render: (value: any) => value,
-  }))
+  const mappedCol = (data && getMappedColumn(data)) ?? []
 
   mappedCol.unshift({
     title: "Estado",
@@ -57,44 +46,14 @@ export default function CrossoverTable({ data }: Props) {
     render: (text: any) => <strong>{text}</strong>,
   })
 
-  const statesKeys = Array.from(
-    new Set(data?.map(([_firstEl, secondEl]) => secondEl))
-  ).map((el) => ({ estado: el }))
-
-  const structuredRows = [...statesKeys].map((el: any) => {
-    data?.forEach(([firstEl, secondEl, thirdEl]: [string, string, string]) => {
-      if (secondEl === el.estado) {
-        el[firstEl] = thirdEl
-      }
-    })
-    return { ...el }
-  })
-  const structuredRowsStateSums = structuredRows.map((el) => {
-    const total = Object.values(el).reduce((acc: any, curr: any) => {
-      if (typeof curr === "number") return acc + (curr || 0)
-      return acc
-    }, 0)
-    return { ...el, estadoTotal: total }
-  })
-  const structuredRowsWithSumsByShipment = structuredRows.reduce(
-    (acc: any, curr: any) => {
-      acc.full += curr.full || 0
-      acc.coleta += curr.coleta || 0
-      acc.correios += curr.correios || 0
-      return acc
-    },
-    { estado: "Tipos de envio / total", full: 0, coleta: 0, correios: 0 }
-  )
-  structuredRowsStateSums.push(structuredRowsWithSumsByShipment)
-
-  console.log("structuredRows", structuredRows)
-
-  const columns2: TableProps<DataType>["columns"] = mappedCol
+  const structuredRowStateSums =
+    (data && getTableContentWithSateSums(data)) ?? []
+  const columns: TableProps<DataType>["columns"] = mappedCol
   return (
     <div>
       <Table
-        columns={columns2}
-        dataSource={structuredRowsStateSums}
+        columns={columns}
+        dataSource={structuredRowStateSums}
         pagination={{ hideOnSinglePage: true }}
         className={"m-zoom"}
       />

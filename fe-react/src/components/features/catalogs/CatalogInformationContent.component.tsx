@@ -132,7 +132,7 @@ export default function CatalogInformationContent({
       </Row>
 
       <Row gutter={16} className="row-with-margin">
-        <Col span={12}>
+        <Col span={14}>
           <h2> Tipos de envio / quantidade</h2>
           <CrossoverTable data={FlatThat(catalogData?.shipmentByState)} />
         </Col>

@@ -27,6 +27,27 @@ export default function CrossoverTable({ data }: Props) {
     new Set(data?.map(([firstElement]) => firstElement))
   )
 
+  const mappedCol = columns.map((key) => ({
+    title: capitalizeFirstLetter(key),
+    dataIndex: key,
+    key: key,
+    render: (value: any) => value,
+  }))
+
+  mappedCol.unshift({
+    title: "Estado",
+    dataIndex: "estado",
+    key: "estado",
+    render: (text: any) => <span>{text}</span>,
+  })
+
+  mappedCol.push({
+    title: "Total por estado",
+    dataIndex: "estadoTotal",
+    key: "estadoTotal",
+    render: (text: any) => <strong>{text}</strong>,
+  })
+
   const statesKeys = Array.from(
     new Set(data?.map(([_firstEl, secondEl]) => secondEl))
   ).map((el) => ({ estado: el }))
@@ -39,27 +60,32 @@ export default function CrossoverTable({ data }: Props) {
     })
     return { ...el }
   })
-
-  const mappedCol = columns.map((key) => ({
-    title: capitalizeFirstLetter(key),
-    dataIndex: key,
-    key: key,
-    render: (value: any) => value,
-  }))
-
-  mappedCol.unshift({
-    title: "Estado",
-    dataIndex: "estado",
-    key: "estado",
-    render: (text: any) => <a>{text}</a>,
+  const structuredRowsStateSums = structuredRows.map((el) => {
+    const total = Object.values(el).reduce((acc: any, curr: any) => {
+      if (typeof curr === "number") return acc + (curr || 0)
+      return acc
+    }, 0)
+    return { ...el, estadoTotal: total }
   })
+  const structuredRowsWithSumsByShipment = structuredRows.reduce(
+    (acc: any, curr: any) => {
+      acc.full += curr.full || 0
+      acc.coleta += curr.coleta || 0
+      acc.correios += curr.correios || 0
+      return acc
+    },
+    { estado: "Tipos de envio / total", full: 0, coleta: 0, correios: 0 }
+  )
+  structuredRowsStateSums.push(structuredRowsWithSumsByShipment)
+
+  console.log("structuredRows", structuredRows)
 
   const columns2: TableProps<DataType>["columns"] = mappedCol
   return (
     <div>
       <Table
         columns={columns2}
-        dataSource={structuredRows}
+        dataSource={structuredRowsStateSums}
         pagination={{ hideOnSinglePage: true }}
       />
     </div>

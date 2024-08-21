@@ -14,8 +14,8 @@ export interface CatalogReducerResponse {
     top5Avg: number | null
     best: number | null
     secondBest: number | null
+    full: number | null
   }
-  bestPriceFull: number | null
   position: {
     full: number | null
     medalGold: number | null
@@ -29,8 +29,8 @@ export interface CatalogReducerResponse {
   dateCreated: string
   shipmentByState: {
     full: { [state: string]: number }
-    correios: { [state: string]: number }
     coleta: { [state: string]: number }
+    correios: { [state: string]: number }
     others: { [state: string]: number }
   }
   medalByState: {

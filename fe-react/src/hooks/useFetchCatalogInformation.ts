@@ -6,13 +6,14 @@ export default function useFetchCatalogInformation(catalogId: string) {
   const queryResponse = useQuery<CatalogInformationResponse>(
     [
       "catalogInformationFetcher",
-      { userId: "1231084821", catalogId: "MLB25575176" },
+      { userId: "1231084821", catalogId: catalogId },
     ],
     () =>
       fetchCatalogInformation({
         userId: "1231084821",
-        catalogId: "MLB25575176",
-      })
+        catalogId: catalogId,
+      }),
+    { enabled: false }
   )
 
   return queryResponse

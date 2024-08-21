@@ -80,12 +80,10 @@ export const catalogReducer = (
 
       acc.price.secondBest = acc.priceList[1] ?? null
 
-      acc.bestPriceFull =
-        isFull && acc.bestPriceFull === null ? price : acc.bestPriceFull
+      acc.price.full =
+        isFull && acc.price.full === null ? price : acc.price.full
 
-      acc.bestPriceFull = isFull
-        ? Math.min(acc.bestPriceFull, price)
-        : acc.bestPriceFull
+      acc.price.full = isFull ? Math.min(acc.price.full, price) : acc.price.full
 
       acc.shipmentByState[shipmentKey][state] =
         acc.shipmentByState[shipmentKey][state] === undefined
@@ -117,8 +115,7 @@ export const catalogReducer = (
       },
       permalink: null,
       thumbnail: null,
-      price: { top5Avg: null, best: null, secondBest: null },
-      bestPriceFull: null,
+      price: { top5Avg: null, best: null, secondBest: null, full: null },
       position: {
         full: null,
         medalGold: null,
@@ -132,8 +129,8 @@ export const catalogReducer = (
       mlOwner: false,
       shipmentByState: {
         full: {},
-        correios: {},
         coleta: {},
+        correios: {},
         others: {},
       },
       medalByState: {

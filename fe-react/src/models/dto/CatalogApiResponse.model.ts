@@ -6,7 +6,6 @@ export interface CatalogInformationResponse {
   permalink: string
   thumbnail: string
   price: Price
-  bestPriceFull: number
   position: Position
   length: number
   dateCreated: string
@@ -39,6 +38,7 @@ interface Price {
   top5Avg: number
   best: number
   secondBest: number
+  full: number
 }
 interface BrandModel {
   brand: string

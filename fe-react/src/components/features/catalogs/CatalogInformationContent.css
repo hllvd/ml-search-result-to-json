@@ -1,0 +1,12 @@
+.ant-card-meta {
+  zoom: 120%;
+}
+.ant-card-meta-title {
+  font-weight: bold;
+}
+.ant-card-meta-description {
+  margin-bottom: 10px;
+}
+.row-with-margin {
+  margin-bottom: 25px;
+}

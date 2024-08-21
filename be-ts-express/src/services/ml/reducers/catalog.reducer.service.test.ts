@@ -109,8 +109,7 @@ describe("catalogReducer", () => {
     expect(result).toEqual({
       title: "product name",
       ean: "6015615941994",
-      bestPriceFull: 60,
-      price: { top5Avg: 56.25, best: 50, secondBest: 55 },
+      price: { top5Avg: 56.25, best: 50, secondBest: 55, full: 60 },
       position: {
         full: 3,
         medalGold: 2,
@@ -178,8 +177,7 @@ describe("catalogReducer", () => {
     expect(result).toEqual({
       title: "product name",
       ean: null,
-      bestPriceFull: null,
-      price: { top5Avg: 50, best: 50, secondBest: null },
+      price: { top5Avg: 50, best: 50, secondBest: null, full: null },
       position: {
         full: null,
         medalGold: null,

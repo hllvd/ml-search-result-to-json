@@ -1,5 +1,9 @@
 import { Request, Response } from "express"
+import { ScrapeType } from "../enums/scrap-type.enum"
+import { fetchVisitsFromCatalog } from "../services/ml/catalog-visits.service"
 import { catalogSummary } from "../services/ml/catalog.service"
+import { webScrapeCatalogToProductIdAndPricePredicate } from "../services/ml/scraper/predicate/catalog/catalog-productIds-price.predicate.service"
+import { webScrapeMlPage } from "../services/ml/scraper/web.scraper.service"
 
 /** Catalog info
  * - Densidade de Líder
@@ -24,7 +28,6 @@ import { catalogSummary } from "../services/ml/catalog.service"
  */
 
 const catalog = async (req: Request, res: Response) => {
-  const productId = req.query?.productId?.toString()
   const catalogId = req.query?.catalogId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
 
@@ -34,10 +37,30 @@ const catalog = async (req: Request, res: Response) => {
   })
 
   res.status(200).json({
-    productId,
     catalogId,
     ...catalogReducerValues,
   })
 }
 
-export default { catalog }
+const views = async (req: Request, res: Response) => {
+  const catalogId = req.query?.catalogId?.toString()
+  const userId = req.query?.userId?.toString() ?? "1231084821"
+  const productList: Array<{ productIdStr: string }> = await webScrapeMlPage(
+    webScrapeCatalogToProductIdAndPricePredicate,
+    {
+      catalogId,
+      scrapeType: ScrapeType.CatalogProductList,
+      maxPage: 1,
+    }
+  )
+
+  console.log("productList.length", productList.length)
+  const test = await fetchVisitsFromCatalog({ userId, productIds: productList })
+  res.status(200).json({
+    catalogId,
+    productList,
+    test,
+  })
+}
+
+export default { catalog, views }

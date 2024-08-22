@@ -40,11 +40,13 @@ const fetchMl = async (url: string, options: FetchMlOptionsModel = {}) => {
       return result
     } catch (e) {
       if (!isAxiosError(e) || !e?.response) return JSON.stringify(e)
-      /** Tenho que verificar se o código é 401 e sse tem "messagem":invalid access token. Só assim podera entrar nesse escope abaixo.
-       * Agora mesmo tudo entr e está causando erro
-       */
+
       dataResponse = e.response && e.response?.data
-      const invalidTokenMessage = ["invalid_token", "mlauth: invalid token"]
+      const invalidTokenMessage = [
+        "invalid_token",
+        "mlauth: invalid token",
+        "invalid access token",
+      ]
       if (invalidTokenMessage.includes(dataResponse?.message)) {
         console.log("is axios", userId)
         const refreshTokenTtl = await _getAppConfigValueFromKey(

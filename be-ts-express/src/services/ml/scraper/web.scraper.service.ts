@@ -8,9 +8,16 @@ import { ProductId } from "../../../models/dto/ml-product.models"
  * @param options
  * @returns
  */
+interface WebScraperMlPageOption {
+  scrapeType: ScrapeType
+  page?: number
+  catalogId?: string
+  productId?: string
+  maxPage?: number | null
+}
 const webScrapeMlPage = async (
   predicateSelector: Function,
-  options
+  options?: WebScraperMlPageOption
 ): Promise<any> => {
   const r = await fetchWithRetry({
     options,
@@ -25,18 +32,15 @@ const fetchWithRetry = async ({
   retries,
   predicateSelector,
 }: {
-  options: {
-    scrapType: ScrapeType
-    page?: number
-    catalogId?: string
-    productId?: string
-  }
+  options: WebScraperMlPageOption
   retries: number
   predicateSelector: Function
 }): Promise<Array<{ productIdStr: string; price: number }>> => {
+  const { maxPage } = options
   const urlBuilder = webScrapeMlUrlBuilder(options)
   let resultArray: Array<any> = []
   let areTherePages = true
+  let currentPage: number = 1
   while (areTherePages) {
     try {
       const response = await webScrapeFetcher(
@@ -51,9 +55,9 @@ const fetchWithRetry = async ({
 
       if (currentPageResult == null)
         throw new Error("Predicate response is null")
-      //check if currentPageResult is an array
-
       resultArray = [...resultArray, ...currentPageResult]
+      if (currentPage == maxPage) break
+      currentPage++
       if (!nextPage) break
       urlBuilder.nextPage()
     } catch (e) {

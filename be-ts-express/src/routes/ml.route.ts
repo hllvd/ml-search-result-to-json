@@ -7,6 +7,7 @@ const router = Router()
 router.get("/log-search-result", mlController.logSearchResult)
 router.get("/me", mlController.me)
 router.get("/catalog", mlCatalogController.catalog)
+router.get("/catalog/views", mlCatalogController.views)
 router.get("/test", mlController.test)
 
 export default router

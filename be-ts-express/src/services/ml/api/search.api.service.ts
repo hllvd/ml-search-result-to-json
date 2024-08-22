@@ -1,7 +1,5 @@
-import { ProductId } from "aws-sdk/clients/sagemaker"
 import { MLProduct } from "../../../models/dto/ml-product.models"
 import { fetchMl } from "../fetcher-api.ml.service"
-import { productIdsReducer } from "../reducers/product-urls.reducer.service"
 
 const fetchProducts = async (
   userId: string,

@@ -5,7 +5,7 @@ import { getSeller } from "./api/users"
 import { getProductInCorrectOrder, getProducts } from "./products.service"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
 import { webScrapeCatalogToMetadataPredicate } from "./scraper/predicate/catalog/catalog-metadata.predicate.service"
-import { webScrapeCatalogToProductIdAndPricePredicate } from "./scraper/predicate/catalog/catalog-producIds-price.predicate.service"
+import { webScrapeCatalogToProductIdAndPricePredicate } from "./scraper/predicate/catalog/catalog-productIds-price.predicate.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
 const catalogSummary = async ({

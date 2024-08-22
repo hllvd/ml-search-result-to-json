@@ -1,11 +1,10 @@
 import React from "react"
-import { Space, Table, Tag } from "antd"
+import { Table } from "antd"
 import type { TableProps } from "antd"
-import { capitalizeFirstLetter } from "../../utils/StringHandler.util"
 import {
   getMappedColumn,
   getTableContentWithSateSums,
-} from "../../services/shipment-table-array.service"
+} from "../../../services/shipment-table-array.service"
 
 type Props = {
   data?: any[]
@@ -20,7 +19,7 @@ interface DataType {
   totalEstado: AlphaNumeric | null
 }
 
-export default function CrossoverTable({ data }: Props) {
+export default function ShipmentInformationTable({ data }: Props) {
   const mappedCol = (data && getMappedColumn(data)) ?? []
 
   mappedCol.unshift({

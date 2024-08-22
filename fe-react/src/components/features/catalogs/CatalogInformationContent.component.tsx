@@ -2,13 +2,13 @@ import React from "react"
 import { Col, Row } from "antd"
 import { CatalogInformationResponse } from "../../../models/dto/CatalogApiResponse.model"
 import "./CatalogInformationContent.css"
-import CrossoverTable from "../../common/CrossoverTableCommon.component"
 
 import CatalogInformationGeneral from "./CatalogInformationGeneral.componenet"
 import CatalogInformationBilling from "./CatalogInformationBilling.component"
 import CatalogInformationPricing from "./CatalogInformationPricing.component"
 import CatalogInformationPosition from "./CatalogInformationPosition.component"
 import { FlatThat } from "../../../utils/ArrayFlat.util"
+import ShipmentInformationTable from "../tables/ShipmentInformation.component"
 
 type Props = { catalogData?: CatalogInformationResponse; productId: string }
 export default function CatalogInformationContent({
@@ -48,7 +48,9 @@ export default function CatalogInformationContent({
       <Row gutter={16} className="row-with-margin">
         <Col span={14}>
           <h2> Tipos de envio / quantidade</h2>
-          <CrossoverTable data={FlatThat(catalogData?.shipmentByState)} />
+          <ShipmentInformationTable
+            data={FlatThat(catalogData?.shipmentByState)}
+          />
         </Col>
       </Row>
     </>

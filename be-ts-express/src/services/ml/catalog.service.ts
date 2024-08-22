@@ -1,9 +1,8 @@
-import { ML_OWN_USER_ID } from "../../constants"
 import { ScrapeType } from "../../enums/scrap-type.enum"
 import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.models"
-import { getProductInCorrectOrder } from "./api/search.api.service"
+
 import { getSeller } from "./api/users"
-import { getProducts } from "./products.service"
+import { getProductInCorrectOrder, getProducts } from "./products.service"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
 import { webScrapeCatalogToMetadataPredicate } from "./scraper/predicate/catalog/catalog-metadata.predicate.service"
 import { webScrapeCatalogToProductIdAndPricePredicate } from "./scraper/predicate/catalog/catalog-producIds-price.predicate.service"

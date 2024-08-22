@@ -3,16 +3,6 @@ import { MLProduct } from "../../../models/dto/ml-product.models"
 import { fetchMl } from "../fetcher-api.ml.service"
 import { productIdsReducer } from "../reducers/product-urls.reducer.service"
 
-const getProductInCorrectOrder = (
-  productIds: ProductId[],
-  products: MLProduct[]
-): MLProduct[] => {
-  return productIds.map((productId) => {
-    const product = products.find((product) => product.id === productId)
-    return product
-  })
-}
-
 const fetchProducts = async (
   userId: string,
   productIdStr: string
@@ -27,4 +17,4 @@ const fetchProducts = async (
     .map((product) => product.body)
 }
 
-export { fetchProducts, getProductInCorrectOrder }
+export { fetchProducts }

@@ -18,4 +18,14 @@ const getProducts = async (
   ).flat(1)
 }
 
-export { getProducts }
+const getProductInCorrectOrder = (
+  productIds: ProductId[],
+  products: MLProduct[]
+): MLProduct[] => {
+  return productIds.map((productId) => {
+    const product = products.find((product) => product.id === productId)
+    return product
+  })
+}
+
+export { getProducts, getProductInCorrectOrder }

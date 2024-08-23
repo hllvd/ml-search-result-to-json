@@ -45,6 +45,7 @@ describe("catalogReducer", () => {
         ...commonProperties,
         seller_address: { state: { id: "BR-SP" } },
         date_created: "2022-06-13T11:23:59.000Z",
+        permalink: "https://example.com",
         price: 50,
         mlOwner: false,
         shipping: {
@@ -110,6 +111,7 @@ describe("catalogReducer", () => {
       title: "product name",
       ean: "6015615941994",
       price: { top5Avg: 56.25, best: 50, secondBest: 55, full: 60 },
+      permalink: "https://example.com",
       position: {
         full: 3,
         medalGold: 2,
@@ -150,6 +152,7 @@ describe("catalogReducer", () => {
       title: "product name",
       id: "id",
       permalink: "https://example.com",
+      thumbnail: "https://example",
     }
     const sellers: Array<MLProduct> = [
       {
@@ -178,6 +181,8 @@ describe("catalogReducer", () => {
       title: "product name",
       ean: null,
       price: { top5Avg: 50, best: 50, secondBest: null, full: null },
+      permalink: "https://example.com",
+      thumbnail: "https://example",
       position: {
         full: null,
         medalGold: null,

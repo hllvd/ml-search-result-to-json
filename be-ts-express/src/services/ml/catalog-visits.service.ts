@@ -2,13 +2,12 @@ import { ProductVisitsResponse } from "../../models/api-response/product-views-r
 import { ProductIdStrAndPriceResponse } from "../../models/predicate/predicate-response.models"
 import { fetchViewsFromProduct } from "./api/product-visits.api.service"
 
-const fetchVisitsFromCatalog = async ({
+const _fetchVisitsFromCatalog = async ({
   userId,
   productIds,
 }): Promise<ProductVisitsResponse[]> => {
   const last = 5
-  const ending = "2023-12-31"
-
+  const ending = new Date().toISOString().slice(0, 10)
   const productsWithVisits = Promise.all(
     productIds.map(async ({ productIdStr }) => {
       return await fetchViewsFromProduct({
@@ -19,8 +18,11 @@ const fetchVisitsFromCatalog = async ({
       })
     })
   )
-
   return productsWithVisits
 }
 
-export { fetchVisitsFromCatalog }
+const getCatalogVisitsSummary = ({ userId, productIds }) => {
+  const cataLogVisits = _fetchVisitsFromCatalog({ userId, productIds })
+}
+
+export { getCatalogVisitsSummary }

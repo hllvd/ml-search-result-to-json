@@ -9,6 +9,7 @@ describe("catalogReducer", () => {
       title: "product name",
       id: "id",
       permalink: "https://example.com",
+      tags: ["supermarket_eligible"],
       attributes: [
         {
           id: "GTIN",
@@ -112,6 +113,7 @@ describe("catalogReducer", () => {
       ean: "6015615941994",
       price: { top5Avg: 56.25, best: 50, secondBest: 55, full: 60 },
       permalink: "https://example.com",
+      supermarketEligible: true,
       position: {
         full: 3,
         medalGold: 2,
@@ -183,6 +185,7 @@ describe("catalogReducer", () => {
       price: { top5Avg: 50, best: 50, secondBest: null, full: null },
       permalink: "https://example.com",
       thumbnail: "https://example",
+      supermarketEligible: null,
       position: {
         full: null,
         medalGold: null,

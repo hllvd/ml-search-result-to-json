@@ -20,6 +20,11 @@ export const catalogReducer = (
       acc.thumbnail = acc.thumbnail || curr.thumbnail
       acc.mlOwner = mlUser.id.toString() === ML_OWN_USER_ID ? true : acc.mlOwner
 
+      acc.supermarketEligible =
+        curr?.tags && acc.supermarketEligible !== true
+          ? curr.tags.includes("supermarket_eligible")
+          : acc.supermarketEligible
+
       const shipmentKey = _getShipmentKeyByLogisticType(
         curr.shipping?.logistic_type as LogisticType
       )
@@ -115,6 +120,7 @@ export const catalogReducer = (
       },
       permalink: null,
       thumbnail: null,
+      supermarketEligible: null,
       price: { top5Avg: null, best: null, secondBest: null, full: null },
       position: {
         full: null,

@@ -5,6 +5,7 @@ export interface CatalogReducerResponse {
   ean: string | null
   permalink: string | null
   thumbnail: string | null
+  supermarketEligible: Boolean | null
   brandModel: {
     brand: string | null
     model: string | null

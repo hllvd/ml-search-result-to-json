@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import { ScrapeType } from "../enums/scrap-type.enum"
-import { fetchVisitsFromCatalog } from "../services/ml/catalog-visits.service"
+import { getCatalogVisitsSummary } from "../services/ml/catalog-visits.service"
 import { catalogSummary } from "../services/ml/catalog.service"
 import { webScrapeCatalogToProductIdAndPricePredicate } from "../services/ml/scraper/predicate/catalog/catalog-productIds-price.predicate.service"
 import { webScrapeMlPage } from "../services/ml/scraper/web.scraper.service"
@@ -55,7 +55,10 @@ const views = async (req: Request, res: Response) => {
   )
 
   console.log("productList.length", productList.length)
-  const test = await fetchVisitsFromCatalog({ userId, productIds: productList })
+  const test = await getCatalogVisitsSummary({
+    userId,
+    productIds: productList,
+  })
   res.status(200).json({
     catalogId,
     productList,

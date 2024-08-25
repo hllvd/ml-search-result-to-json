@@ -6,6 +6,7 @@ export interface CatalogReducerResponse {
   permalink: string | null
   thumbnail: string | null
   supermarketEligible: Boolean | null
+  categoryId: string | null
   brandModel: {
     brand: string | null
     model: string | null

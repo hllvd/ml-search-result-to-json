@@ -10,6 +10,7 @@ describe("catalogReducer", () => {
       id: "id",
       permalink: "https://example.com",
       tags: ["supermarket_eligible"],
+      category_id: "CATEGORY_ID",
       attributes: [
         {
           id: "GTIN",
@@ -114,6 +115,7 @@ describe("catalogReducer", () => {
       price: { top5Avg: 56.25, best: 50, secondBest: 55, full: 60 },
       permalink: "https://example.com",
       supermarketEligible: true,
+      categoryId: "CATEGORY_ID",
       position: {
         full: 3,
         medalGold: 2,
@@ -155,6 +157,7 @@ describe("catalogReducer", () => {
       id: "id",
       permalink: "https://example.com",
       thumbnail: "https://example",
+      category_id: "MLB198494",
     }
     const sellers: Array<MLProduct> = [
       {
@@ -186,6 +189,7 @@ describe("catalogReducer", () => {
       permalink: "https://example.com",
       thumbnail: "https://example",
       supermarketEligible: null,
+      categoryId: "MLB198494",
       position: {
         full: null,
         medalGold: null,

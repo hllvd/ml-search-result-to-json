@@ -6,50 +6,25 @@ import fs from "fs"
 import path from "path"
 import cors from "cors"
 
-var env = process.env.NODE_ENV || "development"
-// Load your SSL certificate and private key
-// Install https local certificate https://support.apple.com/en-gb/guide/keychain-access/kyca2431/mac
-const privateKey = fs.readFileSync(
-  path.join(__dirname, "..", "ssl", "localhost-server.key"),
-  "utf8"
-)
-const certificate = fs.readFileSync(
-  path.join(__dirname, "..", "ssl", "localhost-server.crt"),
-  "utf8"
-)
-
-const credentials =
-  env == "development"
-    ? {
-        key: privateKey,
-        cert: certificate,
-      }
-    : null
-
+// Create an instance of the Express application
 const app = express()
+const port = process.env.PORT || 3333
 
-const httpsServer =
-  credentials === null ? app : https.createServer(credentials, app)
-app.use(cors())
+// Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(encodeValidation)
 
+// Routes
 app.use("/", routes)
+//app.post("/notification", notificationController.notification)
 
-function encodeValidation(
-  req: express.Request,
-  _res: express.Response,
-  next: express.NextFunction
-) {
-  const contentType = req.get("content-type")
-  const isPost = req.method === "POST"
-  if (isPost && !contentType?.includes("application/json"))
-    throw "Content-Type must be application/json"
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack)
+  res.status(500).send("Something went wrong!")
+})
 
-  next()
-}
-
-httpsServer.listen(3333, () => {
-  console.log(`Example app listening on port ${3333}`)
+// Start the server
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`)
 })

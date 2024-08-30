@@ -28,7 +28,8 @@ const credentials =
 
 const app = express()
 
-const httpsServer = https.createServer(credentials, app)
+const httpsServer =
+  credentials === null ? app : https.createServer(credentials, app)
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

@@ -46,15 +46,15 @@ export default function CatalogInformationContent({
         </Col>
       </Row>
 
-      <Row gutter={16} className="row-with-margin">
+      <Row gutter={20} className="row-with-margin">
         <Col span={14}>
           <h2> Tipos de envio / quantidade</h2>
           <ShipmentInformationTable
             data={FlatThat(catalogData?.shipmentByState)}
           />
         </Col>
-        <Col span={2}>
-          <CatalogInformationVisits />
+        <Col span={6}>
+          <h2> Visitas últimos 30 dias</h2>
         </Col>
       </Row>
     </>

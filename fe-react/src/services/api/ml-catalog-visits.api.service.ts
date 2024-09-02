@@ -1,4 +1,4 @@
-import { CatalogInformationResponse } from "../../models/dto/CatalogApiResponse.model"
+import { CatalogVisitsResponse } from "../../models/dto/CatalogApiVisitResponse.model"
 
 interface FetchCatalogParam {
   userId: string
@@ -7,9 +7,9 @@ interface FetchCatalogParam {
 export const fetchCatalogVisitsInformation = async ({
   userId,
   catalogId,
-}: FetchCatalogParam): Promise<CatalogInformationResponse> => {
+}: FetchCatalogParam): Promise<CatalogVisitsResponse> => {
   const res = await fetch(
-    `${process.env.REACT_APP_ML_DATA}/ml/catalog/visits?catalogId=${catalogId}&userId=${userId}`
+    `${process.env.REACT_APP_ML_DATA}/ml/catalog/views?catalogId=${catalogId}&userId=${userId}`
   )
   return res.json()
 }

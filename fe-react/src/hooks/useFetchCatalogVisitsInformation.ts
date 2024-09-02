@@ -1,15 +1,15 @@
 import { useQuery } from "react-query"
-import { CatalogInformationResponse } from "../models/dto/CatalogApiResponse.model"
-import { fetchCatalogInformation } from "../services/api/ml-catalog.api.service"
+import { CatalogVisitsResponse } from "../models/dto/CatalogApiVisitResponse.model"
+import { fetchCatalogVisitsInformation } from "../services/api/ml-catalog-visits.api.service"
 
-export default function useFetchCatalogInformation(catalogId: string) {
-  const queryResponse = useQuery<CatalogInformationResponse>(
+export default function useFetchCatalogVisitsInformation(catalogId: string) {
+  const queryResponse = useQuery<CatalogVisitsResponse>(
     [
       "catalogInformationFetcher",
       { userId: "1231084821", catalogId: catalogId },
     ],
     () =>
-      fetchCatalogInformation({
+      fetchCatalogVisitsInformation({
         userId: "1231084821",
         catalogId: catalogId,
       }),

@@ -1,19 +1,27 @@
 import Meta from "antd/es/card/Meta"
+import React from "react"
+import useFetchCatalogVisitsInformation from "../../../hooks/useFetchCatalogVisitsInformation"
 import { CatalogVisitsResponse } from "../../../models/dto/CatalogApiVisitResponse.model"
 
-type Props = { catalogVisitData?: CatalogVisitsResponse }
+type Props = { catalogId: string }
 
-export default function CatalogInformationVisits({ catalogVisitData }: Props) {
+export default function CatalogInformationVisits({ catalogId }: Props) {
+  const {
+    isLoading,
+    isFetched,
+    isError,
+    data: catalogVisitData,
+    error,
+    refetch,
+  } = useFetchCatalogVisitsInformation(catalogId)
+
+  React.useEffect(() => {
+    refetch()
+  }, [catalogId])
   return (
     <>
-      <Meta
-        title="Visitas últimos 30 dias"
-        description={catalogVisitData?.totalVisits}
-      />
-      <Meta
-        title="Média diária últimos 30 dias"
-        description={catalogVisitData?.dailyAvg}
-      />
+      <Meta title="Total" description={catalogVisitData?.totalVisits} />
+      <Meta title="Diário" description={catalogVisitData?.dailyAvg} />
     </>
   )
 }

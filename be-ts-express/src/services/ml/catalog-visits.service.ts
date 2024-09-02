@@ -7,7 +7,7 @@ const _fetchVisitsFromCatalog = async ({
   userId,
   productIds,
 }): Promise<ProductVisitsResponse[]> => {
-  const last = 5
+  const last = 30
   const ending = new Date().toISOString().slice(0, 10)
   const productsWithVisits = Promise.all(
     productIds.map(async ({ productIdStr }) => {

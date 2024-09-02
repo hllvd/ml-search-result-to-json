@@ -1,6 +1,7 @@
 import { ProductVisitsResponse } from "../../models/api-response/product-views-response.models"
 import { ProductIdStrAndPriceResponse } from "../../models/predicate/predicate-response.models"
 import { fetchViewsFromProduct } from "./api/product-visits.api.service"
+import { catalogVisitsReducer } from "./reducers/catalog-visits.reducer.service"
 
 const _fetchVisitsFromCatalog = async ({
   userId,
@@ -21,8 +22,9 @@ const _fetchVisitsFromCatalog = async ({
   return productsWithVisits
 }
 
-const getCatalogVisitsSummary = ({ userId, productIds }) => {
-  const cataLogVisits = _fetchVisitsFromCatalog({ userId, productIds })
+const getCatalogVisitsSummary = async ({ userId, productIds }) => {
+  const cataLogVisits = await _fetchVisitsFromCatalog({ userId, productIds })
+  return catalogVisitsReducer(cataLogVisits)
 }
 
 export { getCatalogVisitsSummary }

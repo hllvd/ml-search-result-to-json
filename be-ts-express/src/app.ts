@@ -1,9 +1,6 @@
 import express from "express"
 import routes from "./routes/index.route"
 import "reflect-metadata"
-import https from "https"
-import fs from "fs"
-import path from "path"
 import cors from "cors"
 
 // Create an instance of the Express application

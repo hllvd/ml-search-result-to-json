@@ -55,14 +55,12 @@ const views = async (req: Request, res: Response) => {
   )
 
   console.log("productList.length", productList.length)
-  const test = await getCatalogVisitsSummary({
+  const catalogVisitsSummary = await getCatalogVisitsSummary({
     userId,
     productIds: productList,
   })
   res.status(200).json({
-    catalogId,
-    productList,
-    test,
+    ...catalogVisitsSummary,
   })
 }
 

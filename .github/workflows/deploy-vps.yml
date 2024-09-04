@@ -24,9 +24,9 @@ jobs:
 
       - name: Connect to VPS instance
         run: |
-          echo "connecting to ${{ secrets.EC2_HOST }}"
+          echo "connecting to ${{ secrets.HOST_IP }}"
           sudo apt-get install sshpass
-          sshpass -p "${{ secrets.ML_VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no -v -i ~/sao_paulo.pem mercadolivre@${{vars.EC2_HOST}} << 'EOF'
+          sshpass -p "${{ secrets.ML_VPS_PASSWORD }}" ssh -o StrictHostKeyChecking=no -v -i ~/sao_paulo.pem mercadolivre@${{vars.HOST_IP}} << 'EOF'
             # Commands to run on the VPS instance
             echo "Connected to EC2 instance!"
             cd /home/mercadolivre/ml-fetcher

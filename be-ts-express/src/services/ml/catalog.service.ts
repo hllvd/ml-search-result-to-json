@@ -5,6 +5,7 @@ import { getSeller } from "./api/users"
 import { getProductInCorrectOrder, getProducts } from "./products.service"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
 import { webScrapeCatalogToMetadataPredicate } from "./scraper/predicate/catalog/catalog-metadata.predicate.service"
+import { webScrapeCatalogProductLengthPredicate } from "./scraper/predicate/catalog/catalog-product-lengths.predicate.service"
 import { webScrapeCatalogToProductIdAndPricePredicate } from "./scraper/predicate/catalog/catalog-productIds-price.predicate.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
@@ -24,10 +25,18 @@ const catalogSummary = async ({
     {
       catalogId,
       scrapeType: ScrapeType.CatalogMetadata,
-      maxPage,
     }
   )
 
+  const amountOfProducts =
+    productList.length === maxPage * 10
+      ? await webScrapeMlPage(webScrapeCatalogProductLengthPredicate, {
+          catalogId,
+          scrapeType: ScrapeType.CatalogMetadata,
+        })
+      : productList.length
+
+  console.log("amountOfProducts", amountOfProducts)
   const productListOnlyIds = productList.map((e) => e.productIdStr)
   const products = await getProducts(userId, productListOnlyIds)
   const productsWithSellers = await Promise.all(
@@ -62,7 +71,7 @@ const catalogSummary = async ({
   )
 
   const catalogReducerWithSummary = _summarizeCatalog({
-    catalog: catalogReducerValues,
+    catalog: { ...catalogReducerValues, length: amountOfProducts },
     sales: productSales,
   })
 

@@ -47,6 +47,7 @@ const fetchWithRetry = async ({
         urlBuilder.getCurrentUrl(),
         retries
       )
+
       const { nextPage, response: currentPageResult } = await predicateSelector(
         response
       )
@@ -56,7 +57,8 @@ const fetchWithRetry = async ({
       if (currentPageResult == null)
         throw new Error("Predicate response is null")
       resultArray = [...resultArray, ...currentPageResult]
-      if (currentPage == maxPage) break
+
+      if (currentPage === maxPage) break
       currentPage++
       if (!nextPage) break
       urlBuilder.nextPage()

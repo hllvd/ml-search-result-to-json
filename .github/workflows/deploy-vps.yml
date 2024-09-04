@@ -36,4 +36,4 @@ jobs:
             cd /home/mercadolivre/ml-fetcher/fe-react
             npm run build
             sudo cp -r build/* /var/www/mlsniper/
-            EOF
+          EOF

@@ -27,7 +27,7 @@ const CatalogInformationPage: React.FC = () => {
     <div>
       <SearchCatalogComponent onSearchHandler={onSearchHandler} />
       {isError && <p>Error fetching data</p>}
-      {isLoading && <LoadingOutlined />}
+      {isLoading && searchTerm && <LoadingOutlined />}
       {isFetched && searchTerm && (
         <CatalogInformationContent catalogData={data} productId={searchTerm} />
       )}

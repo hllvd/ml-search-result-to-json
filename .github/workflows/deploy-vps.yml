@@ -33,7 +33,7 @@ jobs:
             git pull
             # Deploy Front End
             echo "Deploying FE"
-            cd ml-fetcher/fe-react
-            npm build
+            cd /home/mercadolivre/ml-fetcher/fe-react
+            npm run build
             sudo cp -r build/* /var/www/mlsniper/
             EOF

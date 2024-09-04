@@ -37,6 +37,3 @@ jobs:
             npm build
             sudo cp -r build/* /var/www/mlsniper/
             EOF
-
-      - name: Close SSH connection
-          EOF

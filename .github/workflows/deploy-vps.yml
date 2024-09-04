@@ -31,7 +31,7 @@ jobs:
             echo "Connected to EC2 instance!"
             cd /home/mercadolivre/ml-fetcher
             git pull
-            # Deploy FE
+            # Deploy Front End
             echo "Deploying FE"
             cd ml-fetcher/fe-react
             npm build

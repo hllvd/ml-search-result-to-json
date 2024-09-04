@@ -12,16 +12,19 @@ const catalogSummary = async ({
   catalogId,
   userId,
 }): Promise<{ catalogReducerValues: object }> => {
+  const maxPage = 5
   const productList: Array<{ productIdStr: string; price: number }> =
     await webScrapeMlPage(webScrapeCatalogToProductIdAndPricePredicate, {
       catalogId,
       scrapeType: ScrapeType.CatalogProductList,
+      maxPage,
     })
   const productSales = await webScrapeMlPage(
     webScrapeCatalogToMetadataPredicate,
     {
       catalogId,
       scrapeType: ScrapeType.CatalogMetadata,
+      maxPage,
     }
   )
 

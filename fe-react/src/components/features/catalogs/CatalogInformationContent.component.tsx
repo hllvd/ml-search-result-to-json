@@ -9,6 +9,7 @@ import CatalogInformationPricing from "./CatalogInformationPricing.component"
 import CatalogInformationPosition from "./CatalogInformationPosition.component"
 import { FlatThat } from "../../../utils/ArrayFlat.util"
 import ShipmentInformationTable from "../tables/ShipmentInformation.component"
+import CatalogInformationVisits from "./CatalogInformationVisits.component"
 
 type Props = { catalogData?: CatalogInformationResponse; productId: string }
 export default function CatalogInformationContent({
@@ -54,6 +55,7 @@ export default function CatalogInformationContent({
         </Col>
         <Col span={6}>
           <h2> Visitas últimos 30 dias</h2>
+          {productId && <CatalogInformationVisits catalogId={productId} />}
         </Col>
       </Row>
     </>

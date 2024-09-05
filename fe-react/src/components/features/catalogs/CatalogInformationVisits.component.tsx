@@ -1,7 +1,8 @@
+import { LoadingOutlined } from "@ant-design/icons"
 import Meta from "antd/es/card/Meta"
 import React from "react"
 import useFetchCatalogVisitsInformation from "../../../hooks/useFetchCatalogVisitsInformation"
-import { CatalogVisitsResponse } from "../../../models/dto/CatalogApiVisitResponse.model"
+import { convertToInt } from "../../../utils/Number.util"
 
 type Props = { catalogId: string }
 
@@ -16,12 +17,23 @@ export default function CatalogInformationVisits({ catalogId }: Props) {
   } = useFetchCatalogVisitsInformation(catalogId)
 
   React.useEffect(() => {
-    refetch()
-  }, [catalogId])
+    if (catalogId) {
+      refetch()
+    }
+  }, [catalogId, refetch])
   return (
     <>
-      <Meta title="Total" description={catalogVisitData?.totalVisits} />
-      <Meta title="Diário" description={catalogVisitData?.dailyAvg} />
+      {isError && <p>Error fetching data</p>}
+      {isLoading && <LoadingOutlined />}
+      {isFetched && (
+        <div>
+          <Meta title="Total" description={catalogVisitData?.totalVisits} />
+          <Meta
+            title="Diário"
+            description={convertToInt(catalogVisitData?.dailyAvg)}
+          />
+        </div>
+      )}
     </>
   )
 }

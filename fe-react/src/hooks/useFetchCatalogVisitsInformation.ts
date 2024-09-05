@@ -4,16 +4,13 @@ import { fetchCatalogVisitsInformation } from "../services/api/ml-catalog-visits
 
 export default function useFetchCatalogVisitsInformation(catalogId: string) {
   const queryResponse = useQuery<CatalogVisitsResponse>(
-    [
-      "catalogInformationFetcher",
-      { userId: "1231084821", catalogId: catalogId },
-    ],
+    ["catalogVisitsFetcher", { userId: "1231084821", catalogId }],
     () =>
       fetchCatalogVisitsInformation({
         userId: "1231084821",
         catalogId: catalogId,
       }),
-    { enabled: false }
+    { enabled: !!catalogId }
   )
 
   return queryResponse

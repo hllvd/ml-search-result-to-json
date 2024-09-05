@@ -10,3 +10,7 @@
 .row-with-margin {
   margin-bottom: 25px;
 }
+.tax-box-simulator {
+  border: 1px solid #ff00003d;
+  padding-left: 5px;
+}

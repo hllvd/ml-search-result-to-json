@@ -10,6 +10,7 @@ import CatalogInformationPosition from "./CatalogInformationPosition.component"
 import { FlatThat } from "../../../utils/ArrayFlat.util"
 import ShipmentInformationTable from "../tables/ShipmentInformation.component"
 import CatalogInformationVisits from "./CatalogInformationVisits.component"
+import TaxCalculator from "../tax-calculator/TaxCalculator.component"
 
 type Props = { catalogData?: CatalogInformationResponse; productId: string }
 export default function CatalogInformationContent({
@@ -28,6 +29,7 @@ export default function CatalogInformationContent({
           <h2>{catalogData?.title}</h2>
         </Col>
       </Row>
+
       <Row gutter={16} className="row-with-margin m-zoom">
         <Col span={6}>
           <CatalogInformationGeneral
@@ -37,6 +39,11 @@ export default function CatalogInformationContent({
         </Col>
         <Col span={6}>
           <CatalogInformationBilling catalogData={catalogData} />
+          <section className="tax-box-simulator">
+            {catalogData?.price?.best != null && (
+              <TaxCalculator price={catalogData?.price?.best} />
+            )}
+          </section>
         </Col>
         <Col span={6}>
           <CatalogInformationPricing catalogData={catalogData} />

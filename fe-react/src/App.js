@@ -1,6 +1,7 @@
 import "./App.scss"
 import { Layout, Menu } from "antd"
 import CatalogInformationPage from "./pages/catalogs/CatalogInformation.page.tsx"
+import ProductInformationPage from "./pages/products/ProductInformation.page.tsx"
 import { BrowserRouter, Route, Link, Routes } from "react-router-dom"
 import HomePage from "./pages/home/Home.page"
 import { QueryClient, QueryClientProvider } from "react-query"
@@ -13,8 +14,12 @@ const items = new Array(
     label: <Link to="/">Home</Link>,
   },
   {
+    key: "product",
+    label: <Link to="/product">Produto</Link>,
+  },
+  {
     key: "catalog",
-    label: <Link to="/catalog">Catalog</Link>,
+    label: <Link to="/catalog">Catálogo</Link>,
   }
 )
 const queryClient = new QueryClient()
@@ -44,6 +49,13 @@ function App() {
             >
               <Routes>
                 <Route path="/" element={<HomePage />}></Route>
+
+                <Route path="/product/" element={<ProductInformationPage />} />
+                <Route
+                  path="/product/:id"
+                  element={<ProductInformationPage />}
+                />
+
                 <Route path="/catalog/" element={<CatalogInformationPage />} />
                 <Route
                   path="/catalog/:id"

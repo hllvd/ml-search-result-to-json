@@ -3,14 +3,11 @@ import { Input } from "antd"
 const { Search } = Input
 
 type Props = { onSearchHandler: any; isLoading?: boolean }
-export default function SearchCatalogComponent({
-  onSearchHandler,
-  isLoading,
-}: Props) {
+export default function SearchComponent({ onSearchHandler, isLoading }: Props) {
   return (
     <Search
       placeholder="Entre com a url ou código do catálogo"
-      enterButton="Buscar catálogo"
+      enterButton="Buscar agora"
       size="large"
       onSearch={onSearchHandler}
       disabled={isLoading}

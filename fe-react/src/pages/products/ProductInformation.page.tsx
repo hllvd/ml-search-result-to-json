@@ -1,12 +1,12 @@
 import React from "react"
 import { LoadingOutlined } from "@ant-design/icons"
 import useFetchCatalogInformation from "../../hooks/useFetchCatalogInformation"
-import SearchCatalogComponent from "../../components/common/Search.component"
+import SearchComponent from "../../components/common/Search.component"
 import { extractProductId } from "../../utils/Regex.util"
 import { useNavigate, useParams } from "react-router-dom"
 import CatalogInformationContent from "../../components/features/catalogs/CatalogInformationContent.component"
-import "./CatalogInformation.scss"
-const CatalogInformationPage: React.FC = () => {
+
+const ProductInformationPage: React.FC = () => {
   const { id } = useParams()
   const navigate = useNavigate()
 
@@ -14,7 +14,7 @@ const CatalogInformationPage: React.FC = () => {
 
   const onSearchHandler = (searchTerm: string) => {
     const productId = extractProductId(searchTerm)
-    navigate(`/catalog/${productId}`)
+    navigate(`/product/${productId}`)
   }
   const { isLoading, isFetched, isError, data, error, refetch } =
     useFetchCatalogInformation(searchTerm)
@@ -25,7 +25,7 @@ const CatalogInformationPage: React.FC = () => {
 
   return (
     <div>
-      <SearchCatalogComponent
+      <SearchComponent
         onSearchHandler={onSearchHandler}
         isLoading={isLoading}
       />
@@ -38,4 +38,4 @@ const CatalogInformationPage: React.FC = () => {
   )
 }
 
-export default CatalogInformationPage
+export default ProductInformationPage

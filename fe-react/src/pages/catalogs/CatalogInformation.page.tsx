@@ -25,7 +25,10 @@ const CatalogInformationPage: React.FC = () => {
 
   return (
     <div>
-      <SearchCatalogComponent onSearchHandler={onSearchHandler} />
+      <SearchCatalogComponent
+        onSearchHandler={onSearchHandler}
+        isLoading={isLoading}
+      />
       {isError && <p>Error fetching data</p>}
       {isLoading && searchTerm && <LoadingOutlined />}
       {isFetched && searchTerm && (

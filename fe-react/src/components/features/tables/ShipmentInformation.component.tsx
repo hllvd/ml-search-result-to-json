@@ -4,7 +4,7 @@ import type { TableProps } from "antd"
 import {
   getMappedColumn,
   getTableContentWithSateSums,
-} from "../../../services/shipment-table-array.service"
+} from "../../../services/ShipmentTableArray.service"
 
 type Props = {
   data?: any[]

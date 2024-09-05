@@ -1,6 +1,6 @@
 import { useQuery } from "react-query"
 import { CatalogVisitsResponse } from "../models/dto/CatalogApiVisitResponse.model"
-import { fetchCatalogVisitsInformation } from "../services/api/ml-catalog-visits.api.service"
+import { fetchCatalogVisitsInformation } from "../services/api/MlCatalogVisits.api.service"
 
 export default function useFetchCatalogVisitsInformation(catalogId: string) {
   const queryResponse = useQuery<CatalogVisitsResponse>(

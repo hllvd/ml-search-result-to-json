@@ -31,6 +31,11 @@ export default function CatalogInformationVisits({ catalogId }: Props) {
           <Meta
             title="Diário"
             description={convertToInt(catalogVisitData?.dailyAvg)}
+            className={
+              convertToInt(catalogVisitData?.dailyAvg) > 100
+                ? "highlighted"
+                : ""
+            }
           />
         </div>
       )}

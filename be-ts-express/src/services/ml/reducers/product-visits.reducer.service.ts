@@ -1,14 +1,9 @@
-import algebra from "../../../utils/algebra"
 import { ProductVisitsResponse } from "../../../models/api-response/product-views-response.models"
+import { VisitsReducerResponse } from "../../../models/reducers/visits-reducer.models"
 
-interface CatalogVisitsReducerResponse {
-  dates: { [key: string]: number }
-  totalVisits: number
-  dailyAvg: number
-}
-const catalogVisitsReducer = (
+const productVisitsReducer = (
   visits: Array<ProductVisitsResponse>
-): CatalogVisitsReducerResponse => {
+): VisitsReducerResponse => {
   const catalogVisitsReducer = visits.reduce(
     (acc, curr, i) => {
       curr.results.forEach((e) => {
@@ -32,4 +27,4 @@ const catalogVisitsReducer = (
   return catalogVisitsReducer
 }
 
-export { catalogVisitsReducer }
+export { productVisitsReducer }

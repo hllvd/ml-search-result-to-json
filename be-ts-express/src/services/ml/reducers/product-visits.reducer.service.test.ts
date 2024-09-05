@@ -1,5 +1,5 @@
 import { ProductVisitsResponse } from "../../../models/api-response/product-views-response.models"
-import { catalogVisitsReducer } from "./catalog-visits.reducer.service"
+import { productVisitsReducer } from "./product-visits.reducer.service"
 
 describe("Recuer Catalog visits", () => {
   it("Should correctly aggregate visits given an array of dates", () => {
@@ -62,7 +62,7 @@ describe("Recuer Catalog visits", () => {
       },
     ]
     //Act
-    const result = catalogVisitsReducer(arrayOfDatesAndVisits)
+    const result = productVisitsReducer(arrayOfDatesAndVisits)
 
     //Assert
     expect(result).toEqual({

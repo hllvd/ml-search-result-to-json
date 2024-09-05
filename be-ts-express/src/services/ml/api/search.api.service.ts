@@ -15,4 +15,19 @@ const fetchProducts = async (
     .map((product) => product.body)
 }
 
-export { fetchProducts }
+const fetchProduct = async ({
+  userId,
+  productId,
+}: {
+  userId: string
+  productId: string
+}): Promise<MLProduct> => {
+  const options = {
+    userId,
+    method: "GET",
+  }
+  const productsObj = await fetchMl(`/items/${productId}`, options)
+  return productsObj
+}
+
+export { fetchProducts, fetchProduct }

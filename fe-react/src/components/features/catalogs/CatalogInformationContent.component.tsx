@@ -21,7 +21,13 @@ export default function CatalogInformationContent({
     <>
       <Row gutter={16} className="row-with-margin m-zoom">
         <Col span={8}>
-          <a href={catalogData?.permalink} target="_blank">
+          <a
+            href={catalogData?.permalink}
+            target="_blank"
+            className="photo-stack"
+          >
+            <img src={catalogData?.thumbnail} alt={catalogData?.title} />
+            <img src={catalogData?.thumbnail} alt={catalogData?.title} />
             <img src={catalogData?.thumbnail} alt={catalogData?.title} />
           </a>
         </Col>

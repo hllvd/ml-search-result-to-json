@@ -25,7 +25,7 @@ export default function TaxCalculator({ price }: { price: number }) {
         Taxas: <i>{currencyFormatter(calculateMeliTaxes(price), true)}</i>
       </p>
       <p>
-        Preço sem taxas: <strong>{calculateMeliFinalPrice(price)}</strong>
+        Lucro bruto: <strong>{calculateMeliFinalPrice(price)}</strong>
       </p>
     </>
   )

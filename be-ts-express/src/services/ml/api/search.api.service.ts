@@ -1,5 +1,11 @@
 import { MLProduct } from "../../../models/dto/ml-product.models"
 import { fetchMl } from "../fetcher-api.ml.service"
+import { getSeller } from "../api/users"
+
+interface FetchProductArgument {
+  userId: string
+  productId: string
+}
 
 const fetchProducts = async (
   userId: string,
@@ -15,13 +21,10 @@ const fetchProducts = async (
     .map((product) => product.body)
 }
 
-const fetchProduct = async ({
+const _fetchProduct = async ({
   userId,
   productId,
-}: {
-  userId: string
-  productId: string
-}): Promise<MLProduct> => {
+}: FetchProductArgument): Promise<MLProduct> => {
   const options = {
     userId,
     method: "GET",
@@ -30,4 +33,14 @@ const fetchProduct = async ({
   return productsObj
 }
 
-export { fetchProducts, fetchProduct }
+const fetchProductItsSeller = async ({
+  userId,
+  productId,
+}: FetchProductArgument) => {
+  const product = await _fetchProduct({ userId, productId })
+  const sellerId = product?.seller_id.toString()
+  const mlSeller = await getSeller({ sellerId, userId })
+  return { ...product, mlSeller }
+}
+
+export { fetchProducts, fetchProductItsSeller }

@@ -1,5 +1,7 @@
 import { MLProduct, ProductId } from "../../models/dto/ml-product.models"
-import { fetchProducts } from "./api/search.api.service"
+import { FetchProductArgument } from "../../models/params/fetch-product.model"
+import { fetchProduct, fetchProducts } from "./api/search.api.service"
+import { getSeller } from "./api/users"
 import { productIdsReducer } from "./reducers/product-urls.reducer.service"
 
 const getProducts = async (
@@ -18,6 +20,16 @@ const getProducts = async (
   ).flat(1)
 }
 
+const getProductWithItsSeller = async ({
+  userId,
+  productId,
+}: FetchProductArgument) => {
+  const product = await fetchProduct({ userId, productId })
+  const sellerId = product?.seller_id?.toString()
+  const mlSeller = await getSeller({ sellerId, userId })
+  return { ...product, mlSeller }
+}
+
 const getProductInCorrectOrder = (
   productIds: ProductId[],
   products: MLProduct[]
@@ -28,4 +40,4 @@ const getProductInCorrectOrder = (
   })
 }
 
-export { getProducts, getProductInCorrectOrder }
+export { getProducts, getProductInCorrectOrder, getProductWithItsSeller }

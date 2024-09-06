@@ -1,12 +1,12 @@
 import { Request, Response } from "express"
-import { fetchProductItsSeller } from "../services/ml/api/search.api.service"
 import { getProductVisitsSummary } from "../services/ml/products-visits.service"
+import { getProductWithItsSeller } from "../services/ml/products.service"
 
 const product = async (req: Request, res: Response) => {
   const productId = req.query?.productId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
 
-  const productInfo = await fetchProductItsSeller({
+  const productInfo = await getProductWithItsSeller({
     productId,
     userId,
   })

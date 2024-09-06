@@ -3,7 +3,7 @@ import { LoadingOutlined } from "@ant-design/icons"
 import SearchComponent from "../../components/common/Search.component"
 import { useParams } from "react-router-dom"
 import useFetchProductInformation from "../../hooks/useFetchProductInformation"
-import ProductInformationContent from "../../components/features/products/ProductInformation.component"
+import ProductInformationContent from "../../components/features/products/ProductInformationContent.component"
 
 const ProductInformationPage: React.FC = () => {
   const { id } = useParams()

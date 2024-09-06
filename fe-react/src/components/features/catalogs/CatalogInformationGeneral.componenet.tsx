@@ -1,6 +1,7 @@
 import Meta from "antd/es/card/Meta"
 import { CatalogInformationResponse } from "../../../models/dto/CatalogApiResponse.model"
 import { daysFromNow } from "../../../utils/DateFormatter.util"
+import MetaDescriptionBool from "../../common/MetaDescriptionBool.component"
 type Props = { catalogData?: CatalogInformationResponse; productId: string }
 export default function CatalogInformationGeneral({
   catalogData,
@@ -24,6 +25,10 @@ export default function CatalogInformationGeneral({
             ? "red-highlighted-description"
             : "highlighted-description"
         }
+      />
+      <MetaDescriptionBool
+        title="Mercado Livre no catálogo"
+        description={!!catalogData?.mlOwner}
       />
       <Meta title="Id do produto" description={productId ?? ""}></Meta>
     </>

@@ -41,6 +41,7 @@ export default function ProductInformationContent({
             title="Data de criação"
             description={dateIsoFormatter(productData?.date_created ?? "")}
           />
+          <MetaDescriptionBool title="Catálogo" description={false} />
           <MetaDescriptionBool
             title="Loja oficial"
             description={!!productData?.official_store_id}
@@ -91,7 +92,7 @@ export default function ProductInformationContent({
           {productId && <ProductInformationVisits productId={productId} />}
         </Col>
         <Col span={6}>
-          <h2>Seller</h2>
+          <h2>Vendedor</h2>
           {productData?.mlSeller.seller_reputation?.level_id && (
             <Rate
               disabled

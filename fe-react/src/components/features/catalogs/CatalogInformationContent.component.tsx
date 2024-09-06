@@ -10,6 +10,7 @@ import { FlatThat } from "../../../utils/ArrayFlat.util"
 import ShipmentInformationTable from "../tables/ShipmentInformation.component"
 import CatalogInformationVisits from "./CatalogInformationVisits.component"
 import TaxCalculator from "../tax-calculator/TaxCalculator.component"
+import MetaDescriptionBool from "../../common/MetaDescriptionBool.component"
 
 type Props = { catalogData?: CatalogInformationResponse; productId: string }
 export default function CatalogInformationContent({
@@ -37,6 +38,7 @@ export default function CatalogInformationContent({
 
       <Row gutter={16} className="row-with-margin m-zoom">
         <Col span={6}>
+          <MetaDescriptionBool title="Catálogo" description={true} />
           <CatalogInformationGeneral
             catalogData={catalogData}
             productId={productId}

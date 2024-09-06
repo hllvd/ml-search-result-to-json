@@ -1,9 +1,12 @@
 import React from "react"
+import SearchComponent from "../../components/common/Search.component"
 
 const HomePage: React.FC = () => {
   return (
     <React.Fragment>
-      <div>Home page</div>
+      <div className="search-centered">
+        <SearchComponent />
+      </div>
     </React.Fragment>
   )
 }

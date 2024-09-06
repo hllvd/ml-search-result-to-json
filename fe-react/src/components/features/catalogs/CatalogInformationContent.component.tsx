@@ -2,7 +2,6 @@ import React from "react"
 import { Col, Row } from "antd"
 import { CatalogInformationResponse } from "../../../models/dto/CatalogApiResponse.model"
 import "./CatalogInformationContent.css"
-
 import CatalogInformationGeneral from "./CatalogInformationGeneral.componenet"
 import CatalogInformationBilling from "./CatalogInformationBilling.component"
 import CatalogInformationPricing from "./CatalogInformationPricing.component"

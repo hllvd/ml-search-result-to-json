@@ -2,12 +2,11 @@ import React from "react"
 import { LoadingOutlined } from "@ant-design/icons"
 import useFetchCatalogInformation from "../../hooks/useFetchCatalogInformation"
 import SearchCatalogComponent from "../../components/common/Search.component"
-import { useNavigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import CatalogInformationContent from "../../components/features/catalogs/CatalogInformationContent.component"
 import "./CatalogInformation.scss"
 const CatalogInformationPage: React.FC = () => {
   const { id } = useParams()
-  const navigate = useNavigate()
 
   const searchTerm = id ?? ""
 

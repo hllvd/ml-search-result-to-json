@@ -17,15 +17,6 @@ export default function CatalogInformationGeneral({
         }
       />
       <Meta title="Quantidade de anúncios" description={catalogData?.length} />
-      <Meta
-        title="Mercado Livre no catálogo"
-        description={catalogData?.mlOwner ? "Sim" : "Não"}
-        className={
-          catalogData?.mlOwner
-            ? "red-highlighted-description"
-            : "highlighted-description"
-        }
-      />
       <MetaDescriptionBool
         title="Mercado Livre no catálogo"
         description={!!catalogData?.mlOwner}

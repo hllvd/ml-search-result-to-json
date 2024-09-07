@@ -1,7 +1,6 @@
 import React from "react"
 import { Col, Rate, Row } from "antd"
 import { ProductResponse } from "../../../models/dto/ProductApiResponse.model"
-import Meta from "antd/es/card/Meta"
 import {
   currencyFormatter,
   dateIsoFormatter,
@@ -88,7 +87,7 @@ export default function ProductInformationContent({
           </section>
         </Col>
         <Col span={6}>
-          <h2>Visitas</h2>
+          <h2>Visitas últimos 30 dias</h2>
           {productId && <ProductInformationVisits productId={productId} />}
         </Col>
         <Col span={6}>

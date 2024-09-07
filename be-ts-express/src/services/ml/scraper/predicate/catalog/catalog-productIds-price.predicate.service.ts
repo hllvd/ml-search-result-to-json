@@ -24,9 +24,11 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
 
   const prices = Array.from(
     document.querySelectorAll(
-      ".andes-money-amount.ui-pdp-price__part.andes-money-amount--cents-superscript.andes-money-amount--compact"
+      ".ui-pdp-table__cell.ui-pdp-s-table__cell .ui-pdp-price span.andes-money-amount.ui-pdp-price__part.andes-money-amount--cents-superscript.andes-money-amount--compact"
     )
-  ).map((el: HTMLElement) => _convertCurrencyStrings(el.textContent))
+  ).map((el: HTMLElement) =>
+    _convertCurrencyStrings(el.getAttribute("aria-label"))
+  )
   const nextPage =
     Array.from(
       document.querySelectorAll(
@@ -42,9 +44,13 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
 }
 
 const _convertCurrencyStrings = (currencyStrings: string): number => {
-  let numberString = currencyStrings.replace(/R\$\s*/, "").replace(",", ".")
-  const parsedfloat = parseFloat(numberString)
-  return parsedfloat
+  const addCentavos = currencyStrings.includes("centavos")
+    ? currencyStrings
+    : `${currencyStrings} com 00 centavos`
+  const onlyNumber: number = Number.parseInt(addCentavos.replace(/\D/g, ""))
+  const floatNumbers: number = Number.parseFloat((onlyNumber / 100).toFixed(2))
+  console.log("floatNumbers", floatNumbers)
+  return floatNumbers
 }
 
 export { webScrapeCatalogToProductIdAndPricePredicate }

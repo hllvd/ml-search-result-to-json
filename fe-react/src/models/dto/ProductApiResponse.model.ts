@@ -8,6 +8,7 @@ export interface ProductResponse {
   category_id: string
   official_store_id: number
   price: number
+  price_promotional: number
   base_price: number
   original_price: any
   currency_id: string

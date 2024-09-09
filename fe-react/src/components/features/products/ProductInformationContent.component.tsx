@@ -1,14 +1,13 @@
 import React from "react"
 import { Col, Rate, Row } from "antd"
 import { ProductResponse } from "../../../models/dto/ProductApiResponse.model"
-import {
-  currencyFormatter,
-  dateIsoFormatter,
-} from "../../../utils/LocaleFormater.util"
+import { currencyFormatter } from "../../../utils/LocaleFormater.util"
 import MetaDescription from "../../common/MetaDescription.component"
-import MetaDescriptionBool from "../../common/MetaDescriptionBool.component"
 import TaxCalculator from "../tax-calculator/TaxCalculator.component"
 import ProductInformationVisits from "./ProductInformationVisits.component"
+import ProductInformationGeneral from "./ProductInformationGeneral.component"
+import ProductInformationPrices from "./ProductInformationPrices.component"
+import ProductInformationSeller from "./ProductInformationSeller.component"
 
 type Props = { productData?: ProductResponse; productId: string }
 export default function ProductInformationContent({
@@ -32,54 +31,12 @@ export default function ProductInformationContent({
       <Row gutter={16} className="row-with-margin m-zoom">
         <Col span={6}>
           <h2> Anúncio</h2>
-          <MetaDescription
-            title="Qualidade anúncio"
-            description={productData?.health}
-          />
-          <MetaDescription
-            title="Data de criação"
-            description={dateIsoFormatter(productData?.date_created ?? "")}
-          />
-          <MetaDescriptionBool title="Catálogo" description={false} />
-          <MetaDescriptionBool
-            title="Loja oficial"
-            description={!!productData?.official_store_id}
-          />
-          <MetaDescriptionBool
-            title="Mais de 10 imagens"
-            description={
-              productData?.pictures && productData?.pictures?.length > 9
-            }
-          />
-          <MetaDescriptionBool
-            title="Imagem HQ"
-            description={
-              productData?.tags &&
-              productData?.tags.includes("good_quality_thumbnail")
-            }
-          />
-          <MetaDescriptionBool
-            title="Envío Full"
-            description={productData?.shipping?.logistic_type == "fulfillment"}
-          />
-          <MetaDescriptionBool
-            title="Vídeo"
-            description={!!productData?.video_id}
-          />
-          <MetaDescriptionBool
-            title="Compra internacional"
-            description={productData?.international_delivery_mode != "none"}
-          />
+          <ProductInformationGeneral productData={productData} />
         </Col>
 
         <Col span={6}>
           <h2> Preço</h2>
-          <MetaDescription
-            title="Price"
-            description={
-              productData?.price && currencyFormatter(productData?.price, true)
-            }
-          />
+          <ProductInformationPrices productData={productData} />
           <section className="tax-box-simulator">
             {productData?.price != null && (
               <TaxCalculator price={productData?.price} />
@@ -92,33 +49,7 @@ export default function ProductInformationContent({
         </Col>
         <Col span={6}>
           <h2>Vendedor</h2>
-          {productData?.mlSeller.seller_reputation?.level_id && (
-            <Rate
-              disabled
-              defaultValue={Number.parseInt(
-                productData?.mlSeller.seller_reputation?.level_id
-              )}
-            />
-          )}
-          <MetaDescription
-            title="Vendedor"
-            description={productData?.mlSeller?.nickname}
-            link={productData?.mlSeller?.permalink}
-          />
-          <MetaDescription
-            title="Estado vendedor"
-            description={productData?.seller_address?.state?.id}
-          />
-          <MetaDescription
-            title="Medalha"
-            description={
-              productData?.mlSeller.seller_reputation?.power_seller_status
-            }
-          />
-          <MetaDescription
-            title="Transações"
-            description={productData?.mlSeller.seller_reputation?.transactions?.total?.toString()}
-          />
+          <ProductInformationSeller productData={productData} />
         </Col>
       </Row>
     </>

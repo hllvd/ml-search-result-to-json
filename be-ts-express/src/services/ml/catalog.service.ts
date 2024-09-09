@@ -1,5 +1,6 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
 import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.models"
+import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 
 import { fetchSeller } from "./api/users"
 import { getProductInCorrectOrder, getProducts } from "./products.service"
@@ -82,7 +83,6 @@ const _summarizeCatalog = (options: {
   catalog: CatalogReducerResponse
   sales: number
 }) => {
-  console.log("options", options)
   const revenue = options.sales * options?.catalog?.price?.best
 
   const dateCreated = new Date(options?.catalog?.dateCreated) ?? null

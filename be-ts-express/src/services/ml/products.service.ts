@@ -1,6 +1,7 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
 import { MLProduct, ProductId } from "../../models/dto/ml-product.models"
 import { FetchProductArgument } from "../../models/params/fetch-product.model"
+import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 import { fetchProduct, fetchProducts } from "./api/products.api.service"
 import { fetchSeller } from "./api/users"
 import { productIdsReducer } from "./reducers/product-urls.reducer.service"
@@ -27,7 +28,7 @@ const getProductWithItsSeller = async ({
   userId,
   productId,
 }: FetchProductArgument) => {
-  const productIdWIthDash = `MLB-${productId.split("MLB")[1]}`
+  const productIdWIthDash = convertCatalogIdToProductId(productId)
   const product = await fetchProduct({ userId, productId })
   const sellerId = product?.seller_id?.toString()
 

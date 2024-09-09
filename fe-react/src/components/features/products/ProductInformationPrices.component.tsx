@@ -1,10 +1,11 @@
 import { ProductResponse } from "../../../models/dto/ProductApiResponse.model"
 import { currencyFormatter } from "../../../utils/LocaleFormater.util"
 import MetaDescription from "../../common/MetaDescription.component"
+import Skeleton from "antd/es/skeleton"
 
 type Props = { productData?: ProductResponse }
 const ProductInformationPrices = ({ productData }: Props) => {
-  if (productData == null) return null
+  if (productData == null) return <Skeleton />
   return (
     <>
       <MetaDescription

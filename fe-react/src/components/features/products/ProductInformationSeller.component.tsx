@@ -2,9 +2,11 @@ import React from "react"
 import { Rate } from "antd"
 import { ProductResponse } from "../../../models/dto/ProductApiResponse.model"
 import MetaDescription from "../../common/MetaDescription.component"
+import Skeleton from "antd/es/skeleton"
 
 type Props = { productData?: ProductResponse }
 const ProductInformationSeller = ({ productData }: Props) => {
+  if (productData == null) return <Skeleton />
   return (
     <>
       {productData?.mlSeller.seller_reputation?.level_id && (

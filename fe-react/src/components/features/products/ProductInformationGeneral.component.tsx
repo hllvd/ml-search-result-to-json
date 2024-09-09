@@ -2,10 +2,11 @@ import { ProductResponse } from "../../../models/dto/ProductApiResponse.model"
 import { dateIsoFormatter } from "../../../utils/LocaleFormater.util"
 import MetaDescription from "../../common/MetaDescription.component"
 import MetaDescriptionBool from "../../common/MetaDescriptionBool.component"
+import Skeleton from "antd/es/skeleton"
 
 type Props = { productData?: ProductResponse }
 const ProductInformationGeneral = ({ productData }: Props) => {
-  if (productData == null) return null
+  if (productData == null) return <Skeleton />
   return (
     <>
       <MetaDescription

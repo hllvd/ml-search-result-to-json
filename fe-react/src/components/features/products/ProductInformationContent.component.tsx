@@ -1,8 +1,6 @@
 import React from "react"
-import { Col, Rate, Row } from "antd"
+import { Col, Row } from "antd"
 import { ProductResponse } from "../../../models/dto/ProductApiResponse.model"
-import { currencyFormatter } from "../../../utils/LocaleFormater.util"
-import MetaDescription from "../../common/MetaDescription.component"
 import TaxCalculator from "../tax-calculator/TaxCalculator.component"
 import ProductInformationVisits from "./ProductInformationVisits.component"
 import ProductInformationGeneral from "./ProductInformationGeneral.component"
@@ -14,7 +12,6 @@ export default function ProductInformationContent({
   productData,
   productId,
 }: Props) {
-  console.log(productData, productId)
   return (
     <>
       <Row gutter={16} className="row-with-margin m-zoom">

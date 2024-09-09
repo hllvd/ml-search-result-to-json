@@ -1,4 +1,5 @@
-import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
+import { LogisticType } from "../../../models/api-response/product-response.models"
+import { MLProduct } from "../../../models/dto/ml-product.models"
 import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
 import { catalogReducer } from "./catalog.reducer.service"
 
@@ -49,11 +50,11 @@ describe("catalogReducer", () => {
         date_created: "2022-06-13T11:23:59.000Z",
         permalink: "https://example.com",
         price: 50,
-        mlOwner: false,
+        owner: false,
         shipping: {
           logistic_type: LogisticType.correios,
         },
-        mlUser: {
+        user: {
           id: 1,
           seller_reputation: {
             power_seller_status: PowerSellerStatus.Platinum,
@@ -65,12 +66,12 @@ describe("catalogReducer", () => {
         seller_address: { state: { id: "BR-SP" } },
         date_created: "2022-06-13T11:23:59.000Z",
         price: 55,
-        mlOwner: false,
+        owner: false,
         official_store_id: 123,
         shipping: {
           logistic_type: LogisticType.coleta,
         },
-        mlUser: {
+        user: {
           id: 1,
           seller_reputation: { power_seller_status: PowerSellerStatus.Gold },
         },
@@ -80,11 +81,11 @@ describe("catalogReducer", () => {
         seller_address: { state: { id: "BR-SC" } },
         date_created: "2022-06-13T11:23:59.000Z",
         price: 60,
-        mlOwner: false,
+        owner: false,
         shipping: {
           logistic_type: LogisticType.full,
         },
-        mlUser: {
+        user: {
           id: 1,
           seller_reputation: { power_seller_status: PowerSellerStatus.Gold },
         },
@@ -94,11 +95,11 @@ describe("catalogReducer", () => {
         seller_address: { state: { id: "BR-SP" } },
         date_created: "2022-06-13T11:23:59.000Z",
         price: 60,
-        mlOwner: false,
+        owner: false,
         shipping: {
           logistic_type: LogisticType.full,
         },
-        mlUser: {
+        user: {
           id: 1,
           seller_reputation: null,
         },
@@ -165,11 +166,11 @@ describe("catalogReducer", () => {
         seller_address: { state: { id: "BR-SP" } },
         date_created: "2022-06-13T11:23:59.000Z",
         price: 50,
-        mlOwner: false,
+        owner: false,
         shipping: {
           logistic_type: LogisticType.correios,
         },
-        mlUser: {
+        user: {
           id: 1,
           seller_reputation: {
             power_seller_status: PowerSellerStatus.Platinum,

@@ -1,12 +1,9 @@
-import { MLProductResponse } from "../api-response/product-response.models"
-import { MLUser } from "./ml-user.models"
-
 export type ProductId = string
 
-export interface MLProduct extends MLProductResponse {
+export interface MLProductResponse {
   id: ProductId
   site_id?: string
-  user?: MLUser
+  user?: any
   pictures?: any
   attributes?: any
   title?: string
@@ -15,7 +12,6 @@ export interface MLProduct extends MLProductResponse {
   official_store_id?: number
   price: number
   base_price?: number
-  promotional_price?: number
   original_price?: number
   currency_id?: string
   initial_quantity?: number
@@ -26,6 +22,7 @@ export interface MLProduct extends MLProductResponse {
   thumbnail_id?: string
   thumbnail?: string
   video_id?: any
+  shipping?: Shipping
   international_delivery_mode?: string
   seller_contact?: any
   location?: Location
@@ -34,5 +31,29 @@ export interface MLProduct extends MLProductResponse {
   catalog_product_id?: string
   date_created?: string
   last_updated?: string
-  owner: boolean
+  seller_address?: MLProductSellerAddress
 }
+
+interface MLProductSellerAddress {
+  state: { id: string }
+}
+
+export interface Shipping {
+  mode?: string
+  methods?: any[]
+  tags?: string[]
+  dimensions?: any
+  local_pick_up?: boolean
+  free_shipping?: boolean
+  logistic_type?: string
+  store_pick_up?: boolean
+}
+
+export enum LogisticType {
+  full = "fulfillment",
+  correios = "drop_off",
+  coleta2 = "xd_drop_off",
+  coleta = "cross_docking",
+}
+
+export interface Location {}

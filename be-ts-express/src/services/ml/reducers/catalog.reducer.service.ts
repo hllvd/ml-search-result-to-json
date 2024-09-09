@@ -1,5 +1,6 @@
 import { ML_OWN_USER_ID } from "../../../constants"
-import { LogisticType, MLProduct } from "../../../models/dto/ml-product.models"
+import { LogisticType } from "../../../models/api-response/product-response.models"
+import { MLProduct } from "../../../models/dto/ml-product.models"
 import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
 import { CatalogReducerResponse } from "../../../models/reducers/catalog-reducer.models"
 
@@ -8,7 +9,7 @@ export const catalogReducer = (
 ): CatalogReducerResponse => {
   const catalogReducer = catalog.reduce(
     (acc, curr, i) => {
-      const { mlUser, price, title } = curr
+      const { user, price, title } = curr
       const isFull = curr.shipping?.logistic_type == LogisticType.full
       const state = curr.seller_address?.state?.id
       const currentDateCreated = new Date(curr.date_created)
@@ -18,7 +19,7 @@ export const catalogReducer = (
       acc.title = title
       acc.permalink = acc.permalink || curr.permalink
       acc.thumbnail = acc.thumbnail || curr.thumbnail
-      acc.mlOwner = mlUser.id.toString() === ML_OWN_USER_ID ? true : acc.mlOwner
+      acc.mlOwner = user.id.toString() === ML_OWN_USER_ID ? true : acc.mlOwner
       acc.categoryId = acc.categoryId || curr.category_id
 
       acc.supermarketEligible =
@@ -30,7 +31,7 @@ export const catalogReducer = (
         curr.shipping?.logistic_type as LogisticType
       )
       const { isMedalPlatinum, isMedalGold, isMedalLider } = _getMedalBooleans(
-        mlUser.seller_reputation?.power_seller_status
+        user.seller_reputation?.power_seller_status
       )
 
       acc.position.medalGold = _getBestPosition({
@@ -60,7 +61,7 @@ export const catalogReducer = (
       })
 
       const currentMedal = _getMedalKey(
-        mlUser.seller_reputation?.power_seller_status
+        user.seller_reputation?.power_seller_status
       )
       acc.medalByState[currentMedal][state] =
         acc.medalByState[currentMedal][state] === undefined

@@ -19,7 +19,7 @@ export const catalogReducer = (
       acc.title = title
       acc.permalink = acc.permalink || curr.permalink
       acc.thumbnail = acc.thumbnail || curr.thumbnail
-      acc.mlOwner = user.id.toString() === ML_OWN_USER_ID ? true : acc.mlOwner
+      acc.mlOwner = user?.id?.toString() === ML_OWN_USER_ID ? true : acc.mlOwner
       acc.categoryId = acc.categoryId || curr.category_id
 
       acc.supermarketEligible =

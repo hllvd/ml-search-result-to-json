@@ -41,12 +41,12 @@ const catalogSummary = async ({
   const products = await getProducts(userId, productListOnlyIds)
   const productsWithSellers = await Promise.all(
     products.map(async (c): Promise<any> => {
-      const mlUser = await fetchSeller({
+      const user = await fetchSeller({
         userId,
         sellerId: c.seller_id.toString(),
       })
 
-      return { ...c, mlUser }
+      return { ...c, user }
     })
   )
 
@@ -82,6 +82,7 @@ const _summarizeCatalog = (options: {
   catalog: CatalogReducerResponse
   sales: number
 }) => {
+  console.log("options", options)
   const revenue = options.sales * options?.catalog?.price?.best
 
   const dateCreated = new Date(options?.catalog?.dateCreated) ?? null

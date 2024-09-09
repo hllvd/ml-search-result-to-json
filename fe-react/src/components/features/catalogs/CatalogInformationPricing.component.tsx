@@ -1,6 +1,6 @@
 import Meta from "antd/es/card/Meta"
 import { CatalogInformationResponse } from "../../../models/dto/CatalogApiResponse.model"
-import { currencyFormatter } from "../../../utils/LocaleFormater.util"
+import { currencyFormatter } from "../../../utils/LocaleFormatter.util"
 
 type Props = { catalogData?: CatalogInformationResponse }
 

@@ -1,5 +1,5 @@
 import { ProductResponse } from "../../../models/dto/ProductApiResponse.model"
-import { currencyFormatter } from "../../../utils/LocaleFormater.util"
+import { currencyFormatter } from "../../../utils/LocaleFormatter.util"
 import MetaDescription from "../../common/MetaDescription.component"
 import Skeleton from "antd/es/skeleton"
 

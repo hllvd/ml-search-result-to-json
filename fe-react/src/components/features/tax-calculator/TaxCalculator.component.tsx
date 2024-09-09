@@ -1,4 +1,4 @@
-import { currencyFormatter } from "../../../utils/LocaleFormater.util"
+import { currencyFormatter } from "../../../utils/LocaleFormatter.util"
 
 export default function TaxCalculator({ price }: { price: number }) {
   console.log(price)

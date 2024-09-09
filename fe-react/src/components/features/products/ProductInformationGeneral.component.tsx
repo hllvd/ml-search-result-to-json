@@ -1,5 +1,5 @@
 import { ProductResponse } from "../../../models/dto/ProductApiResponse.model"
-import { dateIsoFormatter } from "../../../utils/LocaleFormater.util"
+import { dateIsoFormatter } from "../../../utils/LocaleFormatter.util"
 import MetaDescription from "../../common/MetaDescription.component"
 import MetaDescriptionBool from "../../common/MetaDescriptionBool.component"
 import Skeleton from "antd/es/skeleton"

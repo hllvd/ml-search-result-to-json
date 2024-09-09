@@ -1,7 +1,7 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
 import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.models"
 
-import { getSeller } from "./api/users"
+import { fetchSeller } from "./api/users"
 import { getProductInCorrectOrder, getProducts } from "./products.service"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
 import { webScrapeCatalogToMetadataPredicate } from "./scraper/predicate/catalog/catalog-metadata.predicate.service"
@@ -41,7 +41,7 @@ const catalogSummary = async ({
   const products = await getProducts(userId, productListOnlyIds)
   const productsWithSellers = await Promise.all(
     products.map(async (c): Promise<any> => {
-      const mlUser = await getSeller({
+      const mlUser = await fetchSeller({
         userId,
         sellerId: c.seller_id.toString(),
       })

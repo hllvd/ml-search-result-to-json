@@ -96,7 +96,7 @@ const webScrapeMlUrlBuilder = (options) => {
   let currentPage
   let isPagerWorking = true
   let page = options.page ?? 1
-  const { catalogId } = options
+  const { catalogId, productId } = options
 
   const getCurrentUrlScope = () => {
     switch (options.scrapeType) {
@@ -106,6 +106,9 @@ const webScrapeMlUrlBuilder = (options) => {
       case ScrapeType.CatalogMetadata:
         isPagerWorking = false
         currentPage = `https://www.mercadolivre.com.br/p/${catalogId}`
+      case ScrapeType.ProductPage:
+        isPagerWorking = false
+        currentPage = `https://produto.mercadolivre.com.br/${productId}`
         return currentPage
       default:
         throw new Error("Invalid scrape type")

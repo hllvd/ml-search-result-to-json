@@ -1,5 +1,6 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
 import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.models"
+import { roundNumber } from "../../utils/math.util"
 import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 
 import { fetchSeller } from "./api/users"
@@ -89,7 +90,7 @@ const _summarizeCatalog = (options: {
   const today = new Date()
   const timeDiff = today.getTime() - dateCreated.getTime()
   const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24))
-  const dailyRevenue = revenue / daysDiff
+  const dailyRevenue = roundNumber(revenue / daysDiff)
 
   const catalogWithSummary = {
     ...options.catalog,

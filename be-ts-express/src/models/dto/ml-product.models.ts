@@ -15,7 +15,7 @@ export interface MLProduct extends MLProductResponse {
   official_store_id?: number
   price: number
   base_price?: number
-  promotional_price?: number
+  current_price?: number
   original_price?: number
   currency_id?: string
   initial_quantity?: number

@@ -42,6 +42,7 @@ const getProductComplete = async ({
     currentPrice: scrapProductPage.currentPrice,
     quantitySold: scrapProductPage.quantitySold,
   })
+
   return {
     ...product,
     user,
@@ -61,14 +62,19 @@ const _getProductStatistics = ({
   revenue: number
   quantity_sold: number
   daily_revenue: number
+  has_promotion: boolean
 } => {
   const revenue = currentPrice * quantitySold
   const days = calculateDaysFrom(product.date_created)
   const daily_revenue = revenue / days
+  const has_promotion =
+    currentPrice < product.price || product.price < product.original_price
   return {
     ...product,
+    has_promotion,
     revenue,
     quantity_sold: quantitySold,
+    current_price: currentPrice,
     daily_revenue,
   }
 }

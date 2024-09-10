@@ -9,18 +9,18 @@ const ProductInformationSeller = ({ productData }: Props) => {
   if (productData == null) return <Skeleton />
   return (
     <>
-      {productData?.mlSeller.seller_reputation?.level_id && (
+      {productData?.user.seller_reputation?.level_id && (
         <Rate
           disabled
           defaultValue={Number.parseInt(
-            productData?.mlSeller.seller_reputation?.level_id
+            productData?.user.seller_reputation?.level_id
           )}
         />
       )}
       <MetaDescription
         title="Vendedor"
-        description={productData?.mlSeller?.nickname}
-        link={productData?.mlSeller?.permalink}
+        description={productData?.user?.nickname}
+        link={productData?.user?.permalink}
       />
       <MetaDescription
         title="Estado vendedor"
@@ -28,13 +28,11 @@ const ProductInformationSeller = ({ productData }: Props) => {
       />
       <MetaDescription
         title="Medalha"
-        description={
-          productData?.mlSeller.seller_reputation?.power_seller_status
-        }
+        description={productData?.user.seller_reputation?.power_seller_status}
       />
       <MetaDescription
         title="Transações"
-        description={productData?.mlSeller.seller_reputation?.transactions?.total?.toString()}
+        description={productData?.user.seller_reputation?.transactions?.total?.toString()}
       />
     </>
   )

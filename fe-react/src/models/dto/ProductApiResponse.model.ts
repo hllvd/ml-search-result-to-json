@@ -4,7 +4,7 @@ export interface ProductResponse {
   site_id: string
   title: string
   seller_id: number
-  mlSeller: MLUser
+  user: MLUser
   category_id: string
   official_store_id: number
   price: number

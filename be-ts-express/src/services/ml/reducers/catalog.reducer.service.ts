@@ -3,6 +3,7 @@ import { LogisticType } from "../../../models/api-response/product-response.mode
 import { MLProduct } from "../../../models/dto/ml-product.models"
 import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
 import { CatalogReducerResponse } from "../../../models/reducers/catalog-reducer.models"
+import { roundNumber } from "../../../utils/math.util"
 
 export const catalogReducer = (
   catalog: Array<MLProduct>
@@ -79,7 +80,9 @@ export const catalogReducer = (
 
       acc.price.top5Avg =
         i < 5
-          ? acc.priceList.reduce((ac, cur) => ac + cur, 0) / (i + 1)
+          ? roundNumber(
+              acc.priceList.reduce((ac, cur) => ac + cur, 0) / (i + 1)
+            )
           : acc.price.top5Avg
 
       acc.price.best =

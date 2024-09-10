@@ -2,6 +2,7 @@ import { ScrapeType } from "../../enums/scrap-type.enum"
 import { MLProduct, ProductId } from "../../models/dto/ml-product.models"
 import { FetchProductArgument } from "../../models/params/fetch-product.model"
 import { calculateDaysFrom } from "../../utils/day-claculation.util"
+import { roundNumber } from "../../utils/math.util"
 import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 import { fetchProduct, fetchProducts } from "./api/products.api.service"
 import { fetchSeller } from "./api/users"
@@ -66,7 +67,7 @@ const _getProductStatistics = ({
 } => {
   const revenue = currentPrice * quantitySold
   const days = calculateDaysFrom(product.date_created)
-  const daily_revenue = revenue / days
+  const daily_revenue = roundNumber(revenue / days)
   const has_promotion =
     currentPrice < product.price || product.price < product.original_price
   return {

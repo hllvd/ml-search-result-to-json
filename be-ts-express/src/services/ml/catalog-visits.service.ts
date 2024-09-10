@@ -1,4 +1,5 @@
 import { ProductVisitsResponse } from "../../models/api-response/product-views-response.models"
+import { calculateDispersion } from "../../utils/math.util"
 import { fetchViewsFromProduct } from "./api/product-visits.api.service"
 import { productVisitsReducer } from "./reducers/product-visits.reducer.service"
 
@@ -23,7 +24,9 @@ const _fetchVisitsFromCatalog = async ({
 
 const getCatalogVisitsSummary = async ({ userId, productIds }) => {
   const cataLogVisits = await _fetchVisitsFromCatalog({ userId, productIds })
-  return productVisitsReducer(cataLogVisits)
+  const visitsReducer = productVisitsReducer(cataLogVisits)
+  const { cv } = calculateDispersion(visitsReducer.visitsBySeller)
+  return { ...visitsReducer, cv }
 }
 
 export { getCatalogVisitsSummary }

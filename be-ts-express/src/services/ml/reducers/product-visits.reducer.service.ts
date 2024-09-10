@@ -11,10 +11,12 @@ const productVisitsReducer = (
         acc.dates[date] = (acc.dates[date] || 0) + e.total
         acc.totalVisits = acc.totalVisits + e.total
       })
+      acc.visitsBySeller.push(curr.total_visits)
       return acc
     },
     {
       dates: {},
+      visitsBySeller: [],
       dailyAvg: 0,
       totalVisits: 0,
     }

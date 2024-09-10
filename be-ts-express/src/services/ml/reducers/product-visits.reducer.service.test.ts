@@ -7,6 +7,7 @@ describe("Recuer Catalog visits", () => {
     const arrayOfDatesAndVisits: Array<ProductVisitsResponse> = [
       {
         item_id: "MLB4641831438",
+        total_visits: 6,
         results: [
           {
             date: "2023-12-26T00:00:00Z",
@@ -37,6 +38,7 @@ describe("Recuer Catalog visits", () => {
       },
       {
         item_id: "MLB4287999270",
+        total_visits: 4,
         results: [
           {
             date: "2023-12-26T00:00:00Z",
@@ -75,6 +77,7 @@ describe("Recuer Catalog visits", () => {
       },
       dailyAvg: 2,
       totalVisits: 10,
+      visitsBySeller: [6, 4],
     })
   })
 })

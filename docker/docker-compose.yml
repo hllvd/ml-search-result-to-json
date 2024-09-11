@@ -1,0 +1,19 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_server
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD} #Injected from environment variables
+    ports:
+      - "3306:3306" # Map local port 3306 to container port 3306
+    volumes:
+      - db_data:/var/lib/mysql # Persistent data storage for MySQL
+    networks:
+      - mysql_network
+
+volumes:
+  db_data:
+
+networks:
+  mysql_network:
+    driver: bridge

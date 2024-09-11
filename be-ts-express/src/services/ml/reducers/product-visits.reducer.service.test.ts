@@ -1,10 +1,10 @@
-import { ProductVisitsResponse } from "../../../models/api-response/product-views-response.models"
+import { ProductVisitsMlResponse } from "../../../models/api-response/ml/product-views-response.models"
 import { productVisitsReducer } from "./product-visits.reducer.service"
 
 describe("Recuer Catalog visits", () => {
   it("Should correctly aggregate visits given an array of dates", () => {
     //Arrange
-    const arrayOfDatesAndVisits: Array<ProductVisitsResponse> = [
+    const arrayOfDatesAndVisits: Array<ProductVisitsMlResponse> = [
       {
         item_id: "MLB4641831438",
         total_visits: 6,

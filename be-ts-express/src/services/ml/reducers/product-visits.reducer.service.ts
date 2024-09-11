@@ -1,8 +1,8 @@
-import { ProductVisitsResponse } from "../../../models/api-response/product-views-response.models"
+import { ProductVisitsMlResponse } from "../../../models/api-response/ml/product-views-response.models"
 import { VisitsReducerResponse } from "../../../models/reducers/visits-reducer.models"
 
 const productVisitsReducer = (
-  visits: Array<ProductVisitsResponse>
+  visits: Array<ProductVisitsMlResponse>
 ): VisitsReducerResponse => {
   const catalogVisitsReducer = visits.reduce(
     (acc, curr, i) => {

@@ -1,8 +1,7 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
-import { CatalogResponse } from "../../models/api-response/catalog-response.models"
+import { CatalogApiResponse } from "../../models/api-response/api/catalog-response.models"
 import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.models"
 import { roundNumber } from "../../utils/math.util"
-import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 
 import { fetchSeller } from "./api/users"
 import { getProductInCorrectOrder, getProducts } from "./products.service"
@@ -15,7 +14,7 @@ import { webScrapeMlPage } from "./scraper/web.scraper.service"
 const catalogSummary = async ({
   catalogId,
   userId,
-}): Promise<CatalogResponse> => {
+}): Promise<CatalogApiResponse> => {
   const maxPage = 5
   const productList: Array<{ productIdStr: string; price: number }> =
     await webScrapeMlPage(webScrapeCatalogToProductIdAndPricePredicate, {

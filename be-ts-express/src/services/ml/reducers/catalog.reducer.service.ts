@@ -1,5 +1,5 @@
 import { ML_OWN_USER_ID } from "../../../constants"
-import { LogisticType } from "../../../models/api-response/product-response.models"
+import { LogisticType } from "../../../models/api-response/ml/product-response.models"
 import { MLProduct } from "../../../models/dto/ml-product.models"
 import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
 import { CatalogReducerResponse } from "../../../models/reducers/catalog-reducer.models"

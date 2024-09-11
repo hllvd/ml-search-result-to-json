@@ -1,4 +1,4 @@
-export interface ProductPrices {
+export interface MLProductPrices {
   id: string
   prices: Price[]
 }

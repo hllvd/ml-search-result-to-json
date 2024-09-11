@@ -1,6 +1,5 @@
-import { ProductVisitsResponse } from "../../models/api-response/product-views-response.models"
+import { ProductVisitsMlResponse } from "../../models/api-response/ml/product-views-response.models"
 import { VisitsReducerResponse } from "../../models/reducers/visits-reducer.models"
-import { calculateDispersion } from "../../utils/math.util"
 import { fetchViewsFromProduct } from "./api/product-visits.api.service"
 import { productVisitsReducer } from "./reducers/product-visits.reducer.service"
 
@@ -10,7 +9,7 @@ const getProductVisitsSummary = async ({
 }): Promise<VisitsReducerResponse> => {
   const last = 30
   const ending = new Date().toISOString().slice(0, 10)
-  const response: ProductVisitsResponse = await fetchViewsFromProduct({
+  const response: ProductVisitsMlResponse = await fetchViewsFromProduct({
     userId,
     productId,
     last,

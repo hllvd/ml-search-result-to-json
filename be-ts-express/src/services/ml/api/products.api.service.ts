@@ -1,4 +1,3 @@
-import { ProductPrices } from "../../../models/api-response/product-prices.models"
 import { MLProduct } from "../../../models/dto/ml-product.models"
 import { FetchProductArgument } from "../../../models/params/fetch-product.model"
 import { fetchMl } from "../fetcher-api.ml.service"

@@ -1,4 +1,4 @@
-export interface ProductVisitsResponse {
+export interface ProductVisitsMlResponse {
   item_id: string
   date_from?: string
   date_to?: string

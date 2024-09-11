@@ -1,4 +1,4 @@
-import { ProductVisitsResponse } from "../../../models/api-response/product-views-response.models"
+import { ProductVisitsMlResponse } from "../../../models/api-response/ml/product-views-response.models"
 import { fetchMl } from "../fetcher-api.ml.service"
 
 const fetchViewsFromProduct = async ({
@@ -11,7 +11,7 @@ const fetchViewsFromProduct = async ({
   productId: string
   last: number
   ending: string
-}): Promise<ProductVisitsResponse> => {
+}): Promise<ProductVisitsMlResponse> => {
   const options = {
     userId,
     method: "GET",

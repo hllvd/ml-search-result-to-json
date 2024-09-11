@@ -1,5 +1,5 @@
-import { CatalogVisitsResponse } from "../../models/api-response/catalog-visits-response.models"
-import { ProductVisitsResponse } from "../../models/api-response/product-views-response.models"
+import { CatalogVisitsApiResponse } from "../../models/api-response/api/catalog-visits-response.models"
+import { ProductVisitsMlResponse } from "../../models/api-response/ml/product-views-response.models"
 import { calculateDispersion } from "../../utils/math.util"
 import { fetchViewsFromProduct } from "./api/product-visits.api.service"
 import { productVisitsReducer } from "./reducers/product-visits.reducer.service"
@@ -7,7 +7,7 @@ import { productVisitsReducer } from "./reducers/product-visits.reducer.service"
 const _fetchVisitsFromCatalog = async ({
   userId,
   productIds,
-}): Promise<ProductVisitsResponse[]> => {
+}): Promise<ProductVisitsMlResponse[]> => {
   const last = 30
   const ending = new Date().toISOString().slice(0, 10)
   const productsWithVisits = Promise.all(
@@ -26,7 +26,7 @@ const _fetchVisitsFromCatalog = async ({
 const getCatalogVisitsSummary = async ({
   userId,
   productIds,
-}): Promise<CatalogVisitsResponse> => {
+}): Promise<CatalogVisitsApiResponse> => {
   const cataLogVisits = await _fetchVisitsFromCatalog({ userId, productIds })
   const visitsReducer = productVisitsReducer(cataLogVisits)
   const { cv } = calculateDispersion(visitsReducer.visitsBySeller)

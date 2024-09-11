@@ -1,4 +1,4 @@
-import { MLProductResponse } from "../api-response/product-response.models"
+import { MLProductResponse } from "../api-response/ml/product-response.models"
 import { MLUser } from "./ml-user.models"
 
 export type ProductId = string

@@ -17,11 +17,19 @@ export default function CatalogInformationGeneral({
         }
       />
       <Meta title="Quantidade de anúncios" description={catalogData?.length} />
+      <Meta title="Id do produto" description={productId ?? ""}></Meta>
       <MetaDescriptionBool
-        title="Mercado Livre no catálogo"
+        title={`Mercado Livre${
+          !!catalogData?.mlOwner ? "" : " não "
+        }está no catálogo`}
         description={!!catalogData?.mlOwner}
       />
-      <Meta title="Id do produto" description={productId ?? ""}></Meta>
+      <MetaDescriptionBool
+        title={`Este produto${
+          !!catalogData?.supermarketEligible ? "" : " não "
+        }está no supermercado`}
+        description={!!catalogData?.supermarketEligible}
+      />
     </>
   )
 }

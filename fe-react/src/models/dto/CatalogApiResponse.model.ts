@@ -7,6 +7,7 @@ export interface CatalogInformationResponse {
   thumbnail: string
   price: Price
   position: Position
+  supermarketEligible: boolean
   length: number
   dateCreated: string
   mlOwner: boolean

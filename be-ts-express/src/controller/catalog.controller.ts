@@ -1,4 +1,4 @@
-import { Request, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { ScrapeType } from "../enums/scrap-type.enum"
 import { getCatalogVisitsSummary } from "../services/ml/catalog-visits.service"
 import { catalogSummary } from "../services/ml/catalog.service"
@@ -27,19 +27,26 @@ import { webScrapeMlPage } from "../services/ml/scraper/web.scraper.service"
  * - summary_ttl
  */
 
-const catalog = async (req: Request, res: Response) => {
+const catalog = async (
+  req: Request & { catalogResponse: any },
+  res: Response,
+  next: NextFunction
+) => {
   const catalogId = req.query?.catalogId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
 
-  const { catalogReducerValues } = await catalogSummary({
+  const catalogSummaryResponse = await catalogSummary({
     catalogId,
     userId,
   })
 
-  res.status(200).json({
-    catalogId,
-    ...catalogReducerValues,
-  })
+  const response = {
+    ...catalogSummaryResponse,
+  }
+
+  req.catalogResponse = response
+  res.status(200).json(response)
+  next()
 }
 
 const views = async (req: Request, res: Response) => {

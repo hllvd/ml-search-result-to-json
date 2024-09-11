@@ -1,7 +1,9 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
+import { ProductVisitsApiResponse } from "../../models/api-response/api/product-response.models"
+import { MlProductExtraFields } from "../../models/dto/ml-product-extra-fields.models"
 import { MLProduct, ProductId } from "../../models/dto/ml-product.models"
 import { FetchProductArgument } from "../../models/params/fetch-product.model"
-import { calculateDaysFrom } from "../../utils/day-claculation.util"
+import { calculateDaysFrom } from "../../utils/day-calculation.util"
 import { roundNumber } from "../../utils/math.util"
 import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 import { fetchProduct, fetchProducts } from "./api/products.api.service"
@@ -29,7 +31,7 @@ const getProducts = async (
 const getProductComplete = async ({
   userId,
   productId,
-}: FetchProductArgument) => {
+}: FetchProductArgument): Promise<ProductVisitsApiResponse> => {
   const productIdWIthDash = convertCatalogIdToProductId(productId)
   const product = await fetchProduct({ userId, productId })
   const sellerId = product?.seller_id?.toString()
@@ -45,6 +47,7 @@ const getProductComplete = async ({
   })
 
   return {
+    productId,
     ...product,
     user,
     ...extraFields,
@@ -59,12 +62,7 @@ const _getProductStatistics = ({
   product: MLProduct
   currentPrice: number
   quantitySold: number
-}): MLProduct & {
-  revenue: number
-  quantity_sold: number
-  daily_revenue: number
-  has_promotion: boolean
-} => {
+}): MLProduct & MlProductExtraFields => {
   const revenue = currentPrice * quantitySold
   const days = calculateDaysFrom(product.date_created)
   const daily_revenue = roundNumber(revenue / days)

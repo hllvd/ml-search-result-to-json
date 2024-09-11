@@ -10,9 +10,7 @@ const product = async (req: Request, res: Response) => {
     productId,
     userId,
   })
-
   res.status(200).json({
-    productId,
     ...productInfo,
   })
 }

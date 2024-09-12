@@ -3,7 +3,7 @@
 ### Setup
 
 - Set `src/db/data-source.ts` up
-- Don't forget to set environment variable `MYSQL_PASSWORD` from **.env** feile
+- Don't forget to set environment variable `MYSQL_PASSWORD` from **.env** file
 
 ### Install
 

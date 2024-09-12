@@ -7,6 +7,7 @@ export const {
   ML_CALLBACK_URL,
   ML_APP_ID,
   ML_SITE_ID,
+  MYSQL_PASSWORD,
   AWS_DDB_HOST,
   AWS_DDB_NAME,
   AWS_REGION,

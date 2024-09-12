@@ -1,3 +1,5 @@
+# Ml-Fetcher
+
 ## Migrations
 
 ### Setup
@@ -9,5 +11,3 @@
 
 - Generating migration named _product-catalog-init_ : `npm run typeorm:generate src/db/migrations/product-catalog-init`
 - Apply migration: `npm run typeorm:migrate`
-
-# ml-search-result-to-json

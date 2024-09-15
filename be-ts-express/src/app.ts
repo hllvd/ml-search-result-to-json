@@ -2,6 +2,8 @@ import express from "express"
 import routes from "./routes/index.route"
 import "reflect-metadata"
 import cors from "cors"
+import { persistentMiddleware } from "./middlewares/persistent.middleware"
+import dataSource from "./db/data-source"
 
 // Create an instance of the Express application
 const app = express()
@@ -16,6 +18,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/", routes)
 //app.post("/notification", notificationController.notification)
 
+// Persistent middleware
+app.use(persistentMiddleware)
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack)
@@ -23,6 +28,12 @@ app.use((err, req, res, next) => {
 })
 
 // Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`)
+app.listen(port, async () => {
+  try {
+    await dataSource.initialize()
+    console.log("Data source has been initialized.")
+    console.log(`Server is running on port ${port}`)
+  } catch (error) {
+    console.error("Error during data source initialization:", error)
+  }
 })

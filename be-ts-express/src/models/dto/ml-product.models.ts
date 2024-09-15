@@ -34,5 +34,7 @@ export interface MLProduct extends MLProductResponse {
   catalog_product_id?: string
   date_created?: string
   last_updated?: string
-  owner: boolean
+  owner?: boolean
+  health?: number
+  catalog_listing?: boolean
 }

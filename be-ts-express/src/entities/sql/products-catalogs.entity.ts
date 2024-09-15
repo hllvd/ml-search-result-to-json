@@ -1,13 +1,9 @@
 import { Entity, Column, PrimaryColumn, Index, ManyToOne } from "typeorm"
+import { EntityType } from "../../enums/entity-type.enum"
 import { Seller } from "./seller.entity"
 
-enum EntityType {
-  product,
-  catalog,
-}
-
-@Entity()
 @Index("IDX_CUSTOM_INDEX", ["id", "type"])
+@Entity()
 export class ProductsCatalogs {
   @PrimaryColumn({ unique: true })
   id: string

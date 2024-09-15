@@ -1,5 +1,5 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
-import { ProductVisitsApiResponse } from "../../models/api-response/api/product-response.models"
+import { ProductApiResponse } from "../../models/api-response/api/product-response.models"
 import { MlProductExtraFields } from "../../models/dto/ml-product-extra-fields.models"
 import { MLProduct, ProductId } from "../../models/dto/ml-product.models"
 import { FetchProductArgument } from "../../models/params/fetch-product.model"
@@ -31,7 +31,7 @@ const getProducts = async (
 const getProductComplete = async ({
   userId,
   productId,
-}: FetchProductArgument): Promise<ProductVisitsApiResponse> => {
+}: FetchProductArgument): Promise<ProductApiResponse> => {
   const productIdWIthDash = convertCatalogIdToProductId(productId)
   const product = await fetchProduct({ userId, productId })
   const sellerId = product?.seller_id?.toString()

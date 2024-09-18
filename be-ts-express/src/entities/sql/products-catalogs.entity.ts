@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryColumn, Index, ManyToOne } from "typeorm"
 import { EntityType } from "../../enums/entity-type.enum"
+import { Attributes } from "./attributes.entity"
 import { Seller } from "./seller.entity"
 
 @Index("IDX_CUSTOM_INDEX", ["id", "type"])
@@ -38,7 +39,7 @@ export class ProductsCatalogs {
   @Column({ nullable: true })
   videoId: string
 
-  @Column({ type: "varchar", length: 100, nullable: true })
+  @Column({ type: "varchar", nullable: true })
   ean: string
 
   @Column({ nullable: true })
@@ -62,8 +63,32 @@ export class ProductsCatalogs {
   @Column({ nullable: true, type: "varchar", length: 27 })
   dateCreated: string
 
+  @Column({ nullable: true })
+  tagsGoodQualityThumbnail: boolean
+
+  @Column({ nullable: true })
+  tagsGoodQualityPicture: boolean
+
+  @Column({ nullable: true })
+  hasPromotion: boolean
+
+  @Column({ nullable: true })
+  revenue: number
+
+  @Column({ nullable: true })
+  quantitySold: number
+
+  @Column({ nullable: true, type: "float" })
+  currentPrice: number
+
+  @Column({ nullable: true, type: "float" })
+  dailyRevenue: number
+
   @ManyToOne(() => Seller, (seller) => seller.id)
   seller: Seller
+
+  @ManyToOne(() => Attributes, (attribute) => attribute.id)
+  attribute: Attributes
 }
 /**
 - catalog_old_post Anuncio mais antigo

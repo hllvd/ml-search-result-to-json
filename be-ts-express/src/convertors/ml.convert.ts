@@ -23,11 +23,22 @@ export const convertProductApiResponseToProductCatalogEntity = (
   product.thumbnail = productApiResponse.thumbnail
   product.videoId = productApiResponse.video_id
   product.health = productApiResponse.health
+  product.tagsGoodQualityThumbnail = productApiResponse.tags?.includes(
+    "good_quality_thumbnail"
+  )
+  product.tagsGoodQualityPicture = productApiResponse.tags?.includes(
+    "good_quality_picture"
+  )
   product.shippingFreeShipping = productApiResponse.shipping?.free_shipping
   product.shippingLogisticType = productApiResponse.shipping.logistic_type
   product.catalogProductId = productApiResponse.catalog_product_id
   product.catalogListing = productApiResponse.catalog_listing
   product.dateCreated = productApiResponse.date_created
+  product.hasPromotion = productApiResponse.has_promotion
+  product.revenue = productApiResponse.revenue
+  product.quantitySold = productApiResponse.quantity_sold
+  product.currentPrice = productApiResponse.current_price
+  product.dailyRevenue = productApiResponse.daily_revenue
   return product
 }
 

@@ -45,12 +45,23 @@ const getProductComplete = async ({
     currentPrice: scrapProductPage.currentPrice,
     quantitySold: scrapProductPage.quantitySold,
   })
-
+  const ean = _getEanFromProductObj(product)
+  extraFields.ean = ean
   return {
     productId,
     ...product,
     user,
     ...extraFields,
+  }
+}
+
+const _getEanFromProductObj = (product: MLProduct): string | null => {
+  try {
+    return product.attributes
+      .find((a) => a.id === "GTIN")
+      .value_name?.toString()
+  } catch (e) {
+    return null
   }
 }
 
@@ -62,7 +73,8 @@ const _getProductStatistics = ({
   product: MLProduct
   currentPrice: number
   quantitySold: number
-}): MLProduct & MlProductExtraFields => {
+}): MlProductExtraFields => {
+  quantitySold = quantitySold ?? 1
   const revenue = currentPrice * quantitySold
   const days = calculateDaysFrom(product.date_created)
   const daily_revenue = roundNumber(revenue / days)

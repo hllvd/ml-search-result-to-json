@@ -2,9 +2,15 @@ import { AxiosResponse } from "axios"
 import { JSDOM } from "jsdom"
 import { sanitizeAmountSold } from "../../../../../utils/ml.utils"
 
-const webScrapeProductPriceAndQuantitySoldPredicate = async (
+const webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate = async (
   response: AxiosResponse
-): Promise<{ response: { quantitySold: number; currentPrice: number } }> => {
+): Promise<{
+  response: {
+    quantitySold: number
+    currentPrice: number
+    hasVideo: boolean
+  }
+}> => {
   const dom = new JSDOM(await response.data)
   const document = dom.window.document
 
@@ -16,6 +22,11 @@ const webScrapeProductPriceAndQuantitySoldPredicate = async (
   const priceStr = priceHtml.getAttribute("content")
   const currentPrice = Number.parseFloat(priceStr)
 
-  return { response: { currentPrice, quantitySold } }
+  const clipIconHtml = document.querySelectorAll(
+    ".ui-pdp-thumbnail--overlay .clip-picture-icon"
+  )
+  const hasVideo = !!clipIconHtml
+
+  return { response: { currentPrice, quantitySold, hasVideo } }
 }
-export { webScrapeProductPriceAndQuantitySoldPredicate }
+export { webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate }

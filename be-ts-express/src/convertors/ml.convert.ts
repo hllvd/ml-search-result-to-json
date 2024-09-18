@@ -12,6 +12,8 @@ export const convertProductApiResponseToProductCatalogEntity = (
   product.type = EntityType.product
   product.title = productApiResponse.title
   product.categoryId = productApiResponse.category_id
+  product.domainId = productApiResponse.domain_id
+  product.supermarketEligible = productApiResponse.supermarket_eligible
   product.officialStoreId = productApiResponse.official_store_id
     ? productApiResponse.official_store_id.toString()
     : null
@@ -21,7 +23,9 @@ export const convertProductApiResponseToProductCatalogEntity = (
   product.listingTypeId = productApiResponse.listing_type_id
   product.permalink = productApiResponse.permalink
   product.thumbnail = productApiResponse.thumbnail
+  product.pictureCount = productApiResponse.picture_count
   product.videoId = productApiResponse.video_id
+
   product.health = productApiResponse.health
   product.tagsGoodQualityThumbnail = productApiResponse.tags?.includes(
     "good_quality_thumbnail"
@@ -35,10 +39,12 @@ export const convertProductApiResponseToProductCatalogEntity = (
   product.catalogListing = productApiResponse.catalog_listing
   product.dateCreated = productApiResponse.date_created
   product.hasPromotion = productApiResponse.has_promotion
+  product.hasVideo = productApiResponse.has_video
   product.revenue = productApiResponse.revenue
   product.quantitySold = productApiResponse.quantity_sold
   product.currentPrice = productApiResponse.current_price
   product.dailyRevenue = productApiResponse.daily_revenue
+
   return product
 }
 

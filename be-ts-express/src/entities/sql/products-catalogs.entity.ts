@@ -18,6 +18,9 @@ export class ProductsCatalogs {
   @Column({ nullable: true })
   categoryId: string
 
+  @Column({ nullable: true })
+  domainId: string
+
   @Column({ nullable: true, type: "varchar", length: 16 })
   officialStoreId: string
 
@@ -46,6 +49,9 @@ export class ProductsCatalogs {
   thumbnail: string
 
   @Column({ nullable: true })
+  pictureCount: number
+
+  @Column({ nullable: true })
   health: number
 
   @Column({ nullable: true })
@@ -71,6 +77,12 @@ export class ProductsCatalogs {
 
   @Column({ nullable: true })
   hasPromotion: boolean
+
+  @Column({ nullable: true })
+  hasVideo: boolean
+
+  @Column({ nullable: true })
+  supermarketEligible: boolean
 
   @Column({ nullable: true })
   revenue: number

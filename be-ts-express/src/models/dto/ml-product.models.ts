@@ -10,6 +10,7 @@ export interface MLProduct extends MLProductResponse {
   pictures?: any
   attributes?: any
   title?: string
+  domain_id?: string
   seller_id?: number
   category_id?: string
   official_store_id?: number

@@ -9,7 +9,7 @@ import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 import { fetchProduct, fetchProducts } from "./api/products.api.service"
 import { fetchSeller } from "./api/users"
 import { productIdsReducer } from "./reducers/product-urls.reducer.service"
-import { webScrapeProductPriceAndQuantitySoldPredicate } from "./scraper/predicate/product/product-metadata.predicate.service"
+import { webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate } from "./scraper/predicate/product/product-metadata.predicate.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
 const getProducts = async (
@@ -38,15 +38,23 @@ const getProductComplete = async ({
 
   const [user, scrapProductPage] = await Promise.all([
     fetchSeller({ sellerId, userId }),
-    _webScrapeProductPriceAndQuantitySold(productIdWIthDash),
+    _webScrapeProductMetadata(productIdWIthDash),
   ])
-  const extraFields = _getProductStatistics({
+
+  const extraFields = _getProductExtraFields({
     product,
-    currentPrice: scrapProductPage.currentPrice,
-    quantitySold: scrapProductPage.quantitySold,
+    currentPrice: scrapProductPage?.currentPrice,
+    quantitySold: scrapProductPage?.quantitySold,
   })
+
   const ean = _getEanFromProductObj(product)
   extraFields.ean = ean
+  extraFields.has_video = scrapProductPage.hasVideo
+  extraFields.picture_count = product.pictures.length
+  extraFields.supermarket_eligible = product.tags.includes(
+    "supermarket_eligible"
+  )
+
   return {
     productId,
     ...product,
@@ -65,7 +73,7 @@ const _getEanFromProductObj = (product: MLProduct): string | null => {
   }
 }
 
-const _getProductStatistics = ({
+const _getProductExtraFields = ({
   product,
   currentPrice,
   quantitySold,
@@ -100,14 +108,15 @@ const getProductInCorrectOrder = (
   })
 }
 
-const _webScrapeProductPriceAndQuantitySold = async (
-  productId: string
-): Promise<any> => {
+const _webScrapeProductMetadata = async (productId: string): Promise<any> => {
   const productPrice: Array<{ productIdStr: string; price: number }> =
-    await webScrapeMlPage(webScrapeProductPriceAndQuantitySoldPredicate, {
-      productId,
-      scrapeType: ScrapeType.ProductPage,
-    })
+    await webScrapeMlPage(
+      webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate,
+      {
+        productId,
+        scrapeType: ScrapeType.ProductPage,
+      }
+    )
   return productPrice
 }
 

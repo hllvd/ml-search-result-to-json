@@ -5,4 +5,7 @@ export interface MlProductExtraFields {
   daily_revenue: number
   has_promotion: boolean
   current_price: number
+  has_video?: boolean
+  picture_count?: number
+  supermarket_eligible?: boolean
 }

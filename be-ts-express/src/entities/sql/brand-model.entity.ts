@@ -1,8 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm"
 import { ProductsCatalogs } from "./products-catalogs.entity"
-
-@Entity()
-export class Attributes {
+@Unique(["brand", "model", "color"])
+@Entity({
+  engine: "InnoDB",
+})
+export class BrandModel {
   @PrimaryGeneratedColumn()
   id: number
 
@@ -17,7 +19,4 @@ export class Attributes {
 
   @Column({ nullable: true })
   modelDetailed: string
-
-  @ManyToOne(() => ProductsCatalogs, (product) => product.attribute)
-  productCatalog: ProductsCatalogs
 }

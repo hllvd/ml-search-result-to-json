@@ -1,10 +1,12 @@
 import { Entity, Column, PrimaryColumn, Index, ManyToOne } from "typeorm"
 import { EntityType } from "../../enums/entity-type.enum"
-import { Attributes } from "./attributes.entity"
+import { BrandModel } from "./brand-model.entity"
 import { Seller } from "./seller.entity"
 
 @Index("IDX_CUSTOM_INDEX", ["id", "type"])
-@Entity()
+@Entity({
+  engine: "InnoDB",
+})
 export class ProductsCatalogs {
   @PrimaryColumn({ unique: true })
   id: string
@@ -99,8 +101,8 @@ export class ProductsCatalogs {
   @ManyToOne(() => Seller, (seller) => seller.id)
   seller: Seller
 
-  @ManyToOne(() => Attributes, (attribute) => attribute.id)
-  attribute: Attributes
+  @ManyToOne(() => BrandModel, (attribute) => attribute.id)
+  brandModel: BrandModel
 }
 /**
 - catalog_old_post Anuncio mais antigo

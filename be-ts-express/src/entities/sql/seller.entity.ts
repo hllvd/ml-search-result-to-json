@@ -1,6 +1,8 @@
 import { Column, Entity, PrimaryColumn } from "typeorm"
 
-@Entity()
+@Entity({
+  engine: "InnoDB",
+})
 export class Seller {
   @PrimaryColumn({ unique: true })
   id: number

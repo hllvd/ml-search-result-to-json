@@ -1,6 +1,14 @@
-import { Entity, Column, PrimaryColumn, Index, ManyToOne } from "typeorm"
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  Index,
+  ManyToOne,
+  OneToOne,
+} from "typeorm"
 import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
+import { CatalogFields } from "./catalog-fields.entity"
 import { Seller } from "./seller.entity"
 
 @Index("IDX_CUSTOM_INDEX", ["id", "type"])
@@ -86,6 +94,9 @@ export class ProductsCatalogs {
   @Column({ nullable: true })
   supermarketEligible: boolean
 
+  @Column({ nullable: true }) // fix that
+  isKit: boolean
+
   @Column({ nullable: true })
   revenue: number
 
@@ -103,6 +114,9 @@ export class ProductsCatalogs {
 
   @ManyToOne(() => BrandModel, (attribute) => attribute.id)
   brandModel: BrandModel
+
+  @OneToOne(() => CatalogFields, (catalogFields) => catalogFields.id)
+  catalogFields
 }
 /**
 - catalog_old_post Anuncio mais antigo

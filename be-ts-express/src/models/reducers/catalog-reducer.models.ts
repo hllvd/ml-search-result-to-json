@@ -3,9 +3,11 @@ import { String } from "aws-sdk/clients/sagemaker"
 export interface CatalogReducerResponse {
   title: String
   ean: string | null
+  domainId: string | null
+  tagsGoodQualityThumbnail: boolean | null
   permalink: string | null
   thumbnail: string | null
-  supermarketEligible: Boolean | null
+  supermarketEligible: boolean | null
   categoryId: string | null
   brandModel: {
     brand: string | null

@@ -10,7 +10,6 @@ describe("catalogReducer", () => {
       title: "product name",
       id: "id",
       permalink: "https://example.com",
-      tags: ["supermarket_eligible"],
       category_id: "CATEGORY_ID",
       attributes: [
         {
@@ -46,11 +45,13 @@ describe("catalogReducer", () => {
     const sellers: Array<MLProduct> = [
       {
         ...commonProperties,
+        domain_id: "123",
         seller_address: { state: { id: "BR-SP" } },
         date_created: "2022-06-13T11:23:59.000Z",
         permalink: "https://example.com",
         price: 50,
         owner: false,
+        tags: ["good_quality_thumbnail", "supermarket_eligible"],
         shipping: {
           logistic_type: LogisticType.correios,
         },
@@ -113,6 +114,8 @@ describe("catalogReducer", () => {
     expect(result).toEqual({
       title: "product name",
       ean: "6015615941994",
+      domainId: "123",
+      tagsGoodQualityThumbnail: true,
       price: { top5Avg: 56.25, best: 50, secondBest: 55, full: 60 },
       permalink: "https://example.com",
       supermarketEligible: true,
@@ -166,6 +169,7 @@ describe("catalogReducer", () => {
         seller_address: { state: { id: "BR-SP" } },
         date_created: "2022-06-13T11:23:59.000Z",
         price: 50,
+        tags: [],
         owner: false,
         shipping: {
           logistic_type: LogisticType.correios,
@@ -186,10 +190,12 @@ describe("catalogReducer", () => {
     expect(result).toEqual({
       title: "product name",
       ean: null,
+      domainId: null,
+      tagsGoodQualityThumbnail: false,
       price: { top5Avg: 50, best: 50, secondBest: null, full: null },
       permalink: "https://example.com",
       thumbnail: "https://example",
-      supermarketEligible: null,
+      supermarketEligible: false,
       categoryId: "MLB198494",
       position: {
         full: null,

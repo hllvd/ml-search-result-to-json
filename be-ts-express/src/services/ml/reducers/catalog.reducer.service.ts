@@ -113,11 +113,21 @@ export const catalogReducer = (
         acc.brandModel.model || _getAttributeValueName(attributes, "MODEL")
 
       acc.ean = acc.ean === null ? _getEanIfExist(attributes) : acc.ean
+
+      acc.domainId = curr.domain_id || acc.domainId
+
+      acc.tagsGoodQualityThumbnail =
+        acc.tagsGoodQualityThumbnail === null
+          ? curr.tags.includes("good_quality_thumbnail")
+          : acc.tagsGoodQualityThumbnail
+
       return acc
     },
     {
       title: "",
       ean: null,
+      domainId: null,
+      tagsGoodQualityThumbnail: null,
       brandModel: {
         brand: null,
         model: null,

@@ -1,16 +1,44 @@
 import { ProductsCatalogs } from "../entities/sql/products-catalogs.entity"
 import { Seller } from "../entities/sql/seller.entity"
 import { EntityType } from "../enums/entity-type.enum"
+import { CatalogApiResponse } from "../models/api-response/api/catalog-response.models"
 import { ProductApiResponse } from "../models/api-response/api/product-response.models"
 import { MLUser } from "../models/dto/ml-user.models"
 
-export const convertProductApiResponseToProductCatalogEntity = (
-  productApiResponse: ProductApiResponse
+export const convertCatalogApiResponseToProductCatalogEntity = (
+  catalogApiResponse: CatalogApiResponse,
+  type: EntityType
 ): ProductsCatalogs => {
-  const product = new ProductsCatalogs()
+  const product = _convertProductApiResponseToProductCatalogEntityCommonFields(
+    catalogApiResponse,
+    type
+  )
+  product.id = catalogApiResponse.catalogId
+  product.categoryId = catalogApiResponse.categoryId
+  product.domainId = catalogApiResponse.domainId
+  product.hasVideo = catalogApiResponse.hasVideo
+  product.supermarketEligible = catalogApiResponse.supermarketEligible
+  product.price = catalogApiResponse.price.best
+  product.basePrice = catalogApiResponse.price.best
+  product.revenue = catalogApiResponse.revenue
+  product.currentPrice = catalogApiResponse.price.best
+  //product.quantitySold = catalogApiResponse.quantity_sold
+  //product.currentPrice = catalogApiResponse.current_price
+
+  product.dailyRevenue = catalogApiResponse.dailyRevenue
+  product.quantitySold = catalogApiResponse.quantitySold
+
+  return product
+}
+export const convertProductApiResponseToProductCatalogEntity = (
+  productApiResponse: ProductApiResponse,
+  type: EntityType
+): ProductsCatalogs => {
+  const product = _convertProductApiResponseToProductCatalogEntityCommonFields(
+    productApiResponse,
+    type
+  )
   product.id = productApiResponse.id
-  product.type = EntityType.product
-  product.title = productApiResponse.title
   product.categoryId = productApiResponse.category_id
   product.domainId = productApiResponse.domain_id
   product.supermarketEligible = productApiResponse.supermarket_eligible
@@ -21,10 +49,12 @@ export const convertProductApiResponseToProductCatalogEntity = (
   product.basePrice = productApiResponse.base_price
   product.originalPrice = productApiResponse.original_price
   product.listingTypeId = productApiResponse.listing_type_id
-  product.permalink = productApiResponse.permalink
-  product.thumbnail = productApiResponse.thumbnail
   product.pictureCount = productApiResponse.picture_count
   product.videoId = productApiResponse.video_id
+  product.isKit = productApiResponse.attributes.find((a) => a.id === "IS_KIT")
+    ?.value_name
+    ? true
+    : productApiResponse.title.toLowerCase().includes("kit")
 
   product.health = productApiResponse.health
   product.tagsGoodQualityThumbnail = productApiResponse.tags?.includes(
@@ -48,6 +78,18 @@ export const convertProductApiResponseToProductCatalogEntity = (
   return product
 }
 
+const _convertProductApiResponseToProductCatalogEntityCommonFields = (
+  productApiResponse: ProductApiResponse | CatalogApiResponse,
+  type: EntityType
+): ProductsCatalogs => {
+  const product = new ProductsCatalogs()
+  product.type = type
+  product.title = productApiResponse.title
+  product.permalink = productApiResponse.permalink
+  product.thumbnail = productApiResponse.thumbnail
+  return product
+}
+
 export const convertMLUserFromApiResponseToSellerEntity = (
   mlUser: MLUser
 ): Seller => {
@@ -55,6 +97,8 @@ export const convertMLUserFromApiResponseToSellerEntity = (
   seller.id = mlUser.id
   seller.nickname = mlUser.nickname
   seller.permalink = mlUser.permalink
+  seller.sellerAddressStateId = mlUser.address.state
+  seller.userType = mlUser.user_type
   seller.sellerReputationLevelId = mlUser.seller_reputation.level_id
   seller.sellerReputationPowerSellerStatus =
     mlUser.seller_reputation.power_seller_status

@@ -1,5 +1,9 @@
 import { NextFunction, Request, Response } from "express"
 import { ScrapeType } from "../enums/scrap-type.enum"
+import {
+  PersistencyInfo,
+  RequestExtended,
+} from "../models/extends/params/request-custom.model"
 import { getCatalogVisitsSummary } from "../services/ml/catalog-visits.service"
 import { catalogSummary } from "../services/ml/catalog.service"
 import { webScrapeCatalogToProductIdAndPricePredicate } from "../services/ml/scraper/predicate/catalog/catalog-productIds-price.predicate.service"
@@ -28,7 +32,7 @@ import { webScrapeMlPage } from "../services/ml/scraper/web.scraper.service"
  */
 
 const catalog = async (
-  req: Request & { catalogResponse: any },
+  req: RequestExtended & { catalogResponse: any },
   res: Response,
   next: NextFunction
 ) => {
@@ -43,8 +47,11 @@ const catalog = async (
   const response = {
     ...catalogSummaryResponse,
   }
+  if (!req.persistency) {
+    req.persistency = {} as PersistencyInfo
+    req.persistency.catalogInfo = response
+  }
 
-  req.catalogResponse = response
   res.status(200).json(response)
   next()
 }

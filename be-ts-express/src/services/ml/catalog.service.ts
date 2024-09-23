@@ -76,8 +76,8 @@ const catalogSummary = async ({
     catalog: { ...catalogReducerValues, length: amountOfProducts },
     sales: productSales,
   })
-
-  return { catalogId, ...catalogReducerWithSummary }
+  const { has_video: hasVideo } = productSales
+  return { catalogId, ...catalogReducerWithSummary, hasVideo }
 }
 
 const _summarizeCatalog = (options: {
@@ -96,6 +96,7 @@ const _summarizeCatalog = (options: {
     ...options.catalog,
     revenue,
     dailyRevenue,
+    quantitySold: options.sales,
   }
   return catalogWithSummary
 }

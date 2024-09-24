@@ -21,13 +21,6 @@ const product = async (
   res.status(200).json({
     ...productInfo,
   })
-
-  if (!req.persistency) {
-    req.persistency = {} as PersistencyInfo
-    req.persistency.productInfo = productInfo
-  }
-
-  next()
 }
 
 const views = async (req: Request, res: Response) => {

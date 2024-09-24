@@ -56,7 +56,11 @@ const catalog = async (
   next()
 }
 
-const views = async (req: Request, res: Response) => {
+const views = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction
+) => {
   const catalogId = req.query?.catalogId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
   const productList: Array<{ productIdStr: string }> = await webScrapeMlPage(
@@ -73,9 +77,17 @@ const views = async (req: Request, res: Response) => {
     userId,
     productIds: productList,
   })
+
+  if (!req.persistency) {
+    req.persistency = {} as PersistencyInfo
+    req.persistency.catalogViewsInfo = { ...catalogVisitsSummary, catalogId }
+  }
   res.status(200).json({
     ...catalogVisitsSummary,
+    catalogId,
   })
+
+  next()
 }
 
 export default { catalog, views }

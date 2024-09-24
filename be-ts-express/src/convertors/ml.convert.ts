@@ -1,3 +1,4 @@
+import { CatalogFields } from "../entities/sql/catalog-fields.entity"
 import { ProductsCatalogs } from "../entities/sql/products-catalogs.entity"
 import { Seller } from "../entities/sql/seller.entity"
 import { EntityType } from "../enums/entity-type.enum"
@@ -76,6 +77,40 @@ export const convertProductApiResponseToProductCatalogEntity = (
   product.dailyRevenue = productApiResponse.daily_revenue
 
   return product
+}
+
+export const catalogFieldsHandler = async ({
+  catalogFields,
+  catalogInfo,
+}: {
+  catalogFields: CatalogFields
+  catalogInfo: CatalogApiResponse
+}) => {
+  const {
+    full = null,
+    medalGold = null,
+    medalLider = null,
+    medalPlatinum = null,
+  } = catalogInfo?.position || {}
+
+  const {
+    best = null,
+    secondBest = null,
+    full: priceFull = null,
+    top5Avg = null,
+  } = catalogInfo.price || {}
+  catalogFields.length = catalogInfo?.length
+  catalogFields.mlOwner = catalogInfo?.mlOwner
+  catalogFields.positionFull = full
+  catalogFields.positionMedalGold = medalGold
+  catalogFields.positionMedalLider = medalLider
+  catalogFields.positionMedalPlatinum = medalPlatinum
+
+  catalogFields.priceBest = best
+  catalogFields.priceFull = priceFull
+  catalogFields.priceSecond = secondBest
+  catalogFields.priceTop5Avg = top5Avg
+  return catalogFields
 }
 
 const _convertProductApiResponseToProductCatalogEntityCommonFields = (

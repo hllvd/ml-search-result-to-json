@@ -10,6 +10,7 @@ import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
 import { CatalogFields } from "./catalog-fields.entity"
 import { Seller } from "./seller.entity"
+import { ProductViews } from "./views.entity"
 
 @Index("IDX_CUSTOM_INDEX", ["id", "type"])
 @Entity({
@@ -117,6 +118,9 @@ export class ProductsCatalogs {
 
   @OneToOne(() => CatalogFields, (catalogFields) => catalogFields.id)
   catalogFields
+
+  @OneToOne(() => ProductViews, { nullable: true })
+  views: ProductViews
 }
 /**
 - catalog_old_post Anuncio mais antigo

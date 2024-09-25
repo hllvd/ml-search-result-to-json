@@ -1,5 +1,5 @@
 import {
-  catalogFieldsHandler,
+  catalogInfoToCatalogFieldsEntityConverter,
   convertCatalogApiResponseToProductCatalogEntity,
   convertMLUserFromApiResponseToSellerEntity,
   convertProductApiResponseToProductCatalogEntity,
@@ -53,17 +53,17 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
   const existingCatalog = await dataSource.manager
     .getRepository(ProductsCatalogs)
     .findOne({ where: { id: catalog?.id } })
-  if (!existingCatalog.catalogFields) {
-    const { catalogFields } = existingCatalog
-    const catalogFieldDb = await dataSource.manager
-      .getRepository(CatalogFields)
-      .findOne({ where: { id: catalogFields?.id } })
-    const catalogField = await catalogFieldsHandler({
-      catalogInfo,
-      catalogFields: catalogFieldDb,
-    })
-    await dataSource.manager.save(catalogField)
-  }
+
+  const { catalogFields = new CatalogFields() } = existingCatalog
+  console.log("catalogFieldDb", catalogFields)
+
+  const catalogField = await catalogInfoToCatalogFieldsEntityConverter({
+    catalogInfo,
+    catalogFields: catalogFields,
+  })
+  console.log("catalogField", catalogField)
+
+  await dataSource.manager.save(catalogField)
 
   await dataSource.manager.save(catalog)
   console.log("saved to db")

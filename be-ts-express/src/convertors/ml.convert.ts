@@ -79,7 +79,7 @@ export const convertProductApiResponseToProductCatalogEntity = (
   return product
 }
 
-export const catalogFieldsHandler = async ({
+export const catalogInfoToCatalogFieldsEntityConverter = async ({
   catalogFields,
   catalogInfo,
 }: {
@@ -99,6 +99,8 @@ export const catalogFieldsHandler = async ({
     full: priceFull = null,
     top5Avg = null,
   } = catalogInfo.price || {}
+  console.log("catalogInfo", catalogInfo.length)
+
   catalogFields.length = catalogInfo?.length
   catalogFields.mlOwner = catalogInfo?.mlOwner
   catalogFields.positionFull = full

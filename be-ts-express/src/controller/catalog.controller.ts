@@ -47,13 +47,12 @@ const catalog = async (
   const response = {
     ...catalogSummaryResponse,
   }
+  res.status(200).json(response)
   if (!req.persistency) {
     req.persistency = {} as PersistencyInfo
     req.persistency.catalogInfo = response
+    next()
   }
-
-  res.status(200).json(response)
-  next()
 }
 
 const views = async (
@@ -78,16 +77,16 @@ const views = async (
     productIds: productList,
   })
 
-  if (!req.persistency) {
-    req.persistency = {} as PersistencyInfo
-    req.persistency.catalogViewsInfo = { ...catalogVisitsSummary, catalogId }
-  }
   res.status(200).json({
     ...catalogVisitsSummary,
     catalogId,
   })
 
-  next()
+  if (!req.persistency) {
+    req.persistency = {} as PersistencyInfo
+    req.persistency.catalogViewsInfo = { ...catalogVisitsSummary, catalogId }
+    next()
+  }
 }
 
 export default { catalog, views }

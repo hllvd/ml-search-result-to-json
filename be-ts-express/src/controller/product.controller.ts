@@ -21,9 +21,18 @@ const product = async (
   res.status(200).json({
     ...productInfo,
   })
+  if (!req.persistency) {
+    req.persistency = {} as PersistencyInfo
+    req.persistency.productInfo = { ...productInfo, productId }
+    next()
+  }
 }
 
-const views = async (req: Request, res: Response) => {
+const views = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction
+) => {
   const productId = req.query?.productId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
 
@@ -31,9 +40,15 @@ const views = async (req: Request, res: Response) => {
     userId,
     productId,
   })
+
   res.status(200).json({
     ...catalogVisitsSummary,
   })
+  if (!req.persistency) {
+    req.persistency = {} as PersistencyInfo
+    req.persistency.productViewInfo = { ...catalogVisitsSummary, productId }
+    next()
+  }
 }
 
 export default { product, views }

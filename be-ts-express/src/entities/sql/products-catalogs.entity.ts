@@ -116,7 +116,7 @@ export class ProductsCatalogs {
   @ManyToOne(() => BrandModel, (attribute) => attribute.id)
   brandModel: BrandModel
 
-  @OneToOne(() => CatalogFields, (catalogFields) => catalogFields.id)
+  @OneToOne(() => ProductsCatalogs, { nullable: true })
   catalogFields
 
   @OneToOne(() => ProductViews, { nullable: true })

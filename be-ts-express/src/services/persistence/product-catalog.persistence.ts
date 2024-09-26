@@ -50,21 +50,23 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
   const { brand, model, color } = catalogInfo?.brandModel
   catalog.brandModel = await brandModelFieldHandler({ brand, model, color })
 
-  const existingCatalog = await dataSource.manager
-    .getRepository(ProductsCatalogs)
-    .findOne({ where: { id: catalog?.id } })
-
-  const { catalogFields = new CatalogFields() } = existingCatalog
-  console.log("catalogFieldDb", catalogFields)
-
-  const catalogField = await catalogInfoToCatalogFieldsEntityConverter({
-    catalogInfo,
-    catalogFields: catalogFields,
-  })
-  console.log("catalogField", catalogField)
-
-  await dataSource.manager.save(catalogField)
+  // const catalogField = await dataSource.manager
+  //   .getRepository(ProductsCatalogs)
+  //   .findOne({ where: { id: catalog?.id } })
 
   await dataSource.manager.save(catalog)
-  console.log("saved to db")
+
+  const catalogFields = new CatalogFields()
+  const catalogFieldConverted = await catalogInfoToCatalogFieldsEntityConverter(
+    {
+      catalogInfo,
+      catalogFields,
+    }
+  )
+
+  await dataSource.manager.upsert(
+    CatalogFields,
+    [catalogFieldConverted],
+    ["productsCatalogs"]
+  )
 }

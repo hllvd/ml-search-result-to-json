@@ -1,3 +1,4 @@
+import { Entity } from "typeorm"
 import { CatalogFields } from "../entities/sql/catalog-fields.entity"
 import { ProductsCatalogs } from "../entities/sql/products-catalogs.entity"
 import { Seller } from "../entities/sql/seller.entity"
@@ -112,6 +113,8 @@ export const catalogInfoToCatalogFieldsEntityConverter = async ({
   catalogFields.priceFull = priceFull
   catalogFields.priceSecond = secondBest
   catalogFields.priceTop5Avg = top5Avg
+
+  catalogFields.productsCatalogs = catalogInfo.catalogId
   return catalogFields
 }
 

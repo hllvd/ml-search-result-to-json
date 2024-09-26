@@ -29,7 +29,10 @@ export class ProductViews {
   @Column({ type: "float", nullable: true })
   cv: number
 
-  @OneToOne(() => ProductsCatalogs, { cascade: true, nullable: true })
+  @OneToOne(() => ProductsCatalogs, (pc) => pc.id, {
+    cascade: true,
+    nullable: true,
+  })
   @JoinColumn()
-  productsCatalogs: ProductsCatalogs
+  productsCatalogs: string
 }

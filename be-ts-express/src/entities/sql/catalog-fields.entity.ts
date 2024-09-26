@@ -1,12 +1,19 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm"
+import {
+  Column,
+  Entity,
+  Index,
+  JoinColumn,
+  OneToOne,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from "typeorm"
+import { ProductsCatalogs } from "./products-catalogs.entity"
 
+@Index("IDX_CUSTOM_INDEX", ["productsCatalogs"])
 @Entity({
   engine: "InnoDB",
 })
 export class CatalogFields {
-  @PrimaryGeneratedColumn()
-  id: number
-
   @Column({ nullable: true, type: "float" })
   priceBest: number
 
@@ -39,6 +46,11 @@ export class CatalogFields {
 
   @Column({ nullable: true })
   mlOwner: boolean
+
+  @OneToOne(() => ProductsCatalogs, (pc) => pc.id, { cascade: true })
+  @JoinColumn()
+  @PrimaryColumn()
+  productsCatalogs: string
 }
 
 /**

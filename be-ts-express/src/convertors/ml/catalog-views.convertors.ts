@@ -18,7 +18,7 @@ export const catalogViewsResponseToViewsEntity = (
   view.startDate = startDate
   view.endDate = endDate
   view.totalVisits = totalVisits
-  view.productsCatalogs = productsCatalogs
+  view.productsCatalogs = catalogId
   view.dailyAvg = dailyAvg
   return view
 }
@@ -35,7 +35,7 @@ export const productViewsResponseToViewsEntity = (
   view.startDate = startDate
   view.endDate = endDate
   view.totalVisits = totalVisits
-  view.productsCatalogs = productsCatalogs
+  view.productsCatalogs = productId
   view.dailyAvg = dailyAvg
   return view
 }

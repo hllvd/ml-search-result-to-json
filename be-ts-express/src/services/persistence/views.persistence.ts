@@ -13,13 +13,23 @@ export const saveCatalogViewsDb = async (
   viewInfo: CatalogVisitsApiResponse
 ) => {
   const view = catalogViewsResponseToViewsEntity(viewInfo)
+  console.log("saveCatalogViewsDb", view)
   try {
     await dataSource.manager.upsert(ProductViews, [view], ["id"])
+    console.log("saved to db 1")
   } catch (e) {
-    if (e.code === "ER_NO_REFERENCED_ROW_2") {
-      await dataSource.manager.upsert(ProductViews, [view], ["id"])
+    console.log("err")
+    if (e.code === "ER_NO_REFERENCED_ROW_2" || e.code === "ER_DUP_ENTRY") {
       const { catalogId } = viewInfo
-      _createProductCatalogRegister({ catalogId })
+      await _createProductCatalogRegister({
+        catalogId,
+        type: EntityType.catalog,
+      })
+      await dataSource.manager.upsert(
+        ProductViews,
+        [view],
+        ["productsCatalogs"]
+      )
     }
   }
 }
@@ -28,13 +38,21 @@ export const saveProductViewToDb = async (
   viewInfo: ProductVisitsApiResponse
 ) => {
   const view = productViewsResponseToViewsEntity(viewInfo)
+  console.log("saveProductViewToDb", view)
   try {
     await dataSource.manager.upsert(ProductViews, [view], ["id"])
   } catch (e) {
     if (e.code === "ER_NO_REFERENCED_ROW_2") {
-      await dataSource.manager.upsert(ProductViews, [view], ["id"])
       const { productId } = viewInfo
-      _createProductCatalogRegister({ productId })
+      await _createProductCatalogRegister({
+        productId,
+        type: EntityType.product,
+      })
+      await dataSource.manager.upsert(
+        ProductViews,
+        [view],
+        ["productsCatalogs"]
+      )
     }
   }
 }
@@ -42,11 +60,12 @@ export const saveProductViewToDb = async (
 const _createProductCatalogRegister = async ({
   productId,
   catalogId,
+  type,
 }: {
   productId?: string
   catalogId?: string
+  type: EntityType
 }) => {
-  const type = productId == null ? EntityType.catalog : EntityType.product
   const productsCatalogs = new ProductsCatalogs()
   productsCatalogs.id = productId || catalogId
   productsCatalogs.type = type

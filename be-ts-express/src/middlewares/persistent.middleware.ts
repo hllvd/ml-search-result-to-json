@@ -23,11 +23,12 @@ const persistentMiddleware = async (req: RequestExtended) => {
     productViewInfo == null
   )
     return null
-  if (productInfo) saveProductToDb(productInfo)
-  if (catalogInfo) saveCatalogToDb(catalogInfo)
-  if (catalogViewsInfo) saveCatalogViewsDb(catalogViewsInfo)
-  if (productViewInfo) saveProductViewToDb(productViewInfo)
+
   try {
+    if (productInfo) saveProductToDb(productInfo)
+    if (catalogInfo) saveCatalogToDb(catalogInfo)
+    if (catalogViewsInfo) saveCatalogViewsDb(catalogViewsInfo)
+    if (productViewInfo) saveProductViewToDb(productViewInfo)
   } catch (e) {
     console.log(e)
   }

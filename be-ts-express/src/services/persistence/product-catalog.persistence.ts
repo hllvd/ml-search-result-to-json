@@ -3,7 +3,7 @@ import {
   convertCatalogApiResponseToProductCatalogEntity,
   convertMLUserFromApiResponseToSellerEntity,
   convertProductApiResponseToProductCatalogEntity,
-} from "../../convertors/ml.convert"
+} from "../../converters/ml.convert"
 import dataSource from "../../db/data-source"
 import { CatalogFields } from "../../entities/sql/catalog-fields.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
@@ -20,7 +20,7 @@ export const saveProductToDb = async (productInfo: ProductApiResponse) => {
   let product = new ProductsCatalogs()
   product = convertProductApiResponseToProductCatalogEntity(
     productInfo,
-    EntityType.product
+    EntityType.Product
   )
   const { brand, model, color } = getBrandModel(productInfo)
   product.brandModel = await brandModelFieldHandler({ brand, model, color })
@@ -45,7 +45,7 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
   let catalog = new ProductsCatalogs()
   catalog = convertCatalogApiResponseToProductCatalogEntity(
     catalogInfo,
-    EntityType.catalog
+    EntityType.Catalog
   )
   const { brand, model, color } = catalogInfo?.brandModel
   catalog.brandModel = await brandModelFieldHandler({ brand, model, color })

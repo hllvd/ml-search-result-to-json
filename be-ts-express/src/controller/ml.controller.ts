@@ -2,6 +2,15 @@ import { Request, Response } from "express"
 import { getMe } from "../services/ml/api/users"
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs"
 import { fetchMl } from "../services/ml/fetcher-api.ml.service"
+import dataSource from "../db/data-source"
+import { StateFields } from "../entities/sql/state-fields.entity"
+import { ProductsCatalogs } from "../entities/sql/products-catalogs.entity"
+import { EntityType } from "../enums/entity-type.enum"
+import {
+  StateFieldType,
+  StateFieldSubType,
+} from "../enums/state-field-type.enum"
+import { stateFieldsRepository } from "../repository/state-fields.repository"
 
 const me = async (req: Request, res: Response) => {
   const userId = req.query?.userId?.toString() ?? "1334843159"
@@ -26,8 +35,43 @@ const test = async (req: Request, res: Response) => {
    * document.querySelectorAll(".ui-pdp-action--secondary").forEach(e => { console.log(e.getAttribute('formaction'))})
    */
   //const r = await fetchMl("/sites/MLB/search?q=celular", options)
-  const r = await fetchMl("/items?ids=MLB19564320", options)
-  res.status(200).json({ ...r })
+  await stateFieldsRepository([
+    {
+      type: StateFieldType.Shipment,
+      subType: StateFieldSubType.Coleta,
+      state: "BR-zz",
+      value: 1,
+      productsCatalogsId: "MLB19564311",
+      productsCatalogsType: EntityType.Catalog,
+    },
+    {
+      type: StateFieldType.Shipment,
+      subType: StateFieldSubType.Coleta,
+      state: "BR-zq",
+      value: 2,
+      productsCatalogsId: "MLB19564311",
+      productsCatalogsType: EntityType.Catalog,
+    },
+    {
+      type: StateFieldType.Shipment,
+      subType: StateFieldSubType.Coleta,
+      state: "BR-ww",
+      value: 4,
+      productsCatalogsId: "MLB19564311",
+      productsCatalogsType: EntityType.Catalog,
+    },
+  ])
+  /**
+   * {
+    type: StateFieldType.Medal,
+    state: "PR-SP",
+    value: 2,
+    productsCatalogsId: "MLB19564320",
+    productsCatalogsType: EntityType.catalog,
+  }
+   */
+  //const r = await fetchMl("/items?ids=MLB19564320", options)
+  res.status(200).json({})
 }
 
 const logSearchResult = async (req: Request, res: Response) => {

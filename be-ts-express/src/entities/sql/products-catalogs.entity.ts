@@ -5,11 +5,12 @@ import {
   Index,
   ManyToOne,
   OneToOne,
+  OneToMany,
 } from "typeorm"
 import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
-import { CatalogFields } from "./catalog-fields.entity"
 import { Seller } from "./seller.entity"
+import { StateFields } from "./state-fields.entity"
 import { ProductViews } from "./views.entity"
 
 @Index("IDX_CUSTOM_INDEX", ["id", "type"])
@@ -121,6 +122,9 @@ export class ProductsCatalogs {
 
   @OneToOne(() => ProductViews, { nullable: true })
   views: ProductViews
+
+  @OneToMany(() => ProductsCatalogs, (pc) => pc.id, { nullable: true })
+  stateFields: StateFields
 }
 /**
 - catalog_old_post Anuncio mais antigo

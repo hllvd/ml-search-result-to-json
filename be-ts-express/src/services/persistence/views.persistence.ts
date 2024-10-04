@@ -1,7 +1,7 @@
 import {
   catalogViewsResponseToViewsEntity,
   productViewsResponseToViewsEntity,
-} from "../../convertors/ml/catalog-views.convertors"
+} from "../../converters/ml/catalog-views.converters"
 import dataSource from "../../db/data-source"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
 import { ProductViews } from "../../entities/sql/views.entity"
@@ -13,17 +13,15 @@ export const saveCatalogViewsDb = async (
   viewInfo: CatalogVisitsApiResponse
 ) => {
   const view = catalogViewsResponseToViewsEntity(viewInfo)
-  console.log("saveCatalogViewsDb", view)
   try {
     await dataSource.manager.upsert(ProductViews, [view], ["id"])
-    console.log("saved to db 1")
   } catch (e) {
     console.log("err")
     if (e.code === "ER_NO_REFERENCED_ROW_2" || e.code === "ER_DUP_ENTRY") {
       const { catalogId } = viewInfo
       await _createProductCatalogRegister({
         catalogId,
-        type: EntityType.catalog,
+        type: EntityType.Catalog,
       })
       await dataSource.manager.upsert(
         ProductViews,
@@ -46,7 +44,7 @@ export const saveProductViewToDb = async (
       const { productId } = viewInfo
       await _createProductCatalogRegister({
         productId,
-        type: EntityType.product,
+        type: EntityType.Product,
       })
       await dataSource.manager.upsert(
         ProductViews,

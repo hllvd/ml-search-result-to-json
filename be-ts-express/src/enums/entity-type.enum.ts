@@ -1,4 +1,4 @@
 export enum EntityType {
-  product,
-  catalog,
+  Product,
+  Catalog,
 }

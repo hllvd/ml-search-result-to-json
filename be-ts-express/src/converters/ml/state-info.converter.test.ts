@@ -4,7 +4,7 @@ import {
 } from "../../enums/state-field-type.enum"
 import { StateFieldsRepositoryArguments } from "../../models/params/state-fields-repository.model"
 import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.models"
-import { stateInfoConverter } from "./state-info.converter"
+import { catalogStateFieldsConverter } from "./state-info.converter"
 const commonProperties: CatalogReducerResponse = {
   title: "product name",
   permalink: "https://example.com",
@@ -106,7 +106,7 @@ describe("Convert CatalogReducerResponse to StateField entity", () => {
     ]
 
     //Act
-    const responseAssert = stateInfoConverter(data)
+    const responseAssert = catalogStateFieldsConverter(data)
 
     //Assert
     expect(responseAssert).toEqual(result)

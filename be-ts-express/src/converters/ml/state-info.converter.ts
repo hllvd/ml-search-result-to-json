@@ -9,7 +9,7 @@ import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.mo
  * @param catalogReducerResponse
  * @returns
  */
-export const stateInfoConverter = (
+export const catalogStateFieldsConverter = (
   catalogReducerResponse: CatalogReducerResponse
 ): Array<StateFieldsRepositoryArguments> => {
   const { shipmentByState, medalByState, categoryId } = catalogReducerResponse
@@ -37,13 +37,3 @@ export const stateInfoConverter = (
       .flat(1)
   )
 }
-
-/**
-   * await stateFieldsRepository({
-    type: StateFieldType.Shipment,
-    state: "BR-PR",
-    value: 3,
-    productsCatalogsId: "MLB19564320",
-    productsCatalogsType: EntityType.catalog,
-  })
-   */

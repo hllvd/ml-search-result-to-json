@@ -35,32 +35,32 @@ const test = async (req: Request, res: Response) => {
    * document.querySelectorAll(".ui-pdp-action--secondary").forEach(e => { console.log(e.getAttribute('formaction'))})
    */
   //const r = await fetchMl("/sites/MLB/search?q=celular", options)
-  await stateFieldsRepository([
-    {
-      type: StateFieldType.Shipment,
-      subType: StateFieldSubType.Coleta,
-      state: "BR-zz",
-      value: 1,
-      productsCatalogsId: "MLB19564311",
-      productsCatalogsType: EntityType.Catalog,
-    },
-    {
-      type: StateFieldType.Shipment,
-      subType: StateFieldSubType.Coleta,
-      state: "BR-zq",
-      value: 2,
-      productsCatalogsId: "MLB19564311",
-      productsCatalogsType: EntityType.Catalog,
-    },
-    {
-      type: StateFieldType.Shipment,
-      subType: StateFieldSubType.Coleta,
-      state: "BR-ww",
-      value: 4,
-      productsCatalogsId: "MLB19564311",
-      productsCatalogsType: EntityType.Catalog,
-    },
-  ])
+  // await stateFieldsRepository([
+  //   {
+  //     type: StateFieldType.Shipment,
+  //     subType: StateFieldSubType.Coleta,
+  //     state: "BR-zz",
+  //     value: 11,
+  //     productsCatalogsId: "MLB19564311",
+  //     productsCatalogsType: EntityType.Catalog,
+  //   },
+  //   {
+  //     type: StateFieldType.Shipment,
+  //     subType: StateFieldSubType.Coleta,
+  //     state: "BR-zq",
+  //     value: 12,
+  //     productsCatalogsId: "MLB19564311",
+  //     productsCatalogsType: EntityType.Catalog,
+  //   },
+  //   {
+  //     type: StateFieldType.Shipment,
+  //     subType: StateFieldSubType.Coleta,
+  //     state: "BR-ww",
+  //     value: 14,
+  //     productsCatalogsId: "MLB19564311",
+  //     productsCatalogsType: EntityType.Catalog,
+  //   },
+  // ])
   /**
    * {
     type: StateFieldType.Medal,

@@ -4,13 +4,16 @@ import {
   convertMLUserFromApiResponseToSellerEntity,
   convertProductApiResponseToProductCatalogEntity,
 } from "../../converters/ml.convert"
+import { catalogStateFieldsConverter } from "../../converters/ml/state-info.converter"
 import dataSource from "../../db/data-source"
+import { ProductCatalogInit1727747432048 } from "../../db/migrations/1727747432048-product-catalog-init"
 import { CatalogFields } from "../../entities/sql/catalog-fields.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
 import { Seller } from "../../entities/sql/seller.entity"
 import { EntityType } from "../../enums/entity-type.enum"
 import { CatalogApiResponse } from "../../models/api-response/api/catalog-response.models"
 import { ProductApiResponse } from "../../models/api-response/api/product-response.models"
+import { stateFieldsRepository } from "../../repository/state-fields.repository"
 import {
   brandModelFieldHandler,
   getBrandModel,
@@ -50,10 +53,6 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
   const { brand, model, color } = catalogInfo?.brandModel
   catalog.brandModel = await brandModelFieldHandler({ brand, model, color })
 
-  // const catalogField = await dataSource.manager
-  //   .getRepository(ProductsCatalogs)
-  //   .findOne({ where: { id: catalog?.id } })
-
   await dataSource.manager.save(catalog)
 
   const catalogFields = new CatalogFields()
@@ -69,4 +68,7 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
     [catalogFieldConverted],
     ["productsCatalogs"]
   )
+
+  const catalogFieldsConverted = await catalogStateFieldsConverter(catalogInfo)
+  await stateFieldsRepository(catalogFieldsConverted)
 }

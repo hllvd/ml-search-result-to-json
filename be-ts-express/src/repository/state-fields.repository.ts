@@ -17,18 +17,18 @@ export const stateFieldsRepository = async (
   const productCatalogCollection =
     _createProductsCatalogCollectionAndRemoveDuplicates(argArray)
 
-  await dataSource.manager
-    .getRepository(ProductsCatalogs)
-    .save(productCatalogCollection)
+  await dataSource.manager.upsert(ProductsCatalogs, productCatalogCollection, [
+    "id",
+  ])
 
   const stateFieldCollection = _createStateFieldsCollection(argArray)
-  await dataSource.manager.getRepository(StateFields).save(stateFieldCollection)
+  await dataSource.manager.upsert(StateFields, stateFieldCollection, [
+    "state",
+    "subType",
+    "prdCat",
+  ])
 }
 
-/**
- * @param argArray
- * @returns
- */
 const _createProductsCatalogCollectionAndRemoveDuplicates = (
   argArray: Array<StateFieldsRepositoryArguments>
 ): Array<ProductsCatalogs> => {

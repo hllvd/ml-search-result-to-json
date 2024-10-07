@@ -5,7 +5,6 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryColumn,
-  PrimaryGeneratedColumn,
 } from "typeorm"
 import { ProductsCatalogs } from "./products-catalogs.entity"
 

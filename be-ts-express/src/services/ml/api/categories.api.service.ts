@@ -5,10 +5,10 @@ import { fetchMl } from "../fetcher-api.ml.service"
 
 type CategoriesApiResponse = CategoriesRootResponse | CategoriesChildrenResponse
 export const fetchChildrenCategories = async ({
-  parentId,
+  categoryId,
   userId,
 }: {
-  parentId?: string
+  categoryId?: string
   userId: string
 }): Promise<Array<ChildrenCategoriesMlResponse> | null> => {
   const options = {
@@ -16,7 +16,7 @@ export const fetchChildrenCategories = async ({
     method: "GET",
   }
   const url =
-    parentId == null ? "/sites/MLB/categories" : `/categories/${parentId}`
+    categoryId == null ? "/sites/MLB/categories" : `/categories/${categoryId}`
   const childrenCats: CategoriesApiResponse = await fetchMl(url, options)
   return (
     "children_categories" in childrenCats

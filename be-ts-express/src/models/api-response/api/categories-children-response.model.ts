@@ -9,16 +9,6 @@ export interface CategoriesChildrenResponse {
   meta_categ_id?: any
   date_created: string
 }
-interface Channelssetting {
-  channel: string
-  settings: Settings2
-}
-interface Settings2 {
-  minimum_price?: number
-  status?: string
-  buying_modes?: string[]
-  immediate_payment?: string
-}
 interface Childrencategory {
   id: string
   name: string

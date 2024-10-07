@@ -7,9 +7,9 @@ const children = async (
   res: Response,
   next: NextFunction
 ) => {
-  const parentId = req.query?.parentId?.toString()
+  const categoryId = req.query?.categoryId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
-  const listOfCats = await getCategories({ parentId, userId })
+  const listOfCats = await getCategories({ categoryId, userId })
   console.log("listOfCats", listOfCats)
   res.status(200).json({})
 }

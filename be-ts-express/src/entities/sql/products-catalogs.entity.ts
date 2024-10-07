@@ -9,6 +9,7 @@ import {
 } from "typeorm"
 import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
+import { Categories } from "./categories.entity"
 import { Seller } from "./seller.entity"
 import { StateFields } from "./state-fields.entity"
 import { ProductViews } from "./views.entity"

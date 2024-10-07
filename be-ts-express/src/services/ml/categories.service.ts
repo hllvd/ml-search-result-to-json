@@ -2,14 +2,14 @@ import { ChildrenCategoriesMlResponse } from "../../models/api-response/ml/categ
 import { fetchChildrenCategories } from "./api/categories.api.service"
 
 export const getCategories = async ({
-  parentId,
+  categoryId,
   userId,
 }: {
-  parentId?: string
+  categoryId?: string
   userId: string
 }): Promise<ChildrenCategoriesMlResponse[]> => {
   const listOfChildrenCategories = await fetchChildrenCategories({
-    parentId,
+    categoryId,
     userId,
   })
   return listOfChildrenCategories

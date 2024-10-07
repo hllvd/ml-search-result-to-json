@@ -6,7 +6,6 @@ import {
 } from "../../converters/ml.convert"
 import { catalogStateFieldsConverter } from "../../converters/ml/state-info.converter"
 import dataSource from "../../db/data-source"
-import { ProductCatalogInit1727747432048 } from "../../db/migrations/1727747432048-product-catalog-init"
 import { CatalogFields } from "../../entities/sql/catalog-fields.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
 import { Seller } from "../../entities/sql/seller.entity"

@@ -1,7 +1,11 @@
+import { CategoriesChildrenResponse } from "../../models/api-response/api/categories-children-response.model"
 import { ChildrenCategoriesMlResponse } from "../../models/api-response/ml/categories-response.models"
-import { fetchChildrenCategories } from "./api/categories.api.service"
+import {
+  fetchCategoryInfo,
+  fetchChildrenCategories,
+} from "./api/categories.api.service"
 
-export const getCategories = async ({
+export const getChildCategories = async ({
   categoryId,
   userId,
 }: {
@@ -13,4 +17,15 @@ export const getCategories = async ({
     userId,
   })
   return listOfChildrenCategories
+}
+
+export const getCategoryInfo = async ({
+  categoryId,
+  userId,
+}): Promise<CategoriesChildrenResponse> => {
+  const categoryInfo = await fetchCategoryInfo({
+    categoryId,
+    userId,
+  })
+  return categoryInfo
 }

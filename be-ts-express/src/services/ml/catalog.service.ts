@@ -4,6 +4,8 @@ import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.mo
 import { roundNumber } from "../../utils/math.util"
 
 import { fetchSeller } from "./api/users"
+import { getCategoryInfo } from "./categories.service"
+
 import { getProductInCorrectOrder, getProducts } from "./products.service"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
 import { webScrapeCatalogToMetadataPredicate } from "./scraper/predicate/catalog/catalog-metadata.predicate.service"
@@ -22,6 +24,7 @@ const catalogSummary = async ({
       scrapeType: ScrapeType.CatalogProductList,
       maxPage,
     })
+
   const productSales = await webScrapeMlPage(
     webScrapeCatalogToMetadataPredicate,
     {
@@ -77,6 +80,14 @@ const catalogSummary = async ({
     sales: productSales,
   })
   const { has_video: hasVideo } = productSales
+
+  const categoryId = products[0]?.category_id ?? null
+
+  if (categoryId) {
+    const category = await getCategoryInfo({ userId, categoryId })
+    return { catalogId, ...catalogReducerWithSummary, hasVideo, category }
+  }
+
   return { catalogId, ...catalogReducerWithSummary, hasVideo }
 }
 

@@ -25,22 +25,22 @@ export class CatalogFields {
   @Column({ nullable: true, type: "float" })
   priceFull: number
 
-  @Column({ nullable: true, type: "tinyint" })
+  @Column({ nullable: true, type: "int" })
   positionFull: number
 
-  @Column({ nullable: true, type: "tinyint" })
+  @Column({ nullable: true, type: "int" })
   positionMedalGold: number
 
-  @Column({ nullable: true, type: "tinyint" })
+  @Column({ nullable: true, type: "int" })
   positionMedalPlatinum: number
 
-  @Column({ nullable: true, type: "tinyint" })
+  @Column({ nullable: true, type: "int" })
   positionMedalLider: number
 
-  @Column({ nullable: true, type: "tinyint" })
+  @Column({ nullable: true, type: "int" })
   positionOfficialStore: number
 
-  @Column({ nullable: true, type: "tinyint" })
+  @Column({ nullable: true, type: "int" })
   length: number
 
   @Column({ nullable: true })

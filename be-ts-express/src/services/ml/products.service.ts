@@ -8,6 +8,7 @@ import { roundNumber } from "../../utils/math.util"
 import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 import { fetchProduct, fetchProducts } from "./api/products.api.service"
 import { fetchSeller } from "./api/users"
+import { getCategoryInfo } from "./categories.service"
 import { productIdsReducer } from "./reducers/product-urls.reducer.service"
 import { webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate } from "./scraper/predicate/product/product-metadata.predicate.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
@@ -55,7 +56,12 @@ const getProductComplete = async ({
     "supermarket_eligible"
   )
 
+  const categoryId = product?.category_id ?? null
+  let category = null
+  if (categoryId) category = await getCategoryInfo({ userId, categoryId })
+
   return {
+    category,
     productId,
     ...product,
     user,

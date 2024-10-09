@@ -1,5 +1,7 @@
+import { Categories } from "../../entities/sql/categories.entity"
 import { CategoriesChildrenResponse } from "../../models/api-response/api/categories-children-response.model"
 import { ChildrenCategoriesMlResponse } from "../../models/api-response/ml/categories-response.models"
+import { getCategoryFromDb } from "../persistence/category.persistence"
 import {
   fetchCategoryInfo,
   fetchChildrenCategories,
@@ -28,4 +30,31 @@ export const getCategoryInfo = async ({
     userId,
   })
   return categoryInfo
+}
+
+/**
+ * Try to get the category info from the cache/db, if not found, fetch it from the API
+ * @param categoryId
+ * @param userId
+ */
+export const getPersistentCategoryInfo = async ({
+  categoryId,
+  userId,
+}): Promise<Categories> => {
+  const categoryFromDb: Categories = await getCategoryFromDb(categoryId)
+
+  if (!categoryFromDb) {
+    const fetchedCategoryInfo = await getCategoryInfo({
+      categoryId,
+      userId,
+    })
+    const categoryFetch: Categories = {
+      id: fetchedCategoryInfo.id,
+      name: fetchedCategoryInfo.name,
+      totalItems: fetchedCategoryInfo.total_items_in_this_category,
+    }
+    return categoryFetch
+  }
+
+  return categoryFromDb
 }

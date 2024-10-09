@@ -1,10 +1,10 @@
-import { NextFunction, Request, Response } from "express"
+import { NextFunction, Response } from "express"
 import {
   PersistencyInfo,
   RequestExtended,
 } from "../models/extends/params/request-custom.model"
+import { getProductComplete } from "../services/ml/products-seller.service"
 import { getProductVisitsSummary } from "../services/ml/products-visits.service"
-import { getProductComplete } from "../services/ml/products.service"
 
 const product = async (
   req: RequestExtended,

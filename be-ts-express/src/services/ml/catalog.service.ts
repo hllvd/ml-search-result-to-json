@@ -2,9 +2,7 @@ import { ScrapeType } from "../../enums/scrap-type.enum"
 import { CatalogApiResponse } from "../../models/api-response/api/catalog-response.models"
 import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.models"
 import { roundNumber } from "../../utils/math.util"
-
-import { fetchSeller } from "./api/users"
-import { getCategoryInfo } from "./categories.service"
+import { getPersistentCategoryInfo } from "./categories.service"
 
 import { getProductInCorrectOrder, getProducts } from "./products.service"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
@@ -12,6 +10,7 @@ import { webScrapeCatalogToMetadataPredicate } from "./scraper/predicate/catalog
 import { webScrapeCatalogProductLengthPredicate } from "./scraper/predicate/catalog/catalog-product-lengths.predicate.service"
 import { webScrapeCatalogToProductIdAndPricePredicate } from "./scraper/predicate/catalog/catalog-productIds-price.predicate.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
+import { getProductSellers } from "./seller.service"
 
 const catalogSummary = async ({
   catalogId,
@@ -44,16 +43,7 @@ const catalogSummary = async ({
   console.log("amountOfProducts", amountOfProducts)
   const productListOnlyIds = productList.map((e) => e.productIdStr)
   const products = await getProducts(userId, productListOnlyIds)
-  const productsWithSellers = await Promise.all(
-    products.map(async (c): Promise<any> => {
-      const user = await fetchSeller({
-        userId,
-        sellerId: c.seller_id.toString(),
-      })
-
-      return { ...c, user }
-    })
-  )
+  const productsWithSellers = await getProductSellers({ userId, products })
 
   const productsWithSellersInCorrectOrder = getProductInCorrectOrder(
     productListOnlyIds,
@@ -84,7 +74,7 @@ const catalogSummary = async ({
   const categoryId = products[0]?.category_id ?? null
 
   if (categoryId) {
-    const category = await getCategoryInfo({ userId, categoryId })
+    const category = await getPersistentCategoryInfo({ userId, categoryId })
     return { catalogId, ...catalogReducerWithSummary, hasVideo, category }
   }
 

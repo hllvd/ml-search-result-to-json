@@ -24,6 +24,7 @@ export const saveProductToDb = async (productInfo: ProductApiResponse) => {
     productInfo,
     EntityType.Product
   )
+
   const { brand, model, color } = getBrandModel(productInfo)
   product.brandModel = await brandModelFieldHandler({ brand, model, color })
 

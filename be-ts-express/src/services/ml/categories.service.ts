@@ -1,7 +1,7 @@
 import { Categories } from "../../entities/sql/categories.entity"
 import { CategoriesChildrenResponse } from "../../models/api-response/api/categories-children-response.model"
 import { ChildrenCategoriesMlResponse } from "../../models/api-response/ml/categories-response.models"
-import { getCategoryFromDb } from "../persistence/category.persistence"
+import categoryPersistent from "../persistence/category.persistence"
 import {
   fetchCategoryInfo,
   fetchChildrenCategories,
@@ -41,7 +41,7 @@ export const getPersistentCategoryInfo = async ({
   categoryId,
   userId,
 }): Promise<Categories> => {
-  const categoryFromDb: Categories = await getCategoryFromDb(categoryId)
+  const categoryFromDb: Categories = await categoryPersistent.get(categoryId)
 
   if (!categoryFromDb) {
     const fetchedCategoryInfo = await getCategoryInfo({
@@ -53,8 +53,8 @@ export const getPersistentCategoryInfo = async ({
       name: fetchedCategoryInfo.name,
       totalItems: fetchedCategoryInfo.total_items_in_this_category,
     }
+    categoryPersistent.upsert(categoryFetch)
     return categoryFetch
   }
-
   return categoryFromDb
 }

@@ -13,6 +13,7 @@ router.get("/catalog/views", mlCatalogController.views)
 router.get("/product", mlProductController.product)
 router.get("/product/views", mlProductController.views)
 router.get("/categories", mlCategoriesController.children)
+router.get("/categories/items", mlCategoriesController.items)
 router.get("/test", mlController.test)
 
 export default router

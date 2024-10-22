@@ -10,3 +10,12 @@ export const sanitizeAmountSold = (amountSold: string): number => {
   const matches = addZerosToAmountStr.match(numbersRegex)
   if (matches) return parseInt(matches.join(""))
 }
+
+export const convertCurrencyStrings = (currencyStrings: string): number => {
+  const addCentavos = currencyStrings.includes("centavos")
+    ? currencyStrings
+    : `${currencyStrings} com 00 centavos`
+  const onlyNumber: number = Number.parseInt(addCentavos.replace(/\D/g, ""))
+  const floatNumbers: number = Number.parseFloat((onlyNumber / 100).toFixed(2))
+  return floatNumbers
+}

@@ -3,4 +3,5 @@ export enum ScrapeType {
   CatalogMetadata = "catalogMetadata",
   CatalogMainPage = "catalogMainPage",
   ProductPage = "productPage",
+  CategoryProductList = "categoryProductList",
 }

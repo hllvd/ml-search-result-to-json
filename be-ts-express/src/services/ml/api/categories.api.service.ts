@@ -19,7 +19,11 @@ export const fetchChildrenCategories = async ({
   }
   const url =
     categoryId == null ? "/sites/MLB/categories" : `/categories/${categoryId}`
+
   const childrenCats: CategoriesApiResponse = await fetchMl(url, options)
+
+  console.log("childrenCats", childrenCats)
+
   return (
     "children_categories" in childrenCats
       ? childrenCats?.children_categories
@@ -40,5 +44,6 @@ export const fetchCategoryInfo = async ({
   }
   const url = `/categories/${categoryId}`
   const catInfo: CategoriesChildrenResponse = await fetchMl(url, options)
+  console.log(catInfo)
   return catInfo as CategoriesChildrenResponse
 }

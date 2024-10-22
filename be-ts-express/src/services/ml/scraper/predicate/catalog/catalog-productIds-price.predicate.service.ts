@@ -4,6 +4,7 @@ import {
   PredicateResponse,
   ProductIdStrAndPriceResponse,
 } from "../../../../../models/predicate/predicate-response.models"
+import { convertCurrencyStrings } from "../../../../../utils/ml.utils"
 
 /**
  *
@@ -27,7 +28,7 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
       ".ui-pdp-table__cell.ui-pdp-s-table__cell .ui-pdp-price span.andes-money-amount.ui-pdp-price__part.andes-money-amount--cents-superscript.andes-money-amount--compact"
     )
   ).map((el: HTMLElement) =>
-    _convertCurrencyStrings(el.getAttribute("aria-label"))
+    convertCurrencyStrings(el.getAttribute("aria-label"))
   )
   const nextPage =
     Array.from(
@@ -41,16 +42,6 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
     return { productIdStr: e, price: prices[i] }
   })
   return { nextPage, response: productIdsAndPricesJoin }
-}
-
-const _convertCurrencyStrings = (currencyStrings: string): number => {
-  const addCentavos = currencyStrings.includes("centavos")
-    ? currencyStrings
-    : `${currencyStrings} com 00 centavos`
-  const onlyNumber: number = Number.parseInt(addCentavos.replace(/\D/g, ""))
-  const floatNumbers: number = Number.parseFloat((onlyNumber / 100).toFixed(2))
-  console.log("floatNumbers", floatNumbers)
-  return floatNumbers
 }
 
 export { webScrapeCatalogToProductIdAndPricePredicate }

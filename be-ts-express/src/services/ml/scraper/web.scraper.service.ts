@@ -51,7 +51,8 @@ const fetchWithRetry = async ({
       )
 
       const { nextPage, response: currentPageResult } = await predicateSelector(
-        response
+        response,
+        currentPage
       )
 
       if (!Array.isArray(currentPageResult)) return currentPageResult
@@ -63,7 +64,7 @@ const fetchWithRetry = async ({
       if (currentPage === maxPage) break
       currentPage++
       if (!nextPage) break
-      urlBuilder.nextPage()
+      urlBuilder.nextPage(nextPage)
     } catch (e) {
       console.error(e)
       areTherePages = false
@@ -114,19 +115,20 @@ const webScrapeMlUrlBuilder = (options) => {
         currentPage = `https://produto.mercadolivre.com.br/${productId}`
         return currentPage
       case ScrapeType.CategoryProductList:
-        isPagerWorking = false
-        currentPage = `${searchUrl}?page=${page}`
+        isPagerWorking = true
+        currentPage = `${searchUrl}`
         return currentPage
       default:
         throw new Error("Invalid scrape type")
     }
   }
   return {
-    getCurrentUrl: () => getCurrentUrlScope(),
-    nextPage: () => {
-      if (!isPagerWorking) return
-      page++
-      return getCurrentUrlScope()
+    getCurrentUrl: () => currentPage ?? getCurrentUrlScope(),
+    nextPage: (url?: string) => {
+      if (url) {
+        currentPage = url
+        return currentPage
+      }
     },
   }
 }

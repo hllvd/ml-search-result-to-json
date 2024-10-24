@@ -5,9 +5,11 @@ import {
 } from "../../../../../models/predicate/predicate-response.models"
 import { JSDOM } from "jsdom"
 import { convertCurrencyStrings } from "../../../../../utils/ml.utils"
+import { minimalPathUrl } from "../../../../../utils/url.util"
 
 const webScrapeSearchResultToIdAndPricePredicate = async (
-  response: AxiosResponse
+  response: AxiosResponse,
+  currentPage?: number
 ): Promise<PredicateResponse<ProductIdStrAndPriceResponse>> => {
   const regex = /MLB-?\d+/
   const dom = new JSDOM(await response.data)
@@ -15,24 +17,13 @@ const webScrapeSearchResultToIdAndPricePredicate = async (
   var gridResultItems = document.querySelectorAll(
     ".ui-search-layout li.ui-search-layout__item"
   )
-  //   const gridResultItemsFiltered = Array.from(gridResultItems).filter(
-  //     (el: HTMLSelectElement) => {
-  //       const link = el
-  //         .querySelector("h2.poly-box.poly-component__title a")
-  //         .getAttribute("href")
-
-  //       return (
-  //         link.startsWith("https://produto") ||
-  //         link.startsWith("https://www.mercado")
-  //       )
-  //     }
-  //   )
 
   const linkPriceAndId = Array.from(gridResultItems).map(
     (el: HTMLSelectElement, i: number) => {
-      const link = el
-        .querySelector("h2.poly-box.poly-component__title a")
-        .getAttribute("href")
+      const currentEl = el.querySelector("h2.ui-search-item__title a")
+      if (currentEl == null) return null
+
+      const link = minimalPathUrl(currentEl.getAttribute("href"))
 
       if (
         !link.startsWith("https://produto") &&
@@ -47,31 +38,27 @@ const webScrapeSearchResultToIdAndPricePredicate = async (
             "span.andes-money-amount.andes-money-amount--cents-superscript"
           )
           .getAttribute("aria-label") ?? "00"
-      //   const id = link.match(regex)
-      //   console.log("id", id)
-      return { link, isProduct, i, price: convertCurrencyStrings(price) }
+      return { link, isProduct, price: convertCurrencyStrings(price) }
     }
   )
-  const linkPriceAndIdFiltered = linkPriceAndId.filter((e) => e !== null)
-  const linkPriceAndIdFilteredWithId = linkPriceAndIdFiltered.map((e) => {
-    return { ...e, id: e.link.match(regex)[0] }
-  })
 
-  const nextPage =
-    Array.from(
-      document.querySelectorAll(
-        ".li.andes-pagination__button.andes-pagination__button--next.andes-pagination__button--disabled"
-      )
-    ).length === 0
+  const linkPriceAndIdFiltered = linkPriceAndId.filter((e) => e !== null)
+  let i = 1
+  const linkPriceAndIdFilteredWithIdAndIndex = linkPriceAndIdFiltered.map(
+    (e) => {
+      const index = i++
+      const id = e.link.match(regex)[0]?.replace("-", "")
+      return { ...e, id, index: index }
+    }
+  )
+
+  const nextPage = document.querySelector(
+    "li.andes-pagination__button.andes-pagination__button--next a"
+  )?.href
 
   if (linkPriceAndId.length === 0) throw new Error("Page not found")
 
-  //   const productIdsAndPrices = linkPriceAndId.map(
-  //     ({ id: productIdStr, price }, i) => {
-  //       return { productIdStr, price }
-  //     }
-  //   )
-  return { nextPage, response: linkPriceAndIdFilteredWithId as any }
+  return { nextPage, response: linkPriceAndIdFilteredWithIdAndIndex as any }
 }
 
 export { webScrapeSearchResultToIdAndPricePredicate }

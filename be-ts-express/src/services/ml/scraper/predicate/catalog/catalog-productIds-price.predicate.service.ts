@@ -30,12 +30,9 @@ const webScrapeCatalogToProductIdAndPricePredicate = async (
   ).map((el: HTMLElement) =>
     convertCurrencyStrings(el.getAttribute("aria-label"))
   )
-  const nextPage =
-    Array.from(
-      document.querySelectorAll(
-        ".li.andes-pagination__button.andes-pagination__button--next.andes-pagination__button--disabled"
-      )
-    ).length === 0
+  const nextPage = document.querySelector(
+    "li.andes-pagination__button.andes-pagination__button--next a"
+  )?.href
   const productIds = buttonWithUrls.map((e) => e.match(regex)[1])
   if (productIds.length === 0) throw new Error("No products found")
   const productIdsAndPricesJoin = productIds.map((e, i) => {

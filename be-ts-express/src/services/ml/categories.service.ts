@@ -2,6 +2,7 @@ import { Categories } from "../../entities/sql/categories.entity"
 import { ScrapeType } from "../../enums/scrap-type.enum"
 import { CategoriesChildrenResponse } from "../../models/api-response/api/categories-children-response.model"
 import { ChildrenCategoriesMlResponse } from "../../models/api-response/ml/categories-response.models"
+import { minimalPathUrl } from "../../utils/url.util"
 import categoryPersistent from "../persistence/category.persistence"
 import {
   fetchCategoryInfo,
@@ -72,9 +73,11 @@ interface CategorySearchItem {
 export const getItemsFromCategory = async ({
   categoryId,
   userId,
-}): Promise<Array<CategorySearchItem>> => {
+}): Promise<Array<any>> => {
   const maxPage = 5
-  const searchUrl = `https://lista.mercadolivre.com.br/acessorios-para-veiculos-c_NoIndex_True`
+  const url = `https://lista.mercadolivre.com.br/acessorios-veiculos/pecas-carros-caminhonetes/pecas-interior/acessorios-para-veiculos-c_NoIndex_True#applied_filter_id%3Dcategory%26applied_filter_name%3DCategorias%26applied_filter_order%3D3%26applied_value_id%3DMLB114765%26applied_value_name%3DPe%C3%A7as+de+Interior%26applied_value_order%3D11%26applied_value_results%3D714%26is_custom%3Dfalse`
+  const searchUrl = minimalPathUrl(url)
+
   const productListFromCategory: Array<{
     productIdStr: string
     price: number
@@ -83,6 +86,5 @@ export const getItemsFromCategory = async ({
     scrapeType: ScrapeType.CategoryProductList,
     maxPage,
   })
-  console.log("productListFromCategory", productListFromCategory)
-  return [{ id: "123", position: 2, currentPrice: 2 }]
+  return [...productListFromCategory]
 }

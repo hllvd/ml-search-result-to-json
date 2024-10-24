@@ -3,6 +3,7 @@ import mlController from "../controller/ml.controller"
 import mlProductController from "../controller/product.controller"
 import mlCatalogController from "../controller/catalog.controller"
 import mlCategoriesController from "../controller/categories.controller"
+import searchController from "../controller/search.controler"
 
 const router = Router()
 
@@ -13,7 +14,8 @@ router.get("/catalog/views", mlCatalogController.views)
 router.get("/product", mlProductController.product)
 router.get("/product/views", mlProductController.views)
 router.get("/categories", mlCategoriesController.children)
-router.get("/categories/items", mlCategoriesController.items)
+router.get("/search", searchController.items)
+router.get("/search/categories", searchController.categories)
 router.get("/test", mlController.test)
 
 export default router

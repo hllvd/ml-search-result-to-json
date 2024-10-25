@@ -12,7 +12,7 @@ const children = async (
   const userId = req.query?.userId?.toString() ?? "1231084821"
   const listOfCats = await getPersistentCategoryInfo({ categoryId, userId })
   console.log("listOfCats", listOfCats)
-  res.status(200).json({})
+  res.status(200).json({ ...listOfCats })
 }
 
 export default { children }

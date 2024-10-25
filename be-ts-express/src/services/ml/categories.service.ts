@@ -1,15 +1,11 @@
 import { Categories } from "../../entities/sql/categories.entity"
-import { ScrapeType } from "../../enums/scrap-type.enum"
 import { CategoriesChildrenResponse } from "../../models/api-response/api/categories-children-response.model"
 import { ChildrenCategoriesMlResponse } from "../../models/api-response/ml/categories-response.models"
-import { minimalPathUrl, searchUrlGenerator } from "../../utils/url.util"
 import categoryPersistent from "../persistence/category.persistence"
 import {
   fetchCategoryInfo,
   fetchChildrenCategories,
 } from "./api/categories.api.service"
-import { webScrapeSearchResultToIdAndPricePredicate } from "./scraper/predicate/list/list.scaper.service"
-import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
 export const getChildCategories = async ({
   categoryId,
@@ -47,8 +43,8 @@ export const getPersistentCategoryInfo = async ({
   userId,
 }): Promise<Categories> => {
   const categoryFromDb: Categories = await categoryPersistent.get(categoryId)
-  // if (!categoryFromDb) {
-  if (true) {
+  // TODO
+  if (!categoryFromDb) {
     const fetchedCategoryInfo = await getCategoryInfo({
       categoryId,
       userId,
@@ -62,10 +58,4 @@ export const getPersistentCategoryInfo = async ({
     return categoryFetch
   }
   return categoryFromDb
-}
-
-interface CategorySearchItem {
-  id: string
-  position: number
-  currentPrice: number
 }

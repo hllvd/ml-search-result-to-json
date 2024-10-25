@@ -12,4 +12,16 @@ export class Categories {
 
   @Column({ nullable: true, type: "int" })
   totalItems: number
+
+  // @Column({ nullable: true })
+  // permaLink: string
+
+  // @Column({ nullable: true })
+  // hasItems: boolean
+
+  // @Column({ nullable: true })
+  // hasChildren: boolean
+
+  // @Column({ nullable: true })
+  // parentId: string
 }

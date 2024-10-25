@@ -1,11 +1,9 @@
-import { CategoriesChildrenResponse } from "../../../models/api-response/api/categories-children-response.model"
+import { CategoriesApiResponse } from "../../../models/api-response/api/categories-response.model"
 import { CategoriesRootResponse } from "../../../models/api-response/api/categories-root-response.model"
 import { ChildrenCategoriesMlResponse } from "../../../models/api-response/ml/categories-response.models"
 import { fetchMl } from "../fetcher-api.ml.service"
 
-export type CategoriesApiResponse =
-  | CategoriesRootResponse
-  | CategoriesChildrenResponse
+export type CategoriesResponse = CategoriesRootResponse | CategoriesApiResponse
 export const fetchChildrenCategories = async ({
   categoryId,
   userId,
@@ -20,7 +18,7 @@ export const fetchChildrenCategories = async ({
   const url =
     categoryId == null ? "/sites/MLB/categories" : `/categories/${categoryId}`
 
-  const childrenCats: CategoriesApiResponse = await fetchMl(url, options)
+  const childrenCats: CategoriesResponse = await fetchMl(url, options)
 
   console.log("childrenCats", childrenCats)
 
@@ -37,13 +35,13 @@ export const fetchCategoryInfo = async ({
 }: {
   categoryId?: string
   userId: string
-}): Promise<CategoriesChildrenResponse> => {
+}): Promise<CategoriesApiResponse> => {
   const options = {
     userId,
     method: "GET",
   }
   const url = `/categories/${categoryId}`
-  const catInfo: CategoriesChildrenResponse = await fetchMl(url, options)
+  const catInfo: CategoriesApiResponse = await fetchMl(url, options)
   console.log(catInfo)
-  return catInfo as CategoriesChildrenResponse
+  return catInfo as CategoriesApiResponse
 }

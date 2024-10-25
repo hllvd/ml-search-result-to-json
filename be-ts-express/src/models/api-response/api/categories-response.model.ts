@@ -1,4 +1,4 @@
-export interface CategoriesChildrenResponse {
+export interface CategoriesApiResponse {
   id: string
   name: string
   picture?: any

@@ -2,6 +2,7 @@ import { NextFunction, Response } from "express"
 import { RequestExtended } from "../models/extends/params/request-custom.model"
 import {
   getCategories,
+  getCategoriesMetaData,
   getPersistentCategoryInfo,
 } from "../services/ml/categories.service"
 
@@ -16,9 +17,11 @@ const item = async (
     const childrenCats = await getCategories({ userId })
     return res.status(400).json([...childrenCats])
   }
-  const listOfCats = await getPersistentCategoryInfo({ categoryId, userId })
-  console.log("listOfCats", listOfCats)
-  res.status(200).json({ ...listOfCats })
+  const a = getCategoriesMetaData({ categoryId, userId })
+  console.log("a", a)
+  //const listOfCats = await getPersistentCategoryInfo({ categoryId, userId })
+  //console.log("listOfCats", listOfCats)
+  res.status(200).json({ ...a })
 }
 
 export default { item }

@@ -15,6 +15,7 @@ interface WebScraperMlPageOption {
   productId?: string
   categoryId?: string
   searchUrl?: string
+  categoryUrl?: string
   maxPage?: number | null
 }
 const webScrapeMlPage = async (
@@ -99,7 +100,7 @@ const webScrapeMlUrlBuilder = (options) => {
   let currentPage
   let isPagerWorking = true
   let page = options.page ?? 1
-  const { catalogId, productId, searchUrl } = options
+  const { catalogId, productId, searchUrl, categoryUrl } = options
 
   const getCurrentUrlScope = () => {
     switch (options.scrapeType) {
@@ -117,6 +118,10 @@ const webScrapeMlUrlBuilder = (options) => {
       case ScrapeType.CategoryProductList:
         isPagerWorking = true
         currentPage = `${searchUrl}`
+        return currentPage
+      case ScrapeType.CategoryMetadata:
+        isPagerWorking = false
+        currentPage = `${categoryUrl}`
         return currentPage
       default:
         throw new Error("Invalid scrape type")

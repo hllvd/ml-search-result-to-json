@@ -117,11 +117,29 @@ const webScrapeMlUrlBuilder = (options) => {
         return currentPage
       case ScrapeType.CategoryProductList:
         isPagerWorking = true
-        currentPage = `${searchUrl}`
+        currentPage = `${categoryUrl}`
         return currentPage
       case ScrapeType.CategoryMetadata:
         isPagerWorking = false
         currentPage = `${categoryUrl}`
+        return currentPage
+      case ScrapeType.CategoryChildren:
+        isPagerWorking = false
+        const url = new URL(categoryUrl)
+        const { protocol, hostname, pathname } = url
+        const pathWithoutNovoAndUnderscore = pathname
+          .replace(/\/novo\/?/, "")
+          .split("_")[0]
+        const removeDoubleSlash = pathWithoutNovoAndUnderscore.replace(
+          /([^:]\/)\/+/g,
+          "$1"
+        )
+        const clearUrl = `${protocol}//${hostname}${removeDoubleSlash}`
+        currentPage = `${clearUrl}/_NoIndex_True?original_category_landing=true`
+        return currentPage
+      case ScrapeType.CategoryRoot:
+        isPagerWorking = false
+        currentPage = `https://www.mercadolivre.com.br/categorias`
         return currentPage
       default:
         throw new Error("Invalid scrape type")

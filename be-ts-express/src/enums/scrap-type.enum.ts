@@ -5,4 +5,6 @@ export enum ScrapeType {
   ProductPage = "productPage",
   CategoryProductList = "categoryProductList",
   CategoryMetadata = "categoryMetadata",
+  CategoryChildren = "categoryChildren",
+  CategoryRoot = "categoryRoot",
 }

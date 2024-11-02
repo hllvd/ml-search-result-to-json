@@ -1,12 +1,14 @@
 import { AxiosResponse } from "axios"
 import { JSDOM } from "jsdom"
-import { CategoryTreeWebCrawler } from "../../../../../models/predicate/category-tree.models"
-import { sanitizeAmountSold } from "../../../../../utils/ml.utils"
+import {
+  CategoryWebCrawlerPredicateResult,
+  CategoryTreeWebCrawler,
+} from "../../../../../models/predicate/category-tree.models"
 
 const categoryMetadataPredicate = async (
   response: AxiosResponse
 ): Promise<{
-  response: { categoryTree: Array<CategoryTreeWebCrawler> }
+  response: CategoryWebCrawlerPredicateResult
 }> => {
   const dom = new JSDOM(await response.data)
   const document = dom.window.document
@@ -14,36 +16,19 @@ const categoryMetadataPredicate = async (
   const parentCategory = document.querySelectorAll(
     ".CategoryList .desktop__view-wrapper .desktop__view-child"
   )
+  console.log("parentCategory", parentCategory)
   const categoryTree: Array<CategoryTreeWebCrawler> = Array.from(
     parentCategory
   ).map((parentEl: HTMLElement) => {
     const parentLink = parentEl.querySelector("a")
-    const parentUrl = parentLink.href
-    const parentName = parentEl.querySelector(
+    const url = parentLink.href
+    const name = parentEl.querySelector(
       "a .category-list__permalink-custom"
     )?.innerHTML
     const childrenEl = parentEl.querySelector(".desktop__view-ul")
     const childrenList = _getChildrenEl(childrenEl)
-    return { parentUrl, parentName, childrenList }
+    return { url, name, childrenList }
   })
-
-  /** 
-  const dom = new JSDOM(await response.data)
-  const document = dom.window.document
-
-  const amountHtml = document.querySelector(".ui-pdp-subtitle")
-  const amountStrInner = amountHtml.textContent
-  const quantitySold = sanitizeAmountSold(amountStrInner)
-
-  const priceHtml = document.querySelector("meta[itemprop=price]")
-  const priceStr = priceHtml.getAttribute("content")
-  const currentPrice = Number.parseFloat(priceStr)
-
-  const clipIconHtml = document.querySelectorAll(
-    ".ui-pdp-thumbnail--overlay .clip-picture-icon"
-  )
-  const hasVideo = !!clipIconHtml
-  **/
 
   return { response: { categoryTree } }
 }
@@ -54,9 +39,9 @@ const _getChildrenEl = (el) => {
       const linkEl = childEl.querySelector(
         ".splinter-link"
       ) as HTMLAnchorElement
-      const childUrl = linkEl?.href
-      const childName = linkEl.querySelector("h4")?.textContent
-      return { childUrl, childName }
+      const url = linkEl?.href
+      const name = linkEl.querySelector("h4")?.textContent
+      return { url, name }
     }
   )
 }

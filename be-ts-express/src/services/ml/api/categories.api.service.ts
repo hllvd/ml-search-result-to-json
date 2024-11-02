@@ -42,6 +42,6 @@ export const fetchCategoryInfo = async ({
   }
   const url = `/categories/${categoryId}`
   const catInfo: CategoriesApiResponse = await fetchMl(url, options)
-  console.log(catInfo)
+
   return catInfo as CategoriesApiResponse
 }

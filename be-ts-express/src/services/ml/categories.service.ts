@@ -1,15 +1,23 @@
 import { Categories } from "../../entities/sql/categories.entity"
-import { ScrapeType } from "../../enums/scrap-type.enum"
-import { CategoriesApiResponse } from "../../models/api-response/api/categories-response.model"
+import {
+  CategoriesApiResponse,
+  Pathfromroot,
+} from "../../models/api-response/api/categories-response.model"
 import { ChildrenCategoriesMlResponse } from "../../models/api-response/ml/categories-response.models"
-import { CategoryTreeWebCrawler } from "../../models/predicate/category-tree.models"
+import {
+  CategoryData,
+  CategoryWebCrawlerPredicateResult,
+  ScrapCategoryMetadata,
+} from "../../models/predicate/category-tree.models"
 import categoryPersistent from "../persistence/category.persistence"
 import {
   fetchCategoryInfo,
   fetchChildrenCategories,
 } from "./api/categories.api.service"
-import { categoryMetadataPredicate } from "./scraper/predicate/category/category-metadata.predicate.service"
-import { webScrapeMlPage } from "./scraper/web.scraper.service"
+import {
+  scrapCategoryChildren,
+  scrapCategoryItems,
+} from "./scraper/predicate/helpers/categories.scrap.service"
 
 export const getCategories = async ({
   categoryId,
@@ -22,7 +30,6 @@ export const getCategories = async ({
     categoryId,
     userId,
   })
-  console.log("listOfChildrenCategories", listOfChildrenCategories)
   return listOfChildrenCategories
 }
 
@@ -32,33 +39,80 @@ export const getCategoriesMetaData = async ({
 }: {
   categoryId: string
   userId: string
-}): Promise<{
-  id: string
-  name: string
-  url: string
-  parentId: string
-  isList: boolean
-  hasChildren: boolean
-  searchTerm?: string
-}> => {
+}): Promise<
+  | {
+      id: string
+      name: string
+      url: string
+      parentId: string
+      isList: boolean
+      hasChildren: boolean
+      searchTerm?: string
+    }
+  | CategoryWebCrawlerPredicateResult
+  | Promise<CategoriesApiResponse>
+  | any
+> => {
   const categoryInfo = await getCategoryInfo({ categoryId, userId })
 
+  const { path_from_root: pathFromRoot } = categoryInfo
+  console.log("pathFromRoot", pathFromRoot)
+  //const a = await _traceRoutePath({ pathFromRoot, userId })
+
   const categoryUrl =
-    "https://www.mercadolivre.com.br/c/beleza-e-cuidado-pessoal"
+    "https://lista.mercadolivre.com.br/beleza-cuidado-pessoal/cuidados-cabelo/cremes-pentear/_NoIndex_True?original_category_landing=true"
+  const cateChild = await scrapCategoryItems(categoryUrl)
+  console.log("cateChild", cateChild)
+  return cateChild
 
-  const categoryMetadata: Array<CategoryTreeWebCrawler> =
-    await _getCategoryMetadata(categoryUrl)
+  // const root = await scrapCategoryRootTree()
+  // return root
 
-  return {
-    id: categoryId,
-    name: categoryInfo.name,
-    url: categoryInfo.permalink,
-    parentId: _getParentIdFromCategory(categoryInfo),
-    isList: false,
-    hasChildren: _hasChildren(categoryInfo),
-    searchTerm: "",
-  }
+  return categoryInfo
+
+  // return {
+  //   id: categoryId,
+  //   name: categoryInfo.name,
+  //   url: categoryInfo.permalink,
+  //   parentId: _getParentIdFromCategory(categoryInfo),
+  //   isList: false,
+  //   hasChildren: _hasChildren(categoryInfo),
+  //   searchTerm: "",
+  // }
 }
+
+// const _traceRoutePath = async ({
+//   pathFromRoot,
+//   userId,
+// }: {
+//   pathFromRoot: Array<Pathfromroot>
+//   userId: string
+// }): Promise<ScrapCategoryMetadata> => {
+//   let categoryMetadata: Array<CategoryData>
+
+//   for (const [index, { name, id }] of pathFromRoot.entries()) {
+//     if (index == 0) {
+//       // Root category
+//       const rootId = id
+//       const rootCategory = await getCategoryInfo({ categoryId: rootId, userId })
+//       const rootCategoryUrl = rootCategory.permalink
+//       categoryMetadata = await scrapCategoryChildren(rootCategoryUrl)
+//       continue
+//     }
+//     const { categoryTree } = categoryMetadata
+//     const currentCategoryUrl =
+//       categoryTree.find((e) => e.name == name)?.url ||
+//       categoryTree
+//         .flatMap((e) => e.childrenList.flat(1))
+//         .find((e) => e.name == name)?.url
+//     console.log(name, id, currentCategoryUrl)
+//     if (currentCategoryUrl) {
+//       categoryMetadata = await scrapCategoryChildren(currentCategoryUrl)
+//     }
+//   }
+
+//   return categoryMetadata
+// }
 
 export const getCategoryInfo = async ({
   categoryId,
@@ -71,13 +125,16 @@ export const getCategoryInfo = async ({
   return categoryInfo
 }
 
-const _getCategoryMetadata = async (
-  categoryUrl: string
-): Promise<Array<CategoryTreeWebCrawler>> => {
-  return await webScrapeMlPage(categoryMetadataPredicate, {
-    categoryUrl,
-    scrapeType: ScrapeType.CategoryMetadata,
-  })
+const _getRootCategory = async ({
+  categoryInfo,
+  userId,
+}: {
+  categoryInfo: CategoriesApiResponse
+  userId: string
+}): Promise<CategoriesApiResponse> => {
+  const rootCategory = categoryInfo?.path_from_root?.[0]
+  if (rootCategory.id === categoryInfo.id) return Promise.resolve(categoryInfo)
+  return await getCategoryInfo({ categoryId: rootCategory.id, userId })
 }
 
 /**

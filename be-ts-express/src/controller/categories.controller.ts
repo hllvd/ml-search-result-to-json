@@ -17,8 +17,7 @@ const item = async (
     const childrenCats = await getCategories({ userId })
     return res.status(400).json([...childrenCats])
   }
-  const a = getCategoriesMetaData({ categoryId, userId })
-  console.log("a", a)
+  const a = await getCategoriesMetaData({ categoryId, userId })
   //const listOfCats = await getPersistentCategoryInfo({ categoryId, userId })
   //console.log("listOfCats", listOfCats)
   res.status(200).json({ ...a })

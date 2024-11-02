@@ -4,6 +4,7 @@ import { MLProduct } from "../../../models/dto/ml-product.models"
 import { PowerSellerStatus } from "../../../models/dto/ml-user.models"
 import { CatalogReducerResponse } from "../../../models/reducers/catalog-reducer.models"
 import { roundNumber } from "../../../utils/math.util"
+import { getEanIfExist } from "../../../utils/ml.utils"
 
 export const catalogReducer = (
   catalog: Array<MLProduct>
@@ -112,7 +113,7 @@ export const catalogReducer = (
       acc.brandModel.model =
         acc.brandModel.model || _getAttributeValueName(attributes, "MODEL")
 
-      acc.ean = acc.ean === null ? _getEanIfExist(attributes) : acc.ean
+      acc.ean = acc.ean === null ? getEanIfExist(attributes) : acc.ean
       return acc
     },
     {
@@ -183,10 +184,6 @@ const _getMedalKey = (powerSellerStatus: string) => {
     default:
       return "noMedal"
   }
-}
-
-const _getEanIfExist = (attributes): string | null => {
-  return attributes?.find((attr) => attr.id == "GTIN")?.value_name ?? null
 }
 
 const _getMedalBooleans = (powerSellerStatus: string) => {

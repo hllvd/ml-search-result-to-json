@@ -10,3 +10,7 @@ export const sanitizeAmountSold = (amountSold: string): number => {
   const matches = addZerosToAmountStr.match(numbersRegex)
   if (matches) return parseInt(matches.join(""))
 }
+
+export const getEanIfExist = (attributes): string | null => {
+  return attributes?.find((attr) => attr.id == "GTIN")?.value_name ?? null
+}

@@ -1,6 +1,7 @@
 export interface ProductResponse {
   productId: string
   id: string
+  ean: string
   site_id: string
   title: string
   seller_id: number

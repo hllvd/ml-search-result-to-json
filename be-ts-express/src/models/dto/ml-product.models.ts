@@ -5,6 +5,7 @@ export type ProductId = string
 
 export interface MLProduct extends MLProductResponse {
   id: ProductId
+  ean?: string
   site_id?: string
   user?: MLUser
   pictures?: any
@@ -38,4 +39,8 @@ export interface MLProduct extends MLProductResponse {
   owner?: boolean
   health?: number
   catalog_listing?: boolean
+  revenue?: number
+  quantity_sold?: number
+  daily_revenue?: number
+  has_promotion?: boolean
 }

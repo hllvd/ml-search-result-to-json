@@ -19,3 +19,6 @@ export const convertCurrencyStrings = (currencyStrings: string): number => {
   const floatNumbers: number = Number.parseFloat((onlyNumber / 100).toFixed(2))
   return floatNumbers
 }
+export const getEanIfExist = (attributes): string | null => {
+  return attributes?.find((attr) => attr.id == "GTIN")?.value_name ?? null
+}

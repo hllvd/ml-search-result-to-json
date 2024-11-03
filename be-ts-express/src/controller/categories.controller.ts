@@ -15,7 +15,7 @@ const item = async (
   const userId = req.query?.userId?.toString() ?? "1231084821"
   if (!categoryId) {
     const childrenCats = await getCategories({ userId })
-    return res.status(400).json([...childrenCats])
+    return res.status(200).json([...childrenCats])
   }
   const a = await getCategoriesMetaData({ categoryId, userId })
   //const listOfCats = await getPersistentCategoryInfo({ categoryId, userId })

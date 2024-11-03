@@ -1,23 +1,13 @@
 import { Categories } from "../../entities/sql/categories.entity"
-import {
-  CategoriesApiResponse,
-  Pathfromroot,
-} from "../../models/api-response/api/categories-response.model"
+import { CategoriesApiResponse } from "../../models/api-response/api/categories-response.model"
 import { ChildrenCategoriesMlResponse } from "../../models/api-response/ml/categories-response.models"
-import {
-  CategoryData,
-  CategoryWebCrawlerPredicateResult,
-  ScrapCategoryMetadata,
-} from "../../models/predicate/category-tree.models"
+import { CategoryWebCrawlerPredicateResult } from "../../models/predicate/category-tree.models"
 import categoryPersistent from "../persistence/category.persistence"
 import {
   fetchCategoryInfo,
   fetchChildrenCategories,
 } from "./api/categories.api.service"
-import {
-  scrapCategoryChildren,
-  scrapCategoryItems,
-} from "./scraper/predicate/helpers/categories.scrap.service"
+import { scrapCategoryItems } from "./scraper/predicate/helpers/categories.scrap.service"
 
 export const getCategories = async ({
   categoryId,

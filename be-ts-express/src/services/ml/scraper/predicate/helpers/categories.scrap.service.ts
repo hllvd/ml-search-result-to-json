@@ -1,8 +1,11 @@
 import { ScrapeType } from "../../../../../enums/scrap-type.enum"
+import { ScrapeCategoryMetadata } from "../../../../../models/predicate/category-metadata.models"
+
 import {
   CategoryData,
   ScrapCategoryMetadata,
 } from "../../../../../models/predicate/category-tree.models"
+import { ensureTrailingSlash } from "../../../../../utils/url.util"
 import { webScrapeMlPage } from "../../web.scraper.service"
 import {
   categoryChildrenPredicate,
@@ -22,7 +25,19 @@ const scrapCategoryRelatedSearches = async (
     categoryUrl,
     scrapeType: ScrapeType.CategoryMetadata,
   })
+
   return { categoryUrl, ...scrapedContent }
+}
+
+const scrapeCategorySearchTerms = async (
+  categoryUrl: string
+): Promise<ScrapeCategoryMetadata> => {
+  const categoryUrlWithSlashes = ensureTrailingSlash(categoryUrl)
+  const scrapedContent = await webScrapeMlPage(categoryMetadataPredicate, {
+    categoryUrl: categoryUrlWithSlashes,
+    scrapeType: ScrapeType.CategoryMetadata,
+  })
+  return { categoryUrl: categoryUrlWithSlashes, ...scrapedContent }
 }
 
 /**
@@ -31,6 +46,7 @@ const scrapCategoryRelatedSearches = async (
 const scrapCategoryItems = async (categoryUrl: string): Promise<any> => {
   const scrapedContent = await webScrapeMlPage(categoryItemsPredicate, {
     categoryUrl,
+    dynamicWeb: true,
     scrapeType: ScrapeType.CategoryProductList,
   })
   return { categoryUrl, ...scrapedContent }
@@ -58,4 +74,5 @@ export {
   scrapCategoryChildren,
   scrapCategoryRootTree,
   scrapCategoryItems,
+  scrapeCategorySearchTerms,
 }

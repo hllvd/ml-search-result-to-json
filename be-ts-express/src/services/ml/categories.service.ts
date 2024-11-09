@@ -7,7 +7,10 @@ import {
   fetchCategoryInfo,
   fetchChildrenCategories,
 } from "./api/categories.api.service"
-import { scrapCategoryItems } from "./scraper/predicate/helpers/categories.scrap.service"
+import {
+  scrapCategoryItems,
+  scrapeCategorySearchTerms,
+} from "./scraper/predicate/helpers/categories.scrap.service"
 
 export const getCategories = async ({
   categoryId,
@@ -49,10 +52,18 @@ export const getCategoriesMetaData = async ({
   console.log("pathFromRoot", pathFromRoot)
   //const a = await _traceRoutePath({ pathFromRoot, userId })
 
+  // const categoryUrl =
+  //   "https://lista.mercadolivre.com.br/beleza-cuidado-pessoal/cuidados-cabelo/cremes-pentear/_NoIndex_True?original_category_landing=true"
+  // const categoryUrl =
+  //   "https://lista.mercadolivre.com.br/beleza-cuidado-pessoal/cuidados-cabelo/cremes-pentear/"
+  // const categoryUrl =
+  //   "https://lista.mercadolivre.com.br/eletrodomesticos/fornos-fogoes/coifas-depuradores"
+  // const categoryUrl =
+  //   "https://lista.mercadolivre.com.br/ferramentas/ferramentas-eletricas/"
   const categoryUrl =
-    "https://lista.mercadolivre.com.br/beleza-cuidado-pessoal/cuidados-cabelo/cremes-pentear/_NoIndex_True?original_category_landing=true"
-  const cateChild = await scrapCategoryItems(categoryUrl)
-  console.log("cateChild", cateChild)
+    "https://lista.mercadolivre.com.br/construcao/materiais-obra/"
+  const cateChild = await scrapeCategorySearchTerms(categoryUrl)
+
   return cateChild
 
   // const root = await scrapCategoryRootTree()
@@ -79,7 +90,6 @@ export const getCategoriesMetaData = async ({
 //   userId: string
 // }): Promise<ScrapCategoryMetadata> => {
 //   let categoryMetadata: Array<CategoryData>
-
 //   for (const [index, { name, id }] of pathFromRoot.entries()) {
 //     if (index == 0) {
 //       // Root category

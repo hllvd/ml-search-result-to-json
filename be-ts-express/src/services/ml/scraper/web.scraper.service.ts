@@ -1,6 +1,9 @@
 import axios from "axios"
 import { ScrapeType } from "../../../enums/scrap-type.enum"
-import { ProductId } from "../../../models/dto/ml-product.models"
+import puppeteer from "puppeteer"
+import fs from "fs"
+import path from "path"
+import { ensureTrailingSlash } from "../../../utils/url.util"
 
 /**
  * read more https://scrapfly.io/blog/web-scraping-with-nodejs/
@@ -17,6 +20,7 @@ interface WebScraperMlPageOption {
   searchUrl?: string
   categoryUrl?: string
   maxPage?: number | null
+  dynamicWeb?: boolean
 }
 const webScrapeMlPage = async (
   predicateSelector: Function,
@@ -39,17 +43,17 @@ const fetchWithRetry = async ({
   retries: number
   predicateSelector: Function
 }): Promise<Array<{ productIdStr: string; price: number }>> => {
-  const { maxPage } = options
+  const { maxPage, dynamicWeb } = options
   const urlBuilder = webScrapeMlUrlBuilder(options)
   let resultArray: Array<any> = []
   let areTherePages = true
   let currentPage: number = 1
   while (areTherePages) {
+    console.log("dynamicWeb", dynamicWeb)
     try {
-      const response = await webScrapeFetcher(
-        urlBuilder.getCurrentUrl(),
-        retries
-      )
+      const response = dynamicWeb
+        ? await webScrapeFetcherDynamic(urlBuilder.getCurrentUrl(), retries)
+        : await webScrapeFetcher(urlBuilder.getCurrentUrl(), retries)
 
       const { nextPage, response: currentPageResult } = await predicateSelector(
         response,
@@ -73,6 +77,46 @@ const fetchWithRetry = async ({
   }
   return resultArray ?? null
 }
+const webScrapeFetcherDynamic = async (url: string, retries: number) => {
+  let counter = 0
+  let response = null
+  const outputFolder =
+    "/Users/hudsonvandal/Documents/ml-search-result/be-ts-express"
+  console.log("dynamic Web", url)
+  while (counter < retries) {
+    try {
+      const browser = await puppeteer.launch()
+      const page = await browser.newPage()
+
+      await page.goto(url, { waitUntil: "networkidle2" })
+      console.log("goto", url)
+
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await page.setViewport({ width: 1080, height: 1024 })
+
+      response = await page.content()
+      console.log("page url", await page.url())
+      if (!fs.existsSync(outputFolder)) {
+        fs.mkdirSync(outputFolder, { recursive: true })
+      }
+
+      // Save the HTML content to a file
+      const htmlFilePath = path.join(outputFolder, "page.html")
+      fs.writeFileSync(htmlFilePath, response)
+      console.log(`HTML content saved to ${htmlFilePath}`)
+
+      // Save a screenshot of the page
+      const screenshotFilePath = path.join(outputFolder, "screenshot.png")
+      await page.screenshot({ path: screenshotFilePath, fullPage: true })
+      console.log(`Screenshot saved to ${screenshotFilePath}`)
+      await browser.close()
+      break
+    } catch {
+      counter++
+    }
+  }
+  return response
+}
 
 const webScrapeFetcher = async (url: string, retries: number) => {
   let counter = 0
@@ -83,16 +127,22 @@ const webScrapeFetcher = async (url: string, retries: number) => {
       response = await axios.get(url, {
         headers: {
           "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
           Accept:
             "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/png,*/*;q=0.8",
+          "Accept-Encoding": "gzip, deflate, br, zstd",
+          Connection: "keep-alive",
+          Cookie:
+            "_d2id=1f00ab5f-a2e6-462c-841c-ae14bfb8852d-n; _csrf=8MhIQ1H-izdSvameUPOAE08T; c_ui-navigation=6.6.92",
         },
+        maxRedirects: 3, // This tells Axios not to follow redirects
       })
       break
     } catch {
       counter++
     }
   }
+  console.log("response url", response.config.url)
   return response
 }
 
@@ -121,7 +171,7 @@ const webScrapeMlUrlBuilder = (options) => {
         return currentPage
       case ScrapeType.CategoryMetadata:
         isPagerWorking = false
-        currentPage = `${categoryUrl}`
+        currentPage = `${ensureTrailingSlash(categoryUrl)}`
         return currentPage
       case ScrapeType.CategoryChildren:
         isPagerWorking = false

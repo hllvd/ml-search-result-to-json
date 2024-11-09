@@ -1,48 +1,44 @@
 import { AxiosResponse } from "axios"
 import { JSDOM } from "jsdom"
-import {
-  CategoryWebCrawlerPredicateResult,
-  CategoryTreeWebCrawler,
-} from "../../../../../models/predicate/category-tree.models"
+import { CategorySearchTypes } from "../../../../../enums/cateogry-search-types.num"
+import { ScrapeCategoryMetadata } from "../../../../../models/predicate/category-metadata.models"
 
 const categoryMetadataPredicate = async (
   response: AxiosResponse
 ): Promise<{
-  response: CategoryWebCrawlerPredicateResult
+  response: ScrapeCategoryMetadata
 }> => {
   const dom = new JSDOM(await response.data)
   const document = dom.window.document
 
-  const parentCategory = document.querySelectorAll(
-    ".CategoryList .desktop__view-wrapper .desktop__view-child"
+  const searchTermsLinksElements = Array.from(
+    document.querySelectorAll(".seo-ui-trends-carousel-wrapper a")
   )
-  console.log("parentCategory", parentCategory)
-  const categoryTree: Array<CategoryTreeWebCrawler> = Array.from(
-    parentCategory
-  ).map((parentEl: HTMLElement) => {
-    const parentLink = parentEl.querySelector("a")
-    const url = parentLink.href
-    const name = parentEl.querySelector(
-      "a .category-list__permalink-custom"
-    )?.innerHTML
-    const childrenEl = parentEl.querySelector(".desktop__view-ul")
-    const childrenList = _getChildrenEl(childrenEl)
-    return { url, name, childrenList }
+  const searchTerms = searchTermsLinksElements.map((e: HTMLAnchorElement) => {
+    const href = e.href
+    const text = e.textContent
+    const url = new URL(href)
+    const fragment = url.hash.split("#")[1]
+    const query = new URLSearchParams(fragment)
+    const type: CategorySearchTypes = query.get(
+      "component_id"
+    ) as CategorySearchTypes
+    return { type, text, href }
   })
 
-  return { response: { categoryTree } }
+  const categoriesLeftEls = Array.from(
+    document.querySelectorAll(".ui-search-filter-dl a")
+  )
+  const categoriesMenu = categoriesLeftEls.map((e: HTMLAnchorElement) => {
+    const href = e.href
+    const text = e.textContent
+    return {
+      href,
+      text,
+    }
+  })
+
+  return { response: { searchTerms, categoriesMenu } }
 }
 
-const _getChildrenEl = (el) => {
-  return Array.from(el.querySelectorAll(".category-list__item")).map(
-    (childEl: HTMLElement) => {
-      const linkEl = childEl.querySelector(
-        ".splinter-link"
-      ) as HTMLAnchorElement
-      const url = linkEl?.href
-      const name = linkEl.querySelector("h4")?.textContent
-      return { url, name }
-    }
-  )
-}
 export { categoryMetadataPredicate }

@@ -18,3 +18,10 @@ export const searchUrlGenerator = ({
     .join("-")
   return `${baseUrl}/${searchTermParsed}`
 }
+
+export function ensureTrailingSlash(url: string): string {
+  if (!url.endsWith("/")) {
+    return url + "/"
+  }
+  return url
+}

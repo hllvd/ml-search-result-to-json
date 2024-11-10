@@ -3,7 +3,6 @@ import { RequestExtended } from "../models/extends/params/request-custom.model"
 import {
   getCategories,
   getCategoriesMetaData,
-  getPersistentCategoryInfo,
 } from "../services/ml/categories.service"
 
 const item = async (

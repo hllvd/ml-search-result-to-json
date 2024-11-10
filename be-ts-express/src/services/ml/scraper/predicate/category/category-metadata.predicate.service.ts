@@ -16,14 +16,14 @@ const categoryMetadataPredicate = async (
   )
   const searchTerms = searchTermsLinksElements.map((e: HTMLAnchorElement) => {
     const href = e.href
-    const text = e.textContent
+    const name = e.textContent
     const url = new URL(href)
     const fragment = url.hash.split("#")[1]
     const query = new URLSearchParams(fragment)
     const type: CategorySearchTypes = query.get(
       "component_id"
     ) as CategorySearchTypes
-    return { type, text, href }
+    return { type, name, url: href }
   })
   const currentCategoryName = document.querySelector(
     "h2.ui-search-breadcrumb__title"
@@ -33,11 +33,11 @@ const categoryMetadataPredicate = async (
     document.querySelectorAll(".ui-search-filter-dl a")
   )
   const categoryChildren = categoriesLeftEls.map((e: HTMLAnchorElement) => {
-    const href = e.href
-    const text = e.textContent
+    const url = e.href
+    const name = e.textContent
     return {
-      href,
-      text,
+      url,
+      name,
     }
   })
 

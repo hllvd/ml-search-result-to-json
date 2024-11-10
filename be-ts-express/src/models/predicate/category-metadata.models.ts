@@ -1,12 +1,13 @@
 import { CategorySearchTypes } from "../../enums/cateogry-search-types.num"
+import { CategoryData } from "./category-tree.models"
 
 export interface CategorySearchTerms {
   type: CategorySearchTypes
-  text: string
-  href: string
+  name: string
+  url: string
 }
 export interface ScrapeCategoryMetadata {
   searchTerms?: Array<CategorySearchTerms>
   currentCategoryName?: string
-  categoryChildren?: Array<{ href: string; text: string }>
+  categoryChildren?: Array<CategoryData>
 }

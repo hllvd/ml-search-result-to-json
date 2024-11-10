@@ -9,6 +9,7 @@ import { webScrapeMlPage } from "../../web.scraper.service"
 import {
   categoryChildrenPredicate,
   categoryRootPredicate,
+  CategoryRootPredicateResponse,
 } from "../category/category-children.predicate.service"
 import { categoryItemsPredicate } from "../category/category-items.predicate.service"
 import { categoryMetadataPredicate } from "../category/category-metadata.predicate.service"
@@ -66,7 +67,9 @@ const scrapCategoryChildren = async (
   return scrapedContent
 }
 
-const scrapCategoryRootTree = async (): Promise<Array<CategoryData>> => {
+const scrapCategoryRootTree = async (): Promise<
+  Array<CategoryRootPredicateResponse>
+> => {
   const scrapedContent = await webScrapeMlPage(categoryRootPredicate, {
     scrapeType: ScrapeType.CategoryRoot,
   })

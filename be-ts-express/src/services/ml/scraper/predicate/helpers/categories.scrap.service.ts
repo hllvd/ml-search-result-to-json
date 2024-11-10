@@ -1,6 +1,5 @@
 import { ScrapeType } from "../../../../../enums/scrap-type.enum"
 import { ScrapeCategoryMetadata } from "../../../../../models/predicate/category-metadata.models"
-
 import {
   CategoryData,
   ScrapCategoryMetadata,

@@ -28,7 +28,12 @@ const scrapCategoryRelatedSearches = async (
   return { categoryUrl, ...scrapedContent }
 }
 
-const scrapeCategorySearchTerms = async (
+/**
+ * Returns search results and childItems
+ * @param categoryUrl
+ * @returns
+ */
+const scrapeCategoryMetadata = async (
   categoryUrl: string
 ): Promise<ScrapeCategoryMetadata> => {
   const categoryUrlWithSlashes = ensureTrailingSlash(categoryUrl)
@@ -73,5 +78,5 @@ export {
   scrapCategoryChildren,
   scrapCategoryRootTree,
   scrapCategoryItems,
-  scrapeCategorySearchTerms,
+  scrapeCategoryMetadata,
 }

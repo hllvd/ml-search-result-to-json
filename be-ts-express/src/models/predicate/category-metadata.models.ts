@@ -6,6 +6,7 @@ export interface CategorySearchTerms {
   href: string
 }
 export interface ScrapeCategoryMetadata {
-  searchTerms: Array<CategorySearchTerms>
-  categoriesMenu: Array<{ href: string; text: string }>
+  searchTerms?: Array<CategorySearchTerms>
+  currentCategoryName?: string
+  categoryChildren?: Array<{ href: string; text: string }>
 }

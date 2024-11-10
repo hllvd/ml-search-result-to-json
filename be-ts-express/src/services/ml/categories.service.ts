@@ -9,7 +9,7 @@ import {
 } from "./api/categories.api.service"
 import {
   scrapCategoryItems,
-  scrapeCategorySearchTerms,
+  scrapeCategoryMetadata,
 } from "./scraper/predicate/helpers/categories.scrap.service"
 
 export const getCategories = async ({
@@ -62,7 +62,7 @@ export const getCategoriesMetaData = async ({
   //   "https://lista.mercadolivre.com.br/ferramentas/ferramentas-eletricas/"
   const categoryUrl =
     "https://lista.mercadolivre.com.br/construcao/materiais-obra/"
-  const cateChild = await scrapeCategorySearchTerms(categoryUrl)
+  const cateChild = await scrapeCategoryMetadata(categoryUrl)
 
   return cateChild
 

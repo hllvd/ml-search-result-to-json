@@ -25,11 +25,14 @@ const categoryMetadataPredicate = async (
     ) as CategorySearchTypes
     return { type, text, href }
   })
+  const currentCategoryName = document.querySelector(
+    "h2.ui-search-breadcrumb__title"
+  )?.textContent
 
   const categoriesLeftEls = Array.from(
     document.querySelectorAll(".ui-search-filter-dl a")
   )
-  const categoriesMenu = categoriesLeftEls.map((e: HTMLAnchorElement) => {
+  const categoryChildren = categoriesLeftEls.map((e: HTMLAnchorElement) => {
     const href = e.href
     const text = e.textContent
     return {
@@ -38,7 +41,7 @@ const categoryMetadataPredicate = async (
     }
   })
 
-  return { response: { searchTerms, categoriesMenu } }
+  return { response: { searchTerms, categoryChildren, currentCategoryName } }
 }
 
 export { categoryMetadataPredicate }

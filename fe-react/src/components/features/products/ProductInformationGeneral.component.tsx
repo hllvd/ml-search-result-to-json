@@ -13,7 +13,7 @@ const ProductInformationGeneral = ({ productData }: Props) => {
         title="Qualidade anúncio"
         description={productData?.health}
       />
-      <MetaDescription title="Ean" description={productData?.ean} />
+      <MetaDescription title="Ean" description={productData?.ean?.split(",")} />
       <MetaDescription
         title="Data de criação"
         description={dateIsoFormatter(productData?.date_created ?? "")}

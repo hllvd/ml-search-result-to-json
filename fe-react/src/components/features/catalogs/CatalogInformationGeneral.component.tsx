@@ -1,6 +1,7 @@
 import Meta from "antd/es/card/Meta"
 import { CatalogInformationResponse } from "../../../models/dto/CatalogApiResponse.model"
 import { daysFromNow } from "../../../utils/DateFormatter.util"
+import MetaDescription from "../../common/MetaDescription.component"
 import MetaDescriptionBool from "../../common/MetaDescriptionBool.component"
 type Props = { catalogData?: CatalogInformationResponse; productId: string }
 export default function CatalogInformationGeneral({
@@ -9,7 +10,7 @@ export default function CatalogInformationGeneral({
 }: Props) {
   return (
     <>
-      <Meta title="EAN" description={catalogData?.ean} />
+      <MetaDescription title="EAN" description={catalogData?.ean?.split(",")} />
       <Meta
         title="Criação do catálogo"
         description={

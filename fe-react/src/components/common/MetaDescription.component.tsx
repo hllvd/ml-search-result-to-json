@@ -1,10 +1,11 @@
 import { CheckOutlined } from "@ant-design/icons"
 import Meta from "antd/es/card/Meta"
 import Skeleton from "antd/es/skeleton"
+import { isArray } from "util"
 
 type DescriptionComponentParam = {
   title: string | null
-  description?: string | number | null
+  description?: string | Array<string> | number | null
   link?: string
 }
 const MetaDescription = ({
@@ -19,6 +20,8 @@ const MetaDescription = ({
           <a href={link} target="_blank">
             <Meta title={title} description={description} />
           </a>
+        ) : Array.isArray(description) ? (
+          <Meta title={title} description={description.join("\n")} />
         ) : (
           <Meta title={title} description={description} />
         )}

@@ -1,0 +1,16 @@
+export enum SearchSummaryFieldsType {
+  Views = "views",
+  Revenue = "revenue",
+  AvgPrice = "avgPrice",
+  DensityFull = "densityFull",
+  DensityLider = "densityLider",
+  DensityOfficialStore = "densityOfficialStore",
+  DensityGold = "densityGold",
+  DensityPlatinum = "densityPlatinum",
+  DensityCatalog = "densityCatalog",
+  DensityGoodQualityThumbnail = "densityGoodQualityThumbnail",
+  DensityVideo = "densityVideo",
+  DensityGoodQualityPicture = "densityGoodQualityPicture",
+  DensityFreeShipment = "densityFreeShipment",
+  WorstStar = "worstStar",
+}

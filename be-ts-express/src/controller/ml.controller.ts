@@ -10,7 +10,8 @@ import {
   StateFieldType,
   StateFieldSubType,
 } from "../enums/state-field-type.enum"
-import { stateFieldsRepository } from "../repository/state-fields.repository"
+import searchPersistence from "../services/persistence/search.persistence"
+import { Search } from "../entities/sql/search.entity"
 
 const me = async (req: Request, res: Response) => {
   const userId = req.query?.userId?.toString() ?? "1334843159"
@@ -21,10 +22,20 @@ const me = async (req: Request, res: Response) => {
 
 const test = async (req: Request, res: Response) => {
   const userId = req.query?.userId?.toString() ?? "1334843159"
+  const searchTerm = req.query?.searchTerm?.toString() ?? ""
   const options = {
     userId,
     method: "GET",
   }
+  const search = new Search()
+  search.categoryId = "12312"
+  search.searchTerm = searchTerm
+  search.url = "https://test2"
+
+  await searchPersistence.upsert(search)
+
+  const r = await searchPersistence.get(searchTerm)
+  res.status(200).json({ test: "hello world", r })
   // const r = await fetchMl(
   //   "/sites/MLB/search?category_id=item_id:MLB3584941189",
   //   options
@@ -71,7 +82,6 @@ const test = async (req: Request, res: Response) => {
   }
    */
   //const r = await fetchMl("/items?ids=MLB19564320", options)
-  res.status(200).json({})
 }
 
 const logSearchResult = async (req: Request, res: Response) => {

@@ -8,13 +8,12 @@ const get = async (searchTerm: string): Promise<Search> => {
   return existingSearchItem
 }
 
-const upsert = async (search: Search): Promise<boolean> => {
+const upsert = async (search: Search): Promise<Search | null> => {
   try {
-    await dataSource.manager.getRepository(Search).save(search)
-    return true
+    return await dataSource.manager.getRepository(Search).save(search)
   } catch (e) {
-    console.log("Search Summary already exist")
-    return false
+    console.log("Search  already exist")
+    return null
   }
 }
 

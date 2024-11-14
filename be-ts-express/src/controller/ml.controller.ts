@@ -11,7 +11,9 @@ import {
   StateFieldSubType,
 } from "../enums/state-field-type.enum"
 import searchPersistence from "../services/persistence/search.persistence"
+import searchSummaryFieldsPersistence from "../services/persistence/search-summary-fields.persistence"
 import { Search } from "../entities/sql/search.entity"
+import { SearchSummaryFieldsType } from "../enums/search-summary-fields-types.enum"
 
 const me = async (req: Request, res: Response) => {
   const userId = req.query?.userId?.toString() ?? "1334843159"
@@ -28,14 +30,22 @@ const test = async (req: Request, res: Response) => {
     method: "GET",
   }
   const search = new Search()
-  search.categoryId = "12312"
+  search.categoryId = "Este é o teste4512"
   search.searchTerm = searchTerm
   search.url = "https://test2"
+  const r = await searchPersistence.upsert(search)
+  //const r = await searchPersistence.get(searchTerm)
 
-  await searchPersistence.upsert(search)
+  const r2 = await searchSummaryFieldsPersistence.upsert({
+    searchType: SearchSummaryFieldsType.AvgPrice,
+    valueNum: 11,
+    valueStr: "jjjj",
+    search: r,
+    id: 3,
+  })
 
-  const r = await searchPersistence.get(searchTerm)
-  res.status(200).json({ test: "hello world", r })
+  //const r2 = await searchSummaryFieldsPersistence.get()
+  res.status(200).json({ test: "hello world", r2 })
   // const r = await fetchMl(
   //   "/sites/MLB/search?category_id=item_id:MLB3584941189",
   //   options

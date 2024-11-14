@@ -1,17 +1,12 @@
 import {
   Column,
   Entity,
-  Index,
   JoinColumn,
   ManyToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm"
-import {
-  StateFieldSubType,
-  StateFieldType,
-} from "../../enums/state-field-type.enum"
-import { ProductsCatalogs } from "./products-catalogs.entity"
+import { SearchSummaryFieldsType } from "../../enums/search-summary-fields-types.enum"
 import { Search } from "./search.entity"
 
 /**
@@ -28,7 +23,7 @@ import { Search } from "./search.entity"
 })
 export class SearchSummaryFields {
   @PrimaryGeneratedColumn()
-  id: number
+  id?: number
 
   @PrimaryColumn({ type: "varchar" })
   searchType: SearchSummaryFieldsType
@@ -39,12 +34,6 @@ export class SearchSummaryFields {
   @Column({ type: "varchar", nullable: true })
   valueStr: string
 
-  @PrimaryColumn()
-  @ManyToOne(() => Search, (s) => s.id, {
-    cascade: true,
-  })
-  @JoinColumn()
-  searchId: number
+  @ManyToOne(() => Search, (search) => search.id)
+  search: Search
 }
-
-enum SearchSummaryFieldsType {}

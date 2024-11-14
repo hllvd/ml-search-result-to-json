@@ -17,7 +17,7 @@ import {
 @Unique(["searchTerm"])
 export class Search {
   @PrimaryGeneratedColumn()
-  id: number
+  id?: number
 
   @PrimaryColumn({ type: "varchar", unique: true })
   searchTerm: string

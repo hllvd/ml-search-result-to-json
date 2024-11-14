@@ -1,4 +1,4 @@
-export enum SearchSummaryFieldsType {
+export const enum SearchSummaryFieldsType {
   Views = "views",
   Revenue = "revenue",
   AvgPrice = "avgPrice",

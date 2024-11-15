@@ -36,7 +36,10 @@ export default function ProductInformationContent({
           <ProductInformationPrices productData={productData} />
           <section className="tax-box-simulator">
             {productData?.price != null && (
-              <TaxCalculator price={productData?.price} />
+              <TaxCalculator
+                commissions={productData?.commissions}
+                price={productData?.price}
+              />
             )}
           </section>
         </Col>

@@ -48,7 +48,10 @@ export default function CatalogInformationContent({
           <CatalogInformationBilling catalogData={catalogData} />
           <section className="tax-box-simulator">
             {catalogData?.price?.best != null && (
-              <TaxCalculator price={catalogData?.price?.best} />
+              <TaxCalculator
+                price={catalogData?.price?.best}
+                commissions={catalogData?.commissions}
+              />
             )}
           </section>
         </Col>

@@ -1,4 +1,9 @@
-import { MLProduct, ProductId } from "../../models/dto/ml-product.models"
+import { ScrapeType } from "../../enums/scrap-type.enum"
+import {
+  MLProduct,
+  MLProductCommission,
+  ProductId,
+} from "../../models/dto/ml-product.models"
 import { FetchProductArgument } from "../../models/params/fetch-product.model"
 import { calculateDaysFrom } from "../../utils/day-calculation.util"
 import { roundNumber } from "../../utils/math.util"
@@ -9,6 +14,8 @@ import {
 import { fetchProduct, fetchProducts } from "./api/products.api.service"
 import { fetchSeller } from "./api/users"
 import { productIdsReducer } from "./reducers/product-urls.reducer.service"
+import { webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate } from "./scraper/predicate/product/product-metadata.predicate.service"
+import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
 const getProducts = async (
   userId: string,
@@ -67,6 +74,8 @@ const _getProductStatistics = ({
   const daily_revenue = roundNumber(revenue / days)
   const has_promotion =
     currentPrice < product.price || product.price < product.original_price
+
+  const commissions = calculateCommissions(currentPrice)
   return {
     ...product,
     ean,
@@ -75,7 +84,32 @@ const _getProductStatistics = ({
     quantity_sold: quantitySold,
     current_price: currentPrice,
     daily_revenue,
+    commissions,
   }
+}
+
+const calculateCommissions = (currentPrice: number): MLProductCommission => {
+  const fixedCommissionPrice = 0.12
+  const fixedShipmentPrice = 22
+  const maxPriceWithoutShipmentCommission = 79
+
+  const shipmentCommission =
+    currentPrice > maxPriceWithoutShipmentCommission ? fixedShipmentPrice : 0
+  const percentageCommission = fixedCommissionPrice * currentPrice
+  const totalCommission = shipmentCommission + percentageCommission
+  const grossProfit = currentPrice - totalCommission
+
+  const commissions = {
+    fixedCommissionPrice,
+    fixedShipmentPrice,
+    shipmentCommission,
+    currentPrice,
+    percentageCommission,
+    totalCommission,
+    grossProfit,
+  }
+
+  return commissions
 }
 
 const getProductInCorrectOrder = (
@@ -88,7 +122,23 @@ const getProductInCorrectOrder = (
   })
 }
 
-export { getProducts, getProductInCorrectOrder }
-function _webScrapeProductPriceAndQuantitySold(productIdWIthDash: string): any {
-  throw new Error("Function not implemented.")
+const _webScrapeProductPriceAndQuantitySold = async (
+  productId: string
+): Promise<any> => {
+  const productPrice: Array<{ productIdStr: string; price: number }> =
+    await webScrapeMlPage(
+      webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate,
+      {
+        productId,
+        scrapeType: ScrapeType.ProductPage,
+      }
+    )
+  return productPrice
+}
+
+export {
+  getProducts,
+  getProductInCorrectOrder,
+  calculateCommissions,
+  getProductComplete,
 }

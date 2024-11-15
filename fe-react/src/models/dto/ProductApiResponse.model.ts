@@ -48,6 +48,16 @@ export interface ProductResponse {
   last_updated: string
   health: number
   catalog_listing: boolean
+  commissions: MLProductCommission
+}
+
+export interface MLProductCommission {
+  fixedCommissionPrice: number
+  fixedShipmentPrice: number
+  shipmentCommission: number
+  percentageCommission: number
+  totalCommission: number
+  grossProfit: number
 }
 
 export interface MLUser {

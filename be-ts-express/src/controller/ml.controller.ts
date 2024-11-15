@@ -39,9 +39,8 @@ const test = async (req: Request, res: Response) => {
   const r2 = await searchSummaryFieldsPersistence.upsert({
     searchType: SearchSummaryFieldsType.AvgPrice,
     valueNum: 11,
-    valueStr: "jjjj",
+    valueStr: "jjj222j22",
     search: r,
-    id: 3,
   })
 
   //const r2 = await searchSummaryFieldsPersistence.get()

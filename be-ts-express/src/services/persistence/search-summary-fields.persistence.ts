@@ -17,9 +17,12 @@ const upsert = async (
   search: SearchSummaryFields
 ): Promise<SearchSummaryFields | null> => {
   try {
+    const { searchType } = search
+    const existingSearchItem = await get(search.search, searchType)
+    const { id } = existingSearchItem || {}
     return await dataSource.manager
       .getRepository(SearchSummaryFields)
-      .save(search)
+      .save({ ...search, id })
   } catch (e) {
     console.log("Search Summary already exist")
     return null

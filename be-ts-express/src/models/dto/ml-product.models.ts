@@ -42,11 +42,12 @@ export interface MLProduct extends MLProductResponse {
   has_promotion?: boolean
   commissions?: MLProductCommission
 }
-interface MLProductCommission {
+export interface MLProductCommission {
   fixedCommissionPrice: number
   fixedShipmentPrice: number
   shipmentCommission: number
   percentageCommission: number
   totalCommission: number
+  currentPrice: number
   grossProfit: number
 }

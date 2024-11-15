@@ -1,5 +1,9 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
-import { MLProduct, ProductId } from "../../models/dto/ml-product.models"
+import {
+  MLProduct,
+  MLProductCommission,
+  ProductId,
+} from "../../models/dto/ml-product.models"
 import { FetchProductArgument } from "../../models/params/fetch-product.model"
 import { calculateDaysFrom } from "../../utils/day-claculation.util"
 import { roundNumber } from "../../utils/math.util"
@@ -63,32 +67,15 @@ const _getProductStatistics = ({
   currentPrice: number
   quantitySold: number
 }): MLProduct => {
-  const fixedCommissionPrice = 0.12
-  const fixedShipmentPrice = 22
-  const maxPriceWithoutShipmentCommission = 79
-
   const revenue = currentPrice * quantitySold
   const days = calculateDaysFrom(product.date_created)
   const ean = getEanIfExist(product.attributes)
 
-  const shipmentCommission =
-    currentPrice > maxPriceWithoutShipmentCommission ? fixedShipmentPrice : 0
-  const percentageCommission = fixedCommissionPrice * currentPrice
-  const totalCommission = shipmentCommission + shipmentCommission
-  const grossProfit = currentPrice - totalCommission
-
-  const commissions = {
-    fixedCommissionPrice,
-    fixedShipmentPrice,
-    shipmentCommission,
-    percentageCommission,
-    totalCommission,
-    grossProfit,
-  }
-
   const daily_revenue = roundNumber(revenue / days)
   const has_promotion =
     currentPrice < product.price || product.price < product.original_price
+
+  const commissions = calculateCommissions(currentPrice)
   return {
     ...product,
     ean,
@@ -99,6 +86,30 @@ const _getProductStatistics = ({
     daily_revenue,
     commissions,
   }
+}
+
+const calculateCommissions = (currentPrice: number): MLProductCommission => {
+  const fixedCommissionPrice = 0.12
+  const fixedShipmentPrice = 22
+  const maxPriceWithoutShipmentCommission = 79
+
+  const shipmentCommission =
+    currentPrice > maxPriceWithoutShipmentCommission ? fixedShipmentPrice : 0
+  const percentageCommission = fixedCommissionPrice * currentPrice
+  const totalCommission = shipmentCommission + percentageCommission
+  const grossProfit = currentPrice - totalCommission
+
+  const commissions = {
+    fixedCommissionPrice,
+    fixedShipmentPrice,
+    shipmentCommission,
+    currentPrice,
+    percentageCommission,
+    totalCommission,
+    grossProfit,
+  }
+
+  return commissions
 }
 
 const getProductInCorrectOrder = (
@@ -122,4 +133,9 @@ const _webScrapeProductPriceAndQuantitySold = async (
   return productPrice
 }
 
-export { getProducts, getProductInCorrectOrder, getProductComplete }
+export {
+  getProducts,
+  getProductInCorrectOrder,
+  calculateCommissions,
+  getProductComplete,
+}

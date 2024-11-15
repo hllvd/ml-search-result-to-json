@@ -4,7 +4,11 @@ import { roundNumber } from "../../utils/math.util"
 import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 
 import { fetchSeller } from "./api/users"
-import { getProductInCorrectOrder, getProducts } from "./products.service"
+import {
+  calculateCommissions,
+  getProductInCorrectOrder,
+  getProducts,
+} from "./products.service"
 import { catalogReducer } from "./reducers/catalog.reducer.service"
 import { webScrapeCatalogToMetadataPredicate } from "./scraper/predicate/catalog/catalog-metadata.predicate.service"
 import { webScrapeCatalogProductLengthPredicate } from "./scraper/predicate/catalog/catalog-product-lengths.predicate.service"
@@ -91,11 +95,13 @@ const _summarizeCatalog = (options: {
   const timeDiff = today.getTime() - dateCreated.getTime()
   const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24))
   const dailyRevenue = roundNumber(revenue / daysDiff)
+  const commissions = calculateCommissions(options?.catalog?.price?.best)
 
   const catalogWithSummary = {
     ...options.catalog,
     revenue,
     dailyRevenue,
+    commissions,
   }
   return catalogWithSummary
 }

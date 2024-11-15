@@ -40,4 +40,13 @@ export interface MLProduct extends MLProductResponse {
   quantity_sold?: number
   daily_revenue?: number
   has_promotion?: boolean
+  commissions?: MLProductCommission
+}
+interface MLProductCommission {
+  fixedCommissionPrice: number
+  fixedShipmentPrice: number
+  shipmentCommission: number
+  percentageCommission: number
+  totalCommission: number
+  grossProfit: number
 }

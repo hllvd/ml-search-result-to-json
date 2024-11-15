@@ -63,9 +63,28 @@ const _getProductStatistics = ({
   currentPrice: number
   quantitySold: number
 }): MLProduct => {
+  const fixedCommissionPrice = 0.12
+  const fixedShipmentPrice = 22
+  const maxPriceWithoutShipmentCommission = 79
+
   const revenue = currentPrice * quantitySold
   const days = calculateDaysFrom(product.date_created)
   const ean = getEanIfExist(product.attributes)
+
+  const shipmentCommission =
+    currentPrice > maxPriceWithoutShipmentCommission ? fixedShipmentPrice : 0
+  const percentageCommission = fixedCommissionPrice * currentPrice
+  const totalCommission = shipmentCommission + shipmentCommission
+  const grossProfit = currentPrice - totalCommission
+
+  const commissions = {
+    fixedCommissionPrice,
+    fixedShipmentPrice,
+    shipmentCommission,
+    percentageCommission,
+    totalCommission,
+    grossProfit,
+  }
 
   const daily_revenue = roundNumber(revenue / days)
   const has_promotion =
@@ -78,6 +97,7 @@ const _getProductStatistics = ({
     quantity_sold: quantitySold,
     current_price: currentPrice,
     daily_revenue,
+    commissions,
   }
 }
 

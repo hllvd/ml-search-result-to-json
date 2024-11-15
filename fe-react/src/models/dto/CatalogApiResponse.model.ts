@@ -1,3 +1,5 @@
+import { MLProductCommission } from "./ProductApiResponse.model"
+
 export interface CatalogInformationResponse {
   catalogId: string
   title: string
@@ -15,6 +17,7 @@ export interface CatalogInformationResponse {
   state: State
   revenue: number
   dailyRevenue: number
+  commissions: MLProductCommission
 }
 
 interface State {

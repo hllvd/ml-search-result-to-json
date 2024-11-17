@@ -36,15 +36,15 @@ const test = async (req: Request, res: Response) => {
   const r = await searchPersistence.upsert(search)
   //const r = await searchPersistence.get(searchTerm)
 
-  const r2 = await searchSummaryFieldsPersistence.upsert({
-    searchType: SearchSummaryFieldsType.AvgPrice,
-    valueNum: 11,
-    valueStr: "jjj222j22",
-    search: r,
-  })
+  // const r2 = await searchSummaryFieldsPersistence.upsert({
+  //   searchType: SearchSummaryFieldsType.AvgPrice,
+  //   valueNum: 11,
+  //   valueStr: "jjj222j22",
+  //   search: r,
+  // })
 
   //const r2 = await searchSummaryFieldsPersistence.get()
-  res.status(200).json({ test: "hello world", r2 })
+  res.status(200).json({ test: "hello world" })
   // const r = await fetchMl(
   //   "/sites/MLB/search?category_id=item_id:MLB3584941189",
   //   options

@@ -7,4 +7,5 @@ export enum ScrapeType {
   CategoryMetadata = "categoryMetadata",
   CategoryChildren = "categoryChildren",
   CategoryRoot = "categoryRoot",
+  SearchMetadata = "searchMetadata",
 }

@@ -7,10 +7,11 @@ import { JSDOM } from "jsdom"
 import { convertCurrencyStrings } from "../../../../../utils/ml.utils"
 import { minimalPathUrl } from "../../../../../utils/url.util"
 
-const webScrapeSearchResultToIdAndPricePredicate = async (
+const webScrapeSearchResultMetadata = async (
   response: AxiosResponse,
   currentPage?: number
 ): Promise<PredicateResponse<ProductIdStrAndPriceResponse>> => {
+  console.log("INIIIIITTT")
   const regex = /MLB-?\d+/
   const dom = new JSDOM(await response.data)
   const document = dom.window.document
@@ -20,7 +21,7 @@ const webScrapeSearchResultToIdAndPricePredicate = async (
 
   const linkPriceAndId = Array.from(gridResultItems).map(
     (el: HTMLSelectElement, i: number) => {
-      const currentEl = el.querySelector("h2.ui-search-item__title a")
+      const currentEl = el.querySelector("h2 a")
       if (currentEl == null) return null
 
       const link = minimalPathUrl(currentEl.getAttribute("href"))
@@ -46,9 +47,10 @@ const webScrapeSearchResultToIdAndPricePredicate = async (
   let i = 1
   const linkPriceAndIdFilteredWithIdAndIndex = linkPriceAndIdFiltered.map(
     (e) => {
-      const index = i++
+      const index = i++ + 50 * (currentPage - 1)
+      console.log(index)
       const id = e.link.match(regex)[0]?.replace("-", "")
-      return { ...e, id, index: index }
+      return { ...e, id, index }
     }
   )
 
@@ -58,7 +60,12 @@ const webScrapeSearchResultToIdAndPricePredicate = async (
 
   if (linkPriceAndId.length === 0) throw new Error("Page not found")
 
+  console.log(
+    "linkPriceAndIdFilteredWithIdAndIndex",
+    linkPriceAndIdFilteredWithIdAndIndex.length,
+    currentPage
+  )
   return { nextPage, response: linkPriceAndIdFilteredWithIdAndIndex as any }
 }
 
-export { webScrapeSearchResultToIdAndPricePredicate }
+export { webScrapeSearchResultMetadata }

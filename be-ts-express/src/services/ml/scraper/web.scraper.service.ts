@@ -3,7 +3,11 @@ import { ScrapeType } from "../../../enums/scrap-type.enum"
 import puppeteer from "puppeteer"
 import fs from "fs"
 import path from "path"
-import { ensureTrailingSlash } from "../../../utils/url.util"
+import {
+  ensureTrailingSlash,
+  minimalPathUrl,
+  searchUrlGenerator,
+} from "../../../utils/url.util"
 
 /**
  * read more https://scrapfly.io/blog/web-scraping-with-nodejs/
@@ -21,6 +25,7 @@ interface WebScraperMlPageOption {
   categoryUrl?: string
   maxPage?: number | null
   dynamicWeb?: boolean
+  searchTerm?: string
 }
 const webScrapeMlPage = async (
   predicateSelector: Function,
@@ -49,7 +54,6 @@ const fetchWithRetry = async ({
   let areTherePages = true
   let currentPage: number = 1
   while (areTherePages) {
-    console.log("dynamicWeb", dynamicWeb)
     try {
       const response = dynamicWeb
         ? await webScrapeFetcherDynamic(urlBuilder.getCurrentUrl(), retries)
@@ -150,7 +154,7 @@ const webScrapeMlUrlBuilder = (options) => {
   let currentPage
   let isPagerWorking = true
   let page = options.page ?? 1
-  const { catalogId, productId, searchUrl, categoryUrl } = options
+  const { catalogId, productId, categoryUrl, searchTerm } = options
 
   const getCurrentUrlScope = () => {
     switch (options.scrapeType) {
@@ -172,6 +176,14 @@ const webScrapeMlUrlBuilder = (options) => {
       case ScrapeType.CategoryMetadata:
         isPagerWorking = false
         currentPage = `${ensureTrailingSlash(categoryUrl)}`
+        return currentPage
+      case ScrapeType.SearchMetadata:
+        const baseUrl = `https://lista.mercadolivre.com.br`
+        const searchTermWithBaseUrl = searchUrlGenerator({
+          searchTerm,
+          baseUrl,
+        })
+        currentPage = minimalPathUrl(searchTermWithBaseUrl)
         return currentPage
       case ScrapeType.CategoryChildren:
         isPagerWorking = false

@@ -21,10 +21,13 @@ import { categoryMetadataPredicate } from "../category/category-metadata.predica
 const scrapCategoryRelatedSearches = async (
   categoryUrl: string
 ): Promise<ScrapCategoryMetadata> => {
-  const scrapedContent = await webScrapeMlPage(categoryMetadataPredicate, {
-    categoryUrl,
-    scrapeType: ScrapeType.CategoryMetadata,
-  })
+  const { result: scrapedContent } = await webScrapeMlPage(
+    categoryMetadataPredicate,
+    {
+      categoryUrl,
+      scrapeType: ScrapeType.CategoryMetadata,
+    }
+  )
 
   return { categoryUrl, ...scrapedContent }
 }
@@ -38,10 +41,13 @@ const scrapeCategoryMetadata = async (
   categoryUrl: string
 ): Promise<ScrapeCategoryMetadata> => {
   const categoryUrlWithSlashes = ensureTrailingSlash(categoryUrl)
-  const scrapedContent = await webScrapeMlPage(categoryMetadataPredicate, {
-    categoryUrl: categoryUrlWithSlashes,
-    scrapeType: ScrapeType.CategoryMetadata,
-  })
+  const { result: scrapedContent } = await webScrapeMlPage(
+    categoryMetadataPredicate,
+    {
+      categoryUrl: categoryUrlWithSlashes,
+      scrapeType: ScrapeType.CategoryMetadata,
+    }
+  )
   return { categoryUrl: categoryUrlWithSlashes, ...scrapedContent }
 }
 
@@ -49,30 +55,39 @@ const scrapeCategoryMetadata = async (
  * TODO
  */
 const scrapCategoryItems = async (categoryUrl: string): Promise<any> => {
-  const scrapedContent = await webScrapeMlPage(categoryItemsPredicate, {
-    categoryUrl,
-    dynamicWeb: true,
-    scrapeType: ScrapeType.CategoryProductList,
-  })
+  const { result: scrapedContent } = await webScrapeMlPage(
+    categoryItemsPredicate,
+    {
+      categoryUrl,
+      dynamicWeb: true,
+      scrapeType: ScrapeType.CategoryProductList,
+    }
+  )
   return { categoryUrl, ...scrapedContent }
 }
 
 const scrapCategoryChildren = async (
   categoryUrl: string
 ): Promise<Array<CategoryData>> => {
-  const scrapedContent = await webScrapeMlPage(categoryChildrenPredicate, {
-    categoryUrl,
-    scrapeType: ScrapeType.CategoryChildren,
-  })
+  const { result: scrapedContent } = await webScrapeMlPage(
+    categoryChildrenPredicate,
+    {
+      categoryUrl,
+      scrapeType: ScrapeType.CategoryChildren,
+    }
+  )
   return scrapedContent
 }
 
 const scrapCategoryRootTree = async (): Promise<
   Array<CategoryRootPredicateResponse>
 > => {
-  const scrapedContent = await webScrapeMlPage(categoryRootPredicate, {
-    scrapeType: ScrapeType.CategoryRoot,
-  })
+  const { result: scrapedContent } = await webScrapeMlPage(
+    categoryRootPredicate,
+    {
+      scrapeType: ScrapeType.CategoryRoot,
+    }
+  )
   return scrapedContent
 }
 

@@ -125,14 +125,13 @@ const getProductInCorrectOrder = (
 const _webScrapeProductPriceAndQuantitySold = async (
   productId: string
 ): Promise<any> => {
-  const productPrice: Array<{ productIdStr: string; price: number }> =
-    await webScrapeMlPage(
-      webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate,
-      {
-        productId,
-        scrapeType: ScrapeType.ProductPage,
-      }
-    )
+  const { result: productPrice } = await webScrapeMlPage(
+    webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate,
+    {
+      productId,
+      scrapeType: ScrapeType.ProductPage,
+    }
+  )
   return productPrice
 }
 

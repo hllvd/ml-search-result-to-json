@@ -62,7 +62,7 @@ const views = async (
 ) => {
   const catalogId = req.query?.catalogId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
-  const productList: Array<{ productIdStr: string }> = await webScrapeMlPage(
+  const { result: productList } = await webScrapeMlPage(
     webScrapeCatalogToProductIdAndPricePredicate,
     {
       catalogId,

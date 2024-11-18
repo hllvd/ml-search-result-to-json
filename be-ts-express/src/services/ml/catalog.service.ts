@@ -22,14 +22,16 @@ const catalogSummary = async ({
   userId,
 }): Promise<CatalogApiResponse> => {
   const maxPage = 5
-  const productList: Array<{ productIdStr: string; price: number }> =
-    await webScrapeMlPage(webScrapeCatalogToProductIdAndPricePredicate, {
+  const { result: productList } = await webScrapeMlPage(
+    webScrapeCatalogToProductIdAndPricePredicate,
+    {
       catalogId,
       scrapeType: ScrapeType.CatalogProductList,
       maxPage,
-    })
+    }
+  )
 
-  const productSales = await webScrapeMlPage(
+  const { result: productSales } = await webScrapeMlPage(
     webScrapeCatalogToMetadataPredicate,
     {
       catalogId,
@@ -37,14 +39,20 @@ const catalogSummary = async ({
     }
   )
 
-  const amountOfProducts =
-    productList.length === maxPage * 10
-      ? await webScrapeMlPage(webScrapeCatalogProductLengthPredicate, {
-          catalogId,
-          scrapeType: ScrapeType.CatalogMetadata,
-        })
-      : productList.length
+  const { result: productLength } = await webScrapeMlPage(
+    webScrapeCatalogProductLengthPredicate,
+    {
+      catalogId,
+      scrapeType: ScrapeType.CatalogMetadata,
+    }
+  )
 
+  const amountOfProducts =
+    productList.length === maxPage * 10 ? productLength : productList.length
+
+  console.log("productList", productList)
+  console.log("productSales", productSales)
+  console.log("productLength", productLength)
   console.log("amountOfProducts", amountOfProducts)
   const productListOnlyIds = productList.map((e) => e.productIdStr)
   const products = await getProducts(userId, productListOnlyIds)
@@ -70,6 +78,7 @@ const catalogSummary = async ({
     productsWithSellersPricesAndAmountInCorrectOrder
   )
 
+  console.log("productSales", productSales)
   const catalogReducerWithSummary = _summarizeCatalog({
     catalog: { ...catalogReducerValues, length: amountOfProducts },
     sales: productSales,

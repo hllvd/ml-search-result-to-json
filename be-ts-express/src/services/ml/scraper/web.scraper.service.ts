@@ -47,31 +47,38 @@ const fetchWithRetry = async ({
   options: WebScraperMlPageOption
   retries: number
   predicateSelector: Function
-}): Promise<Array<{ productIdStr: string; price: number }>> => {
+}): Promise<{
+  pages: Array<string>
+  result: Array<{ productIdStr: string; price: number }>
+}> => {
   const { maxPage, dynamicWeb } = options
   const urlBuilder = webScrapeMlUrlBuilder(options)
-  let resultArray: Array<any> = []
+  let result: Array<any> = []
+  const pages: Array<string> = []
   let areTherePages = true
-  let currentPage: number = 1
+  let currentPageIndex: number = 1
   while (areTherePages) {
     try {
+      const currentPageUrl = urlBuilder.getCurrentUrl()
+      pages.push(currentPageUrl)
       const response = dynamicWeb
-        ? await webScrapeFetcherDynamic(urlBuilder.getCurrentUrl(), retries)
-        : await webScrapeFetcher(urlBuilder.getCurrentUrl(), retries)
+        ? await webScrapeFetcherDynamic(currentPageUrl, retries)
+        : await webScrapeFetcher(currentPageUrl, retries)
 
       const { nextPage, response: currentPageResult } = await predicateSelector(
         response,
-        currentPage
+        currentPageIndex
       )
 
-      if (!Array.isArray(currentPageResult)) return currentPageResult
+      if (!Array.isArray(currentPageResult))
+        return { result: currentPageResult, pages }
 
       if (currentPageResult == null)
         throw new Error("Predicate response is null")
-      resultArray = [...resultArray, ...currentPageResult]
+      result = [...result, ...currentPageResult]
 
-      if (currentPage === maxPage) break
-      currentPage++
+      if (currentPageIndex === maxPage) break
+      currentPageIndex++
       if (!nextPage) break
       urlBuilder.nextPage(nextPage)
     } catch (e) {
@@ -79,7 +86,7 @@ const fetchWithRetry = async ({
       areTherePages = false
     }
   }
-  return resultArray ?? null
+  return { result, pages } ?? null
 }
 const webScrapeFetcherDynamic = async (url: string, retries: number) => {
   let counter = 0

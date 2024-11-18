@@ -12,7 +12,7 @@ export const searchItems = async ({
 }): Promise<{ searchTerm: string; url: string; items: Array<any> }> => {
   const maxPage = 5
 
-  const { result: productListFromCategory } = await webScrapeMlPage(
+  const { result: productListFromCategory, pages } = await webScrapeMlPage(
     webScrapeSearchResultMetadata,
     {
       searchTerm,
@@ -21,9 +21,11 @@ export const searchItems = async ({
     }
   )
 
+  const url = pages[0] ?? null
+
   return {
     searchTerm,
-    url: searchTerm,
+    url,
     items: productListFromCategory,
   }
 }

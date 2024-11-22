@@ -1,5 +1,4 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
-import { minimalPathUrl, searchUrlGenerator } from "../../utils/url.util"
 import { webScrapeSearchResultMetadata } from "./scraper/predicate/list/list.scaper.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
 

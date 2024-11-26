@@ -4,6 +4,7 @@ import dataSource from "../../db/data-source"
 import { BrandModel } from "../../entities/sql/brand-model.entity"
 import { CatalogFields } from "../../entities/sql/catalog-fields.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
+import { Seller } from "../../entities/sql/seller.entity"
 import { StateFields } from "../../entities/sql/state-fields.entity"
 import { ProductViews } from "../../entities/sql/views.entity"
 import { EntityType } from "../../enums/entity-type.enum"
@@ -20,17 +21,22 @@ const items = async (
   //res.status(200).json({ ...productListFromDb })
   let catalog = new ProductsCatalogs()
   catalog.type = EntityType.Catalog
-  catalog.id = "test3"
-  catalog.title = "title2"
+  catalog.id = "test4"
+  catalog.title = "title2frtert"
   const catalogFields = new CatalogFields()
   catalog.catalogFields = catalogFields
   catalogFields.priceBest = 222
 
-  const brand = new BrandModel()
-  brand.color = "RED"
-  brand.model = "model 7"
-  brand.brand = "brand 7"
-  catalog.brandModel = brand
+  const seller = new Seller()
+  seller.id = 6777
+  seller.nickname = "seller 1"
+
+  catalog.seller = await upsertSeller(seller)
+  // const brand = new BrandModel()
+  // brand.color = "RED"
+  // brand.model = "model 7"
+  // brand.brand = "brand 7"
+  // catalog.brandModel = brand
   await upsertProductCatalog(catalog, EntityType.Catalog)
   res.status(200).json({ ...catalog })
   //res.status(200).json({})
@@ -65,7 +71,7 @@ const upsertProductCatalog = async (
       catalog.id = catalogInfo.id
     }
 
-    if (catalog?.brandModel) {
+    if (catalogInfo?.brandModel) {
       const brandModel = await findOrInsertBrandModel(catalogInfo.brandModel)
       catalog.brandModel = brandModel
     }
@@ -94,13 +100,7 @@ export const findOrInsertBrandModel = async ({
   brand,
   model,
   color,
-}: {
-  brand?: string
-  model?: string
-  color?: string
-}): Promise<BrandModel> => {
-  const brandModel = dataSource.getRepository(BrandModel)
-  // First check if it exists
+}: BrandModel): Promise<BrandModel> => {
   const existingBrandModel = await dataSource.manager
     .getRepository(BrandModel)
     .findOne({ where: { brand, model, color } })
@@ -114,6 +114,10 @@ export const findOrInsertBrandModel = async ({
   newBrandModel.model = model
   newBrandModel.color = color
   return await dataSource.manager.getRepository(BrandModel).save(newBrandModel)
+}
+
+export const upsertSeller = async (seller: Seller): Promise<Seller> => {
+  return await dataSource.manager.getRepository(Seller).save(seller)
 }
 
 export default { items }

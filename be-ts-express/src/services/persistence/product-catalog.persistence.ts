@@ -53,22 +53,54 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
   const { brand, model, color } = catalogInfo?.brandModel
   catalog.brandModel = await brandModelFieldHandler({ brand, model, color })
 
+  const catalogFields = new CatalogFields()
+  // const catalogFieldConverted = await catalogInfoToCatalogFieldsEntityConverter(
+  //   {
+  //     catalogInfo,
+  //     catalogFields,
+  //   }
+  // )
+  catalogFields.length = 60
+  catalogFields.mlOwner = false
+  catalogFields.positionFull = 1
+  //catalog.catalogFields = catalogFields
+
   await dataSource.manager.save(catalog)
 
-  const catalogFields = new CatalogFields()
-  const catalogFieldConverted = await catalogInfoToCatalogFieldsEntityConverter(
-    {
-      catalogInfo,
-      catalogFields,
-    }
-  )
-
-  await dataSource.manager.upsert(
-    CatalogFields,
-    [catalogFieldConverted],
-    ["productsCatalogs"]
-  )
+  // await dataSource.manager.upsert(
+  //   ProductsCatalogs,
+  //   [catalog],
+  //   ["catalogFields"]
+  // )
 
   const catalogFieldsConverted = await catalogStateFieldsConverter(catalogInfo)
   await stateFieldsRepository(catalogFieldsConverted)
 }
+
+enum OrderBy {
+  Created = "created",
+  Views = "views",
+  ailyRevenue = "dailyRevenue",
+}
+interface ProductListQueries {
+  userId?: string
+  orderBy?: OrderBy
+  limit?: number
+}
+const listProduct = async (
+  productListQueries?: ProductListQueries
+): Promise<any> => {
+  const { userId, orderBy, limit } = productListQueries
+  // const productListDb = await dataSource.manager.getRepository(ProductsCatalogs)
+  const productListDb = await dataSource.manager
+    .getRepository(ProductsCatalogs)
+    .createQueryBuilder("products")
+    .leftJoinAndSelect("products.brandModel", "brandModel")
+    .leftJoinAndSelect("products.seller", "seller")
+    .leftJoinAndSelect("products.catalogField", "catalogFields")
+
+  const productList = await productListDb.getMany()
+  return [...productList]
+}
+
+export default { listProduct }

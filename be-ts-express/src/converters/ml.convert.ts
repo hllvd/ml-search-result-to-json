@@ -114,7 +114,7 @@ export const catalogInfoToCatalogFieldsEntityConverter = async ({
   catalogFields.priceSecond = secondBest
   catalogFields.priceTop5Avg = top5Avg
 
-  catalogFields.productsCatalogs = catalogInfo.catalogId
+  //catalogFields.productsCatalogs = catalogInfo.catalogId
   return catalogFields
 }
 

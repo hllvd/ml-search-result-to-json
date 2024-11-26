@@ -6,9 +6,11 @@ import {
   ManyToOne,
   OneToOne,
   OneToMany,
+  JoinColumn,
 } from "typeorm"
 import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
+import { CatalogFields } from "./catalog-fields.entity"
 import { Categories } from "./categories.entity"
 import { Seller } from "./seller.entity"
 import { StateFields } from "./state-fields.entity"
@@ -115,17 +117,29 @@ export class ProductsCatalogs {
   @ManyToOne(() => Seller, (seller) => seller.id)
   seller: Seller
 
-  @ManyToOne(() => BrandModel, (attribute) => attribute.id)
-  brandModel: BrandModel
-
-  @OneToOne(() => ProductsCatalogs, { nullable: true })
-  catalogFields
+  @ManyToOne(() => BrandModel, (brandModel) => brandModel, {
+    nullable: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  brandModel: BrandModel | null
 
   @OneToOne(() => ProductViews, { nullable: true })
   views: ProductViews
 
   @OneToMany(() => ProductsCatalogs, (pc) => pc.id, { nullable: true })
   stateFields: StateFields
+
+  @OneToOne(
+    () => CatalogFields,
+    (catalogFields) => catalogFields.productsCatalogs,
+    {
+      nullable: true,
+      cascade: true,
+    }
+  )
+  @JoinColumn()
+  catalogFields: CatalogFields | null
 }
 /**
 - catalog_old_post Anuncio mais antigo

@@ -10,7 +10,7 @@ import { ProductsCatalogs } from "./products-catalogs.entity"
 @Entity({
   engine: "InnoDB",
 })
-export class ProductViews {
+export class ProductViewsSummary {
   @PrimaryGeneratedColumn()
   id: string
 

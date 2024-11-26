@@ -11,10 +11,9 @@ import {
 import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
 import { CatalogFields } from "./catalog-fields.entity"
-import { Categories } from "./categories.entity"
 import { Seller } from "./seller.entity"
 import { StateFields } from "./state-fields.entity"
-import { ProductViews } from "./views.entity"
+import { ProductViewsSummary } from "./views.entity"
 
 @Index("IDX_CUSTOM_INDEX", ["id", "type"])
 @Entity({
@@ -124,8 +123,8 @@ export class ProductsCatalogs {
   @JoinColumn()
   brandModel: BrandModel | null
 
-  @OneToOne(() => ProductViews, { nullable: true })
-  views: ProductViews
+  @OneToOne(() => ProductViewsSummary, { nullable: true })
+  views: ProductViewsSummary
 
   @OneToMany(() => ProductsCatalogs, (pc) => pc.id, { nullable: true })
   stateFields: StateFields

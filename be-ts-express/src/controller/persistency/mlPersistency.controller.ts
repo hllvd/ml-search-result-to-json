@@ -6,7 +6,7 @@ import { CatalogFields } from "../../entities/sql/catalog-fields.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
 import { Seller } from "../../entities/sql/seller.entity"
 import { StateFields } from "../../entities/sql/state-fields.entity"
-import { ProductViews } from "../../entities/sql/views.entity"
+import { ProductViewsSummary } from "../../entities/sql/views.entity"
 import { EntityType } from "../../enums/entity-type.enum"
 import { RequestExtended } from "../../models/extends/params/request-custom.model"
 import persistencyService from "../../services/persistence/product-catalog.persistence"
@@ -27,11 +27,11 @@ const items = async (
   catalog.catalogFields = catalogFields
   catalogFields.priceBest = 222
 
-  const seller = new Seller()
-  seller.id = 6777
-  seller.nickname = "seller 1"
+  // const seller = new Seller()
+  // seller.id = 6777
+  // seller.nickname = "nickname 6777"
+  // catalog.seller = await upsertSeller(seller)
 
-  catalog.seller = await upsertSeller(seller)
   // const brand = new BrandModel()
   // brand.color = "RED"
   // brand.model = "model 7"
@@ -41,6 +41,8 @@ const items = async (
   res.status(200).json({ ...catalog })
   //res.status(200).json({})
 }
+
+const insertProductViews = () => {}
 
 const upsertProductCatalog = async (
   catalogInfo: any,
@@ -53,7 +55,7 @@ const upsertProductCatalog = async (
   }: {
     catalogFields?: CatalogFields
     brandModel?: BrandModel
-    views?: ProductViews
+    views?: ProductViewsSummary
     stateFields?: StateFields
   } = {}
 ) => {

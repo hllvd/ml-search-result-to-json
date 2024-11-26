@@ -20,8 +20,8 @@ const fetchViewsFromProduct = async ({
   if (typeof ending !== "string") throw new Error("ending must be a string")
   const url = `/items/${productId}/visits/time_window?last=${last.toString()}&unit=day&ending=${ending.toString()}`
   console.log(url)
-  const productViews = await fetchMl(url, options)
-  return productViews
+  const ProductViewsSummary = await fetchMl(url, options)
+  return ProductViewsSummary
 }
 
 export { fetchViewsFromProduct }

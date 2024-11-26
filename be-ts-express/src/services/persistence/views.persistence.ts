@@ -4,7 +4,7 @@ import {
 } from "../../converters/ml/catalog-views.converters"
 import dataSource from "../../db/data-source"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
-import { ProductViews } from "../../entities/sql/views.entity"
+import { ProductViewsSummary } from "../../entities/sql/views.entity"
 import { EntityType } from "../../enums/entity-type.enum"
 import { CatalogVisitsApiResponse } from "../../models/api-response/api/catalog-visits-response.models"
 import { ProductVisitsApiResponse } from "../../models/api-response/api/product-visits-response.models"
@@ -14,7 +14,7 @@ export const saveCatalogViewsDb = async (
 ) => {
   const view = catalogViewsResponseToViewsEntity(viewInfo)
   try {
-    await dataSource.manager.upsert(ProductViews, [view], ["id"])
+    await dataSource.manager.upsert(ProductViewsSummary, [view], ["id"])
   } catch (e) {
     console.log("err")
     if (e.code === "ER_NO_REFERENCED_ROW_2" || e.code === "ER_DUP_ENTRY") {
@@ -24,7 +24,7 @@ export const saveCatalogViewsDb = async (
         type: EntityType.Catalog,
       })
       await dataSource.manager.upsert(
-        ProductViews,
+        ProductViewsSummary,
         [view],
         ["productsCatalogs"]
       )
@@ -38,7 +38,7 @@ export const saveProductViewToDb = async (
   const view = productViewsResponseToViewsEntity(viewInfo)
   console.log("saveProductViewToDb", view)
   try {
-    await dataSource.manager.upsert(ProductViews, [view], ["id"])
+    await dataSource.manager.upsert(ProductViewsSummary, [view], ["id"])
   } catch (e) {
     if (e.code === "ER_NO_REFERENCED_ROW_2") {
       const { productId } = viewInfo
@@ -47,7 +47,7 @@ export const saveProductViewToDb = async (
         type: EntityType.Product,
       })
       await dataSource.manager.upsert(
-        ProductViews,
+        ProductViewsSummary,
         [view],
         ["productsCatalogs"]
       )

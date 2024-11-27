@@ -13,7 +13,7 @@ import { BrandModel } from "./brand-model.entity"
 import { CatalogFields } from "./catalog-fields.entity"
 import { Seller } from "./seller.entity"
 import { StateFields } from "./state-fields.entity"
-import { ProductViewsSummary } from "./views.entity"
+import { ProductViewsSummary } from "./views-summary.entity"
 
 @Index("IDX_CUSTOM_INDEX", ["id", "type"])
 @Entity({
@@ -123,8 +123,12 @@ export class ProductsCatalogs {
   @JoinColumn()
   brandModel: BrandModel | null
 
-  @OneToOne(() => ProductViewsSummary, { nullable: true })
-  views: ProductViewsSummary
+  @OneToOne(() => ProductViewsSummary, (views) => views, {
+    nullable: true,
+    cascade: true,
+  })
+  @JoinColumn()
+  views: ProductViewsSummary | null
 
   @OneToMany(() => ProductsCatalogs, (pc) => pc.id, { nullable: true })
   stateFields: StateFields

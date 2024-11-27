@@ -1,19 +1,10 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from "typeorm"
+import { Column, Entity, OneToOne, PrimaryColumn, Unique } from "typeorm"
 import { ProductsCatalogs } from "./products-catalogs.entity"
 
 @Entity({
   engine: "InnoDB",
 })
 export class ProductViewsSummary {
-  @PrimaryGeneratedColumn()
-  id: string
-
   @Column({ type: "varchar" })
   startDate: string
 
@@ -29,10 +20,7 @@ export class ProductViewsSummary {
   @Column({ type: "float", nullable: true })
   cv: number
 
-  @OneToOne(() => ProductsCatalogs, (pc) => pc.id, {
-    cascade: true,
-    nullable: true,
-  })
-  @JoinColumn()
-  productsCatalogs: string
+  @OneToOne(() => ProductsCatalogs, (product) => product.views)
+  @PrimaryColumn()
+  id: string
 }

@@ -4,7 +4,7 @@ import {
 } from "../../converters/ml/catalog-views.converters"
 import dataSource from "../../db/data-source"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
-import { ProductViewsSummary } from "../../entities/sql/views.entity"
+import { ProductViewsSummary } from "../../entities/sql/views-summary.entity"
 import { EntityType } from "../../enums/entity-type.enum"
 import { CatalogVisitsApiResponse } from "../../models/api-response/api/catalog-visits-response.models"
 import { ProductVisitsApiResponse } from "../../models/api-response/api/product-visits-response.models"

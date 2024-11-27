@@ -1,5 +1,5 @@
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
-import { ProductViewsSummary } from "../../entities/sql/views.entity"
+import { ProductViewsSummary } from "../../entities/sql/views-summary.entity"
 
 import { EntityType } from "../../enums/entity-type.enum"
 import { CatalogVisitsApiResponse } from "../../models/api-response/api/catalog-visits-response.models"
@@ -19,7 +19,7 @@ export const catalogViewsResponseToViewsEntity = (
   view.startDate = startDate
   view.endDate = endDate
   view.totalVisits = totalVisits
-  view.productsCatalogs = catalogId
+  // view.productsCatalogs = catalogId // TODO
   view.dailyAvg = dailyAvg
   return view
 }
@@ -36,7 +36,7 @@ export const productViewsResponseToViewsEntity = (
   view.startDate = startDate
   view.endDate = endDate
   view.totalVisits = totalVisits
-  view.productsCatalogs = productId
+  //view.productsCatalogs = productId // TODO
   view.dailyAvg = dailyAvg
   return view
 }

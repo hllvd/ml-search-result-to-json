@@ -6,7 +6,7 @@ import { CatalogFields } from "../../entities/sql/catalog-fields.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
 import { Seller } from "../../entities/sql/seller.entity"
 import { StateFields } from "../../entities/sql/state-fields.entity"
-import { ProductViewsSummary } from "../../entities/sql/views.entity"
+import { ProductViewsSummary } from "../../entities/sql/views-summary.entity"
 import { EntityType } from "../../enums/entity-type.enum"
 import { RequestExtended } from "../../models/extends/params/request-custom.model"
 import persistencyService from "../../services/persistence/product-catalog.persistence"
@@ -21,8 +21,9 @@ const items = async (
   //res.status(200).json({ ...productListFromDb })
   let catalog = new ProductsCatalogs()
   catalog.type = EntityType.Catalog
-  catalog.id = "test4"
+  catalog.id = "test5"
   catalog.title = "title2frtert"
+
   const catalogFields = new CatalogFields()
   catalog.catalogFields = catalogFields
   catalogFields.priceBest = 222
@@ -30,22 +31,42 @@ const items = async (
   // const seller = new Seller()
   // seller.id = 6777
   // seller.nickname = "nickname 6777"
-  // catalog.seller = await upsertSeller(seller)
+  // catalog.seller = seller
 
   // const brand = new BrandModel()
   // brand.color = "RED"
   // brand.model = "model 7"
   // brand.brand = "brand 7"
   // catalog.brandModel = brand
+
+  const summaryViews = new ProductViewsSummary()
+  summaryViews.cv = 12
+  summaryViews.dailyAvg = 15
+  summaryViews.id = catalog.id
+  summaryViews.totalVisits = 123
+  summaryViews.startDate = "2024-02-02"
+  summaryViews.endDate = "2024-02-02"
+  catalog.views = { ...summaryViews }
+
   await upsertProductCatalog(catalog, EntityType.Catalog)
   res.status(200).json({ ...catalog })
   //res.status(200).json({})
 }
 
-const insertProductViews = () => {}
+const insertProductViews = async (viewsInfo: ProductViewsSummary) => {
+  const viewsRepository = dataSource.getRepository(ProductViewsSummary)
+  let views = await viewsRepository.findOne({
+    where: { id: viewsInfo.id },
+  })
+  if (!views) {
+    views = new ProductViewsSummary()
+    views = { ...viewsInfo }
+  }
+  return await dataSource.manager.getRepository(ProductViewsSummary).save(views)
+}
 
 const upsertProductCatalog = async (
-  catalogInfo: any,
+  catalogInfo: ProductsCatalogs,
   type: EntityType,
   {
     catalogFields,
@@ -78,13 +99,21 @@ const upsertProductCatalog = async (
       catalog.brandModel = brandModel
     }
 
-    // Merge new data
+    if (catalogInfo?.seller) {
+      const seller = await upsertSeller(catalogInfo.seller)
+      catalog.seller = seller
+    }
+
+    if (catalogInfo?.views) {
+      const views = await insertProductViews(catalogInfo.views)
+      catalog.views = views
+    }
+
     catalog = catalogRepository.merge(catalog, {
       ...catalogInfo,
       type,
       title: catalogInfo.title,
       // catalogFields,
-      // brandModel,
       // views,
       // stateFields,
     })

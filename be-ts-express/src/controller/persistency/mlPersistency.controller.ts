@@ -8,6 +8,10 @@ import { Seller } from "../../entities/sql/seller.entity"
 import { StateFields } from "../../entities/sql/state-fields.entity"
 import { ProductViewsSummary } from "../../entities/sql/views-summary.entity"
 import { EntityType } from "../../enums/entity-type.enum"
+import {
+  StateFieldSubType,
+  StateFieldType,
+} from "../../enums/state-field-type.enum"
 import { RequestExtended } from "../../models/extends/params/request-custom.model"
 import persistencyService from "../../services/persistence/product-catalog.persistence"
 
@@ -24,9 +28,9 @@ const items = async (
   catalog.id = "test5"
   catalog.title = "title2frtert"
 
-  const catalogFields = new CatalogFields()
-  catalog.catalogFields = catalogFields
-  catalogFields.priceBest = 222
+  // const catalogFields = new CatalogFields()
+  // catalog.catalogFields = catalogFields
+  // catalogFields.priceBest = 222
 
   // const seller = new Seller()
   // seller.id = 6777
@@ -39,18 +43,34 @@ const items = async (
   // brand.brand = "brand 7"
   // catalog.brandModel = brand
 
-  const summaryViews = new ProductViewsSummary()
-  summaryViews.cv = 12
-  summaryViews.dailyAvg = 15
-  summaryViews.id = catalog.id
-  summaryViews.totalVisits = 123
-  summaryViews.startDate = "2024-02-02"
-  summaryViews.endDate = "2024-02-02"
-  catalog.views = { ...summaryViews }
+  // const summaryViews = new ProductViewsSummary()
+  // summaryViews.cv = 12
+  // summaryViews.dailyAvg = 15
+  // summaryViews.id = catalog.id
+  // summaryViews.totalVisits = 123
+  // summaryViews.startDate = "2024-02-02"
+  // summaryViews.endDate = "2024-02-02"
+  // catalog.views = { ...summaryViews }
+
+  const stateFields = new StateFields()
+  stateFields.type = StateFieldType.Medal
+  stateFields.subType = StateFieldSubType.Coleta
+  stateFields.state = "PT"
+  stateFields.value = 32
+  stateFields.productCatalog = catalog.id
+  const sf = await upsertStateFields(stateFields)
 
   await upsertProductCatalog(catalog, EntityType.Catalog)
   res.status(200).json({ ...catalog })
   //res.status(200).json({})
+}
+
+const upsertStateFields = async (stateFieldInfo: StateFields) => {
+  return await dataSource.manager.upsert(
+    StateFields,
+    [stateFieldInfo],
+    ["state", "subType", "productCatalog"]
+  )
 }
 
 const insertProductViews = async (viewsInfo: ProductViewsSummary) => {

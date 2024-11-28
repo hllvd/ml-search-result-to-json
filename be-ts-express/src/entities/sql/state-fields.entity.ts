@@ -21,7 +21,7 @@ import { ProductsCatalogs } from "./products-catalogs.entity"
  * - productsCatalogs: string
  */
 
-@Index("IDX_CUSTOM_INDEX", ["state", "subType", "prdCat"])
+@Index("IDX_CUSTOM_INDEX", ["state", "subType", "productCatalog"])
 @Entity({
   engine: "InnoDB",
 })
@@ -43,5 +43,5 @@ export class StateFields {
     cascade: true,
   })
   @JoinColumn()
-  prdCat: string
+  productCatalog: string
 }

@@ -25,7 +25,7 @@ export const stateFieldsRepository = async (
   await dataSource.manager.upsert(StateFields, stateFieldCollection, [
     "state",
     "subType",
-    "prdCat",
+    "productCatalog",
   ])
 }
 
@@ -56,7 +56,7 @@ const _createStateFieldsCollection = (
     stateFields.subType = subType
     stateFields.state = state
     stateFields.value = value
-    stateFields.prdCat = productsCatalogsId
+    stateFields.productCatalog = productsCatalogsId
     return stateFields
   })
   return stateFieldsArray

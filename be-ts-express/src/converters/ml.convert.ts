@@ -127,6 +127,7 @@ const _convertProductApiResponseToProductCatalogEntityCommonFields = (
   product.title = productApiResponse.title
   product.permalink = productApiResponse.permalink
   product.thumbnail = productApiResponse.thumbnail
+  product.ean = productApiResponse.ean
   return product
 }
 

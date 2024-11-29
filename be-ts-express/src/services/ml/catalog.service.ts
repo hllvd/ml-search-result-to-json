@@ -31,13 +31,14 @@ const catalogSummary = async ({
     }
   )
 
-  const { result: productSales } = await webScrapeMlPage(
-    webScrapeCatalogToMetadataPredicate,
-    {
-      catalogId,
-      scrapeType: ScrapeType.CatalogMetadata,
-    }
-  )
+  const { result: productMetadata } = await (<
+    Promise<{ result: { hasVideo: boolean; amountInt: any } }>
+  >webScrapeMlPage(webScrapeCatalogToMetadataPredicate, {
+    catalogId,
+    scrapeType: ScrapeType.CatalogMetadata,
+  }))
+  const { hasVideo: hasVideoInProductMetadata, amountInt: productSales } =
+    productMetadata
 
   const { result: productLength } = await webScrapeMlPage(
     webScrapeCatalogProductLengthPredicate,
@@ -50,6 +51,7 @@ const catalogSummary = async ({
   const amountOfProducts =
     productList.length === maxPage * 10 ? productLength : productList.length
 
+  console.log("hasVideoInProductMetadata", hasVideoInProductMetadata)
   console.log("productList", productList)
   console.log("productSales", productSales)
   console.log("productLength", productLength)
@@ -78,7 +80,6 @@ const catalogSummary = async ({
     productsWithSellersPricesAndAmountInCorrectOrder
   )
 
-  console.log("productSales", productSales)
   const catalogReducerWithSummary = _summarizeCatalog({
     catalog: { ...catalogReducerValues, length: amountOfProducts },
     sales: productSales,

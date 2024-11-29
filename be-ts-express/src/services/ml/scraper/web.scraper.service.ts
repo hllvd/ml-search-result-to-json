@@ -27,11 +27,11 @@ interface WebScraperMlPageOption {
   dynamicWeb?: boolean
   searchTerm?: string
 }
-const webScrapeMlPage = async (
+const webScrapeMlPage = async <T>(
   predicateSelector: Function,
   options?: WebScraperMlPageOption
-): Promise<any> => {
-  const r = await fetchWithRetry({
+): Promise<any | T> => {
+  const r = await fetchWithRetry<T>({
     options,
     retries: 10,
     predicateSelector,
@@ -39,7 +39,7 @@ const webScrapeMlPage = async (
   return r
 }
 
-const fetchWithRetry = async ({
+const fetchWithRetry = async <T>({
   options,
   retries,
   predicateSelector,
@@ -49,7 +49,7 @@ const fetchWithRetry = async ({
   predicateSelector: Function
 }): Promise<{
   pages: Array<string>
-  result: Array<{ productIdStr: string; price: number }>
+  result: Array<{ productIdStr: string; price: number } | T>
 }> => {
   const { maxPage, dynamicWeb } = options
   const urlBuilder = webScrapeMlUrlBuilder(options)

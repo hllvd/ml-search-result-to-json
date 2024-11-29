@@ -22,9 +22,10 @@ const webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate = async (
   const priceStr = priceHtml.getAttribute("content")
   const currentPrice = Number.parseFloat(priceStr)
 
-  const clipIconHtml = document.querySelectorAll(
+  const clipIconHtml = document.querySelector(
     ".ui-pdp-thumbnail--overlay .clip-picture-icon"
   )
+
   const hasVideo = !!clipIconHtml
 
   return { response: { currentPrice, quantitySold, hasVideo } }

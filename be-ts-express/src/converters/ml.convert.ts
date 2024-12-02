@@ -16,7 +16,7 @@ export const convertCatalogApiResponseToProductCatalogEntity = (
     type
   )
   product.id = catalogApiResponse.catalogId
-  product.categoryId = catalogApiResponse.categoryId
+  //product.category = catalogApiResponse.categoryId
   product.domainId = catalogApiResponse.domainId
   product.hasVideo = catalogApiResponse.hasVideo
   product.supermarketEligible = catalogApiResponse.supermarketEligible
@@ -41,7 +41,7 @@ export const convertProductApiResponseToProductCatalogEntity = (
     type
   )
   product.id = productApiResponse.id
-  product.categoryId = productApiResponse.category_id
+  //product.category = productApiResponse.category
   product.domainId = productApiResponse.domain_id
   product.supermarketEligible = productApiResponse.supermarket_eligible
   product.officialStoreId = productApiResponse.official_store_id

@@ -54,16 +54,17 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
   catalog.brandModel = await brandModelFieldHandler({ brand, model, color })
 
   const catalogFields = new CatalogFields()
-  // const catalogFieldConverted = await catalogInfoToCatalogFieldsEntityConverter(
-  //   {
-  //     catalogInfo,
-  //     catalogFields,
-  //   }
-  // )
-  catalogFields.length = 60
-  catalogFields.mlOwner = false
-  catalogFields.positionFull = 1
-  //catalog.catalogFields = catalogFields
+  const catalogFieldConverted = await catalogInfoToCatalogFieldsEntityConverter(
+    {
+      catalogInfo,
+      catalogFields,
+    }
+  )
+  // catalogFields.length = 60
+  // catalogFields.mlOwner = false
+  // catalogFields.positionFull = 1
+  console.log("catalogFieldConverted", catalogFieldConverted)
+  catalog.catalogFields = catalogFieldConverted
 
   await dataSource.manager.save(catalog)
 
@@ -80,7 +81,7 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
 enum OrderBy {
   Created = "created",
   Views = "views",
-  ailyRevenue = "dailyRevenue",
+  dailyRevenue = "dailyRevenue",
 }
 interface ProductListQueries {
   userId?: string

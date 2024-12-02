@@ -11,6 +11,7 @@ import {
 import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
 import { CatalogFields } from "./catalog-fields.entity"
+import { Categories } from "./categories.entity"
 import { Seller } from "./seller.entity"
 import { StateFields } from "./state-fields.entity"
 import { ProductViewsSummary } from "./views-summary.entity"
@@ -28,9 +29,6 @@ export class ProductsCatalogs {
 
   @Column({ nullable: true })
   title: string
-
-  @Column({ nullable: true })
-  categoryId: string
 
   @Column({ nullable: true })
   domainId: string
@@ -112,6 +110,9 @@ export class ProductsCatalogs {
 
   @Column({ nullable: true, type: "float" })
   dailyRevenue: number
+
+  @ManyToOne(() => Categories, (category) => category.id, { nullable: true })
+  category: Categories | null
 
   @ManyToOne(() => Seller, (seller) => seller.id)
   seller: Seller

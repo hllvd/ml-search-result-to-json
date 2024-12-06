@@ -129,7 +129,7 @@ const webScrapeFetcherDynamic = async (url: string, retries: number) => {
   return response
 }
 
-const webScrapeFetcher = async (url: string, retries: number) => {
+export const webScrapeFetcher = async (url: string, retries: number) => {
   let counter = 0
   let response = null
   console.log("scrap", url)

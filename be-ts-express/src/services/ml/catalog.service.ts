@@ -4,7 +4,6 @@ import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.mo
 import { roundNumber } from "../../utils/math.util"
 import { getPersistentCategoryInfo } from "./categories.service"
 
-import { fetchSeller } from "./api/users"
 import {
   calculateCommissions,
   getProductInCorrectOrder,
@@ -44,12 +43,11 @@ const catalogSummary = async ({
     webScrapeCatalogProductLengthPredicate,
     {
       catalogId,
-      scrapeType: ScrapeType.CatalogMetadata,
+      scrapeType: ScrapeType.CatalogProductList,
     }
   )
 
-  const amountOfProducts =
-    productList.length === maxPage * 10 ? productLength : productList.length
+  const amountOfProducts = productLength
 
   console.log("hasVideoInProductMetadata", hasVideoInProductMetadata)
   console.log("productList", productList)

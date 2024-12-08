@@ -102,6 +102,7 @@ export const catalogInfoToCatalogFieldsEntityConverter = async ({
   } = catalogInfo.price || {}
   console.log("catalogInfo", catalogInfo.length)
 
+  catalogFields.id = catalogInfo.catalogId
   catalogFields.length = catalogInfo?.length
   catalogFields.mlOwner = catalogInfo?.mlOwner
   catalogFields.positionFull = full

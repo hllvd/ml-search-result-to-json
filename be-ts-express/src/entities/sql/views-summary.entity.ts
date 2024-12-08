@@ -1,4 +1,4 @@
-import { Column, Entity, OneToOne, PrimaryColumn, Unique } from "typeorm"
+import { Column, Entity, OneToOne, PrimaryColumn } from "typeorm"
 import { ProductsCatalogs } from "./products-catalogs.entity"
 
 @Entity({

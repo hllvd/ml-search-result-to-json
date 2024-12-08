@@ -134,14 +134,10 @@ export class ProductsCatalogs {
   @OneToMany(() => ProductsCatalogs, (pc) => pc.id, { nullable: true })
   stateFields: StateFields
 
-  @OneToOne(
-    () => CatalogFields,
-    (catalogFields) => catalogFields.productsCatalogs,
-    {
-      nullable: true,
-      cascade: true,
-    }
-  )
+  @OneToOne(() => CatalogFields, (catalogFields) => catalogFields, {
+    nullable: true,
+    cascade: true,
+  })
   @JoinColumn()
   catalogFields: CatalogFields | null
 }

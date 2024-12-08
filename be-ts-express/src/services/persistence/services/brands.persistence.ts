@@ -45,3 +45,25 @@ export const getBrandModel = (
       }, {})
     : null
 }
+
+const findOrInsert = async ({
+  brand,
+  model,
+  color,
+}: BrandModel): Promise<BrandModel> => {
+  const existingBrandModel = await dataSource.manager
+    .getRepository(BrandModel)
+    .findOne({ where: { brand, model, color } })
+
+  if (existingBrandModel) {
+    return existingBrandModel
+  }
+
+  const newBrandModel = new BrandModel()
+  newBrandModel.brand = brand
+  newBrandModel.model = model
+  newBrandModel.color = color
+  return await dataSource.manager.getRepository(BrandModel).save(newBrandModel)
+}
+
+export default { findOrInsert }

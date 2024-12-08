@@ -11,7 +11,8 @@ import {
   CategoryWebCrawlerPredicateResult,
   ScrapCategoryMetadata,
 } from "../../models/predicate/category-tree.models"
-import categoryPersistent from "../persistence/category.persistence"
+import categoryPersistence from "../persistence/category.persistence"
+
 import {
   fetchCategoryInfo,
   fetchChildrenCategories,
@@ -137,8 +138,8 @@ export const getPersistentCategoryInfo = async ({
   categoryId,
   userId,
 }): Promise<Categories> => {
-  const categoryFromDb: Categories = await categoryPersistent.get(categoryId)
-  // TODO
+  const categoryFromDb: Categories = await categoryPersistence.get(categoryId)
+  //TODO
   //if (!categoryFromDb) {
   if (true) {
     const fetchedCategoryInfo = await getCategoryInfo({
@@ -150,11 +151,12 @@ export const getPersistentCategoryInfo = async ({
       id: fetchedCategoryInfo.id,
       name: fetchedCategoryInfo.name,
       totalItems: fetchedCategoryInfo.total_items_in_this_category,
-      // permaLink: permaLink,
-      // parentId: _getParentIdFromCategory(fetchedCategoryInfo),
-      // hasChildren: _hasChildren(fetchedCategoryInfo),
+      permaLink: "",
+      hasItems: false,
+      hasChildren: false,
+      parentId: "",
     }
-    categoryPersistent.upsert(categoryFetch)
+    // categoryPersistent.upsert(categoryFetch)
     return categoryFetch
   }
   return categoryFromDb

@@ -49,7 +49,7 @@ export const saveProductToDb = async (productInfo: ProductApiResponse) => {
   product.seller = existingUser || seller
   //await dataSource.manager.save(product)
   await upsert(product, product.type)
-  console.log("saved to db")
+  console.log("saved saveProductToDb to db")
 }
 
 export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
@@ -86,6 +86,7 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
 
   const catalogFieldsConverted = await catalogStateFieldsConverter(catalogInfo)
   //await stateFieldsRepository(catalogFieldsConverted)
+  console.log("save saveCatalogToDb to db")
 }
 
 enum OrderBy {

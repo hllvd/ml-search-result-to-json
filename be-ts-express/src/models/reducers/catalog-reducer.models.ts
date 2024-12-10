@@ -2,6 +2,7 @@ import { String } from "aws-sdk/clients/sagemaker"
 
 export interface CatalogReducerResponse {
   title: string
+  catalogId?: string
   ean: string | null
   domainId: string | null
   tagsGoodQualityThumbnail: boolean | null

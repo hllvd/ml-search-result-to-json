@@ -34,12 +34,11 @@ const _createProductsCatalogCollectionAndRemoveDuplicates = (
 ): Array<ProductsCatalogs> => {
   const uniqueCatalogsMap = new Map<string, ProductsCatalogs>()
   argArray.forEach((arg) => {
-    const { productsCatalogsId, productsCatalogsType } = arg
-    if (!uniqueCatalogsMap.has(productsCatalogsId)) {
+    const { productCatalog } = arg
+    if (!uniqueCatalogsMap.has(productCatalog)) {
       const productsCatalogs = new ProductsCatalogs()
-      productsCatalogs.id = productsCatalogsId
-      productsCatalogs.type = productsCatalogsType
-      uniqueCatalogsMap.set(productsCatalogsId, productsCatalogs)
+      productsCatalogs.id = productCatalog
+      uniqueCatalogsMap.set(productCatalog, productsCatalogs)
     }
   })
 
@@ -50,13 +49,13 @@ const _createStateFieldsCollection = (
   argArray: Array<StateFieldsRepositoryArguments>
 ): Array<StateFields> => {
   const stateFieldsArray = argArray.map((arg) => {
-    const { type, subType, state, value, productsCatalogsId } = arg
+    const { type, subType, state, value, productCatalog } = arg
     const stateFields = new StateFields()
     stateFields.type = type
     stateFields.subType = subType
     stateFields.state = state
     stateFields.value = value
-    stateFields.productCatalog = productsCatalogsId
+    stateFields.productCatalog = productCatalog
     return stateFields
   })
   return stateFieldsArray

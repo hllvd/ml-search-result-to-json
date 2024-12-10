@@ -12,28 +12,62 @@ import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.mo
 export const catalogStateFieldsConverter = (
   catalogReducerResponse: CatalogReducerResponse
 ): Array<StateFieldsRepositoryArguments> => {
-  const { shipmentByState, medalByState, categoryId } = catalogReducerResponse
+  console.log("catalogReducerResponse", catalogReducerResponse)
+  const { shipmentByState, medalByState, categoryId, catalogId } =
+    catalogReducerResponse
   const types = [
     { type: "shipment", data: shipmentByState },
     { type: "medal", data: medalByState },
   ]
-  return types.flatMap(({ type, data }: { type: any; data: any }) =>
-    Object.entries(data)
-      .flatMap(([key, values]) => {
-        const subType = key as StateFieldSubType
-        if (!values) return []
-        return Object.entries(values).map(([state, qty]) => {
-          let stateFields: StateFieldsRepositoryArguments = {
-            productsCatalogsId: categoryId,
-            state,
-            type,
-            subType,
-            value: qty,
-            productsCatalogsType: EntityType.Catalog,
-          } as StateFieldsRepositoryArguments
-          return stateFields
+  const stateFieldsRepository = types.flatMap(
+    ({ type, data }: { type: any; data: any }) =>
+      Object.entries(data)
+        .flatMap(([key, values]) => {
+          const subType = key as StateFieldSubType
+          if (!values) return []
+          return Object.entries(values).map(([state, qty]) => {
+            let stateFields: StateFieldsRepositoryArguments = {
+              productCatalog: catalogId,
+              state,
+              type,
+              subType,
+              value: qty,
+              productsCatalogsType: EntityType.Catalog,
+            } as StateFieldsRepositoryArguments
+            return stateFields
+          })
         })
-      })
-      .flat(1)
+        .flat(1)
+  )
+  return stateFieldsRepository.map(
+    (e: StateFieldsRepositoryArguments) => e as StateFields
   )
 }
+
+/**
+ * state: string
+
+  @PrimaryColumn({ type: "varchar" })
+  type: StateFieldType
+
+  @PrimaryColumn({ type: "varchar", length: 24 })
+  subType: StateFieldSubType
+
+  @Column({ type: "float" })
+  value: number
+
+  @PrimaryColumn()
+  @ManyToOne(() => ProductsCatalogs, (pc) => pc.id, {
+    cascade: true,
+  })
+  @JoinColumn()
+  productCatalog: string
+
+
+  type: StateFieldType
+  subType: StateFieldSubType
+  productsCatalogsId: string
+  productsCatalogsType: EntityType
+  state: string
+  value: number
+ */

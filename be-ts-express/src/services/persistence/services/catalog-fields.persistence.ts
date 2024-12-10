@@ -10,7 +10,11 @@ const upsert = async (catalogFieldsInfo: CatalogFields) => {
   catalogFields = catalogFieldsRepository.merge(catalogFields, {
     ...catalogFieldsInfo,
   })
-  return await dataSource.manager.upsert(CatalogFields, [catalogFields], ["id"])
+  return await dataSource.manager.upsert<CatalogFields>(
+    CatalogFields,
+    [catalogFields],
+    ["id"]
+  )
 }
 
 export default { upsert }

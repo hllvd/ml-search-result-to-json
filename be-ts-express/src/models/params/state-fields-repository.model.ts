@@ -5,10 +5,10 @@ import {
 } from "../../enums/state-field-type.enum"
 
 export interface StateFieldsRepositoryArguments {
+  productCatalog: string
   type: StateFieldType
   subType: StateFieldSubType
-  productsCatalogsId: string
-  productsCatalogsType: EntityType
+  //productsCatalogsId?: string
   state: string
   value: number
 }

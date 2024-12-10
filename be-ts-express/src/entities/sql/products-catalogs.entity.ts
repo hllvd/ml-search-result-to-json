@@ -21,6 +21,7 @@ import { ProductViewsSummary } from "./views-summary.entity"
   engine: "InnoDB",
 })
 export class ProductsCatalogs {
+  [x: string]: any
   @PrimaryColumn({ unique: true })
   id: string
 
@@ -132,7 +133,7 @@ export class ProductsCatalogs {
   views: ProductViewsSummary | null
 
   @OneToMany(() => ProductsCatalogs, (pc) => pc.id, { nullable: true })
-  stateFields: StateFields
+  stateFields: StateFields[]
 
   @OneToOne(() => CatalogFields, (catalogFields) => catalogFields, {
     nullable: true,

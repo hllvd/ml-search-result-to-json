@@ -24,6 +24,7 @@ import brandsPersistence from "./services/brands.persistence"
 import catalogFieldsPersistence from "./services/catalog-fields.persistence"
 import sellerPersistence from "./services/seller.persistence"
 import viewsPersistence from "./services/views.persistence"
+import stateFieldPersistence from "./services/state-field.persistence"
 
 export const saveProductToDb = async (productInfo: ProductApiResponse) => {
   let product = new ProductsCatalogs()
@@ -69,9 +70,15 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
       catalogFields,
     }
   )
+  const catalogStateFieldsConverted = await catalogStateFieldsConverter(
+    catalogInfo
+  )
   //catalogFieldConverted.length = 123
   // catalogFields.mlOwner = false
   // catalogFields.positionFull = 1
+
+  catalog.stateFields =
+    catalogStateFieldsConverted as unknown as Array<StateFields> /// TODO
   console.log("catalogFieldConverted", catalogFieldConverted)
   catalog.catalogFields = catalogFieldConverted
 
@@ -84,7 +91,6 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
   //   ["catalogFields"]
   // )
 
-  const catalogFieldsConverted = await catalogStateFieldsConverter(catalogInfo)
   //await stateFieldsRepository(catalogFieldsConverted)
   console.log("save saveCatalogToDb to db")
 }
@@ -116,9 +122,17 @@ const get = async (productId): Promise<ProductsCatalogs> => {
     .createQueryBuilder("products")
     .leftJoinAndSelect("products.brandModel", "brandModel IS NOT NULL")
     .leftJoinAndSelect("products.seller", "seller IS NOT NULL")
-    //.leftJoinAndSelect("products.views", "views IS NOT NULL")
-    .leftJoinAndSelect("products.stateFields", "stateFields IS NOT NULL")
-    //.leftJoinAndSelect("products.catalogFields", "catalogFields IS NOT NULL")
+    .leftJoinAndSelect("products.views", "views IS NOT NULL")
+    .leftJoinAndSelect(
+      "products.stateFields",
+      "stateFields IS NOT NULL",
+      "products.type = 1"
+    )
+    .leftJoinAndSelect(
+      "products.catalogFields",
+      "catalogFields IS NOT NULL",
+      "products.catalogFields IS NOT NULL"
+    )
     .where("products.id = :productId", { productId })
     .getOne()
   return productsCatalogs
@@ -167,14 +181,22 @@ const upsert = async (
 
     if (catalogInfo?.views) {
       const views = await viewsPersistence.upsert(catalogInfo.views)
-      //catalog.views = views
+      console.log("views", views)
+      catalog.views = catalogInfo?.views
+    } else {
+      await viewsPersistence.link(catalogInfo.id)
+    }
+
+    if (catalogInfo?.stateFields) {
+      console.log("stateFields", catalogInfo?.stateFields)
+      await stateFieldPersistence.upsert(catalogInfo.stateFields)
     }
 
     if (catalogInfo?.catalogFields) {
-      const views = await catalogFieldsPersistence.upsert(
+      const cf = await catalogFieldsPersistence.upsert(
         catalogInfo.catalogFields
       )
-      //catalog.catalogFields = catalogFields
+      catalog.catalogFields = catalogInfo.catalogFields
     }
 
     catalog = catalogRepository.merge(catalog, {
@@ -183,7 +205,6 @@ const upsert = async (
       title: catalogInfo.title,
       catalogFields,
       views,
-      stateFields,
       brandModel,
     })
 

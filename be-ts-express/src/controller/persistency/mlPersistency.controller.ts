@@ -15,7 +15,7 @@ import {
 import { RequestExtended } from "../../models/extends/params/request-custom.model"
 import persistencyService from "../../services/persistence/product-catalog.persistence"
 
-const items_old = async (
+const items_ = async (
   req: RequestExtended,
   res: Response,
   next: NextFunction
@@ -57,7 +57,7 @@ const items = async (
   catalog.brandModel = brand
 
   const summaryViews = new ProductViewsSummary()
-  summaryViews.cv = 110
+  summaryViews.cv = 1101
   summaryViews.dailyAvg = 150
   summaryViews.id = catalog.id
   summaryViews.totalVisits = 123
@@ -69,8 +69,10 @@ const items = async (
   stateFields.type = StateFieldType.Medal
   stateFields.subType = StateFieldSubType.Coleta
   stateFields.state = "PT"
-  stateFields.value = 32
+  stateFields.value = 112
   stateFields.productCatalog = catalog.id
+
+  catalog.stateFields = [stateFields]
   const sf = await upsertStateFields(stateFields)
 
   await upsertProductCatalog(catalog, EntityType.Catalog)

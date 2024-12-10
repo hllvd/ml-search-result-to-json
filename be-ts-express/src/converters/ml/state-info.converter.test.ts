@@ -7,6 +7,7 @@ import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.mo
 import { catalogStateFieldsConverter } from "./state-info.converter"
 const commonProperties: CatalogReducerResponse = {
   title: "product name",
+  catalogId: "my-id",
   permalink: "https://example.com",
   length: 29,
   shipmentByState: {
@@ -72,32 +73,28 @@ describe("Convert CatalogReducerResponse to StateField entity", () => {
 
     const result: StateFieldsRepositoryArguments[] = [
       {
-        productsCatalogsId: "123",
-        productsCatalogsType: 1,
+        productCatalog: "123",
         state: "BR-SC",
         subType: StateFieldSubType.Full,
         type: StateFieldType.Shipment,
         value: 1,
       },
       {
-        productsCatalogsId: "123",
-        productsCatalogsType: 1,
+        productCatalog: "123",
         state: "BR-SP",
         subType: StateFieldSubType.Full,
         type: StateFieldType.Shipment,
         value: 4,
       },
       {
-        productsCatalogsId: "123",
-        productsCatalogsType: 1,
+        productCatalog: "123",
         state: "BR-SC",
         subType: StateFieldSubType.Coleta,
         type: StateFieldType.Shipment,
         value: 2,
       },
       {
-        productsCatalogsId: "123",
-        productsCatalogsType: 1,
+        productCatalog: "123",
         state: "BR-SP",
         subType: StateFieldSubType.Coleta,
         type: StateFieldType.Shipment,

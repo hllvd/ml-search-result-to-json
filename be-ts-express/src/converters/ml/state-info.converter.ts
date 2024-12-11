@@ -32,7 +32,6 @@ export const catalogStateFieldsConverter = (
               type,
               subType,
               value: qty,
-              productsCatalogsType: EntityType.Catalog,
             } as StateFieldsRepositoryArguments
             return stateFields
           })

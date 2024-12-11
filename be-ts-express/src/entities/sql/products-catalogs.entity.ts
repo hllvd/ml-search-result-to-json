@@ -132,7 +132,9 @@ export class ProductsCatalogs {
   @JoinColumn()
   views: ProductViewsSummary | null
 
-  @OneToMany(() => ProductsCatalogs, (pc) => pc.id, { nullable: true })
+  @OneToMany(() => StateFields, (stateField) => stateField.productCatalog, {
+    nullable: true,
+  })
   stateFields: StateFields[]
 
   @OneToOne(() => CatalogFields, (catalogFields) => catalogFields, {

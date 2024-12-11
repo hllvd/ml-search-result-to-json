@@ -15,7 +15,7 @@ import {
 import { RequestExtended } from "../../models/extends/params/request-custom.model"
 import persistencyService from "../../services/persistence/product-catalog.persistence"
 
-const items_ = async (
+const items = async (
   req: RequestExtended,
   res: Response,
   next: NextFunction
@@ -26,7 +26,7 @@ const items_ = async (
   res.status(200).json({ ...productListFromDb })
 }
 
-const items = async (
+const post = async (
   req: RequestExtended,
   res: Response,
   next: NextFunction
@@ -68,23 +68,36 @@ const items = async (
   const stateFields = new StateFields()
   stateFields.type = StateFieldType.Medal
   stateFields.subType = StateFieldSubType.Coleta
-  stateFields.state = "PT"
-  stateFields.value = 112
+  stateFields.state = "aaa"
+  stateFields.value = 111
   stateFields.productCatalog = catalog.id
 
-  catalog.stateFields = [stateFields]
-  const sf = await upsertStateFields(stateFields)
+  const stateFields2 = new StateFields()
+  stateFields2.type = StateFieldType.Medal
+  stateFields2.subType = StateFieldSubType.Coleta
+  stateFields2.state = "bbb"
+  stateFields2.value = 222
+  stateFields2.productCatalog = catalog.id
+
+  catalog.stateFields = [stateFields, stateFields2]
+  const sf = await upsertStateFields([stateFields, stateFields2])
 
   await upsertProductCatalog(catalog, EntityType.Catalog)
   res.status(200).json({ ...catalog })
 }
 
-const upsertStateFields = async (stateFieldInfo: StateFields) => {
-  return await dataSource.manager.upsert(
-    StateFields,
-    [stateFieldInfo],
-    ["state", "subType", "productCatalog"]
-  )
+const upsertStateFields = async (stateFieldInfo: StateFields[]) => {
+  await dataSource.manager.upsert(StateFields, stateFieldInfo, [
+    "state",
+    "subType",
+    "productCatalog",
+  ])
+  const stateFieldsRepository = dataSource.getRepository(StateFields)
+  let views = await stateFieldsRepository.find({
+    where: { productCatalog: stateFieldInfo[0].productCatalog },
+  })
+  console.log("views", views)
+  return views
 }
 
 const upsertCatalogFields = async (catalogFieldsInfo: CatalogFields) => {

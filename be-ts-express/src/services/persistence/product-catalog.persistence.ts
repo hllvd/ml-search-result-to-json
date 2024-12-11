@@ -25,6 +25,10 @@ import catalogFieldsPersistence from "./services/catalog-fields.persistence"
 import sellerPersistence from "./services/seller.persistence"
 import viewsPersistence from "./services/views.persistence"
 import stateFieldPersistence from "./services/state-field.persistence"
+import {
+  StateFieldSubType,
+  StateFieldType,
+} from "../../enums/state-field-type.enum"
 
 export const saveProductToDb = async (productInfo: ProductApiResponse) => {
   let product = new ProductsCatalogs()
@@ -124,15 +128,11 @@ const get = async (productId): Promise<ProductsCatalogs> => {
     .leftJoinAndSelect("products.seller", "seller IS NOT NULL")
     .leftJoinAndSelect("products.views", "views IS NOT NULL")
     .leftJoinAndSelect(
-      "products.stateFields",
-      "stateFields IS NOT NULL",
-      "products.type = 1"
-    )
-    .leftJoinAndSelect(
       "products.catalogFields",
       "catalogFields IS NOT NULL",
       "products.catalogFields IS NOT NULL"
     )
+    .leftJoinAndSelect("products.stateFields", "StateFields")
     .where("products.id = :productId", { productId })
     .getOne()
   return productsCatalogs
@@ -187,9 +187,25 @@ const upsert = async (
       await viewsPersistence.link(catalogInfo.id)
     }
 
+    /** HEEREEEEE */
     if (catalogInfo?.stateFields) {
       console.log("stateFields", catalogInfo?.stateFields)
-      await stateFieldPersistence.upsert(catalogInfo.stateFields)
+      //await stateFieldPersistence.upsertStateFields(catalogInfo.stateFields)
+      const stateFields = new StateFields()
+      stateFields.type = StateFieldType.Medal
+      stateFields.subType = StateFieldSubType.Coleta
+      stateFields.state = "yyy"
+      stateFields.value = 111
+      stateFields.productCatalog = catalog.id
+
+      const stateFields2 = new StateFields()
+      stateFields2.type = StateFieldType.Medal
+      stateFields2.subType = StateFieldSubType.Coleta
+      stateFields2.state = "zzz"
+      stateFields2.value = 222
+      stateFields2.productCatalog = catalog.id
+
+      catalog.stateFields = [stateFields, stateFields2]
     }
 
     if (catalogInfo?.catalogFields) {

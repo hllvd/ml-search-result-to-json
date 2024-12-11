@@ -24,11 +24,11 @@ import brandsPersistence from "./services/brands.persistence"
 import catalogFieldsPersistence from "./services/catalog-fields.persistence"
 import sellerPersistence from "./services/seller.persistence"
 import viewsPersistence from "./services/views.persistence"
-import stateFieldPersistence from "./services/state-field.persistence"
 import {
   StateFieldSubType,
   StateFieldType,
 } from "../../enums/state-field-type.enum"
+import stateFieldPersistence from "./services/state-field.persistence"
 
 export const saveProductToDb = async (productInfo: ProductApiResponse) => {
   let product = new ProductsCatalogs()
@@ -206,6 +206,7 @@ const upsert = async (
       stateFields2.productCatalog = catalog.id
 
       catalog.stateFields = [stateFields, stateFields2]
+      await stateFieldPersistence.flushAndInsert(catalogInfo?.stateFields)
     }
 
     if (catalogInfo?.catalogFields) {

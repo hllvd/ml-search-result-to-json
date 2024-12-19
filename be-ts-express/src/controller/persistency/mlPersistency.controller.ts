@@ -14,6 +14,7 @@ import {
 } from "../../enums/state-field-type.enum"
 import { RequestExtended } from "../../models/extends/params/request-custom.model"
 import persistencyService from "../../services/persistence/product-catalog.persistence"
+import stateFieldPersistence from "../../services/persistence/services/state-field.persistence"
 
 const items = async (
   req: RequestExtended,
@@ -26,17 +27,18 @@ const items = async (
   res.status(200).json({ ...productListFromDb })
 }
 
-const post = async (
+const items_ = async (
   req: RequestExtended,
   res: Response,
   next: NextFunction
 ) => {
+  const productId = req.query?.productId?.toString()
   //const userId = req.query?.userId?.toString() ?? "1231084821"
   //const productListFromDb = await persistencyService.listProduct({ userId })
   //res.status(200).json({ ...productListFromDb })
   let catalog = new ProductsCatalogs()
   catalog.type = EntityType.Catalog
-  catalog.id = "MLB19722322"
+  catalog.id = productId
   catalog.title = "title2frtert"
 
   const catalogFields = new CatalogFields()
@@ -68,21 +70,21 @@ const post = async (
   const stateFields = new StateFields()
   stateFields.type = StateFieldType.Medal
   stateFields.subType = StateFieldSubType.Coleta
-  stateFields.state = "aaa"
+  stateFields.state = "ttt"
   stateFields.value = 111
   stateFields.productCatalog = catalog.id
 
   const stateFields2 = new StateFields()
   stateFields2.type = StateFieldType.Medal
   stateFields2.subType = StateFieldSubType.Coleta
-  stateFields2.state = "bbb"
+  stateFields2.state = "yyy"
   stateFields2.value = 222
   stateFields2.productCatalog = catalog.id
 
   catalog.stateFields = [stateFields, stateFields2]
-  const sf = await upsertStateFields([stateFields, stateFields2])
+  await upsertStateFields([stateFields, stateFields2])
 
-  await upsertProductCatalog(catalog, EntityType.Catalog)
+  //await upsertProductCatalog(catalog, EntityType.Catalog)
   res.status(200).json({ ...catalog })
 }
 

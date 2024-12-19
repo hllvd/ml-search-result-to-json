@@ -135,7 +135,7 @@ export class ProductsCatalogs {
   @OneToMany(() => StateFields, (stateField) => stateField.productCatalog, {
     nullable: true,
   })
-  stateFields: StateFields[]
+  stateFields: StateFields[] | null
 
   @OneToOne(() => CatalogFields, (catalogFields) => catalogFields, {
     nullable: true,

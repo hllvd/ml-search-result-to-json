@@ -169,21 +169,11 @@ const upsert = async (
 
     if (catalogInfo?.views) {
       const views = await viewsPersistence.upsert(catalogInfo.views)
-      console.log("views", views)
       catalog.views = catalogInfo?.views
-    } else {
-      await viewsPersistence.link(catalogInfo.id)
-    }
-
-    if (catalogInfo?.stateFields) {
-      console.log("stateFields", catalogInfo?.stateFields)
-      await stateFieldPersistence.flushAndInsert(catalogInfo?.stateFields)
     }
 
     if (catalogInfo?.catalogFields) {
-      const cf = await catalogFieldsPersistence.upsert(
-        catalogInfo.catalogFields
-      )
+      await catalogFieldsPersistence.upsert(catalogInfo.catalogFields)
       catalog.catalogFields = catalogInfo.catalogFields
     }
 
@@ -201,6 +191,14 @@ const upsert = async (
       [catalog],
       ["catalogFields"]
     )
+
+    if (!catalogInfo?.views) {
+      await viewsPersistence.link(catalogInfo.id)
+    }
+    if (catalogInfo?.stateFields) {
+      await stateFieldPersistence.flushAndInsert(catalogInfo?.stateFields)
+    }
+
     return result
   } catch (error) {
     console.error("Error in upsert operation:", error)

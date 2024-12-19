@@ -15,6 +15,7 @@ const webScrapeCatalogToMetadataPredicate = async (
   )
 
   const hasVideo = !!clipIconHtml
+  console.log("hasVideo", hasVideo)
   return { response: { amountInt, hasVideo } }
 }
 

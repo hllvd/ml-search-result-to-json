@@ -1,10 +1,13 @@
 import {
+  BeforeInsert,
+  BeforeUpdate,
   Column,
   CreateDateColumn,
   Entity,
   PrimaryColumn,
   PrimaryGeneratedColumn,
   Unique,
+  UpdateDateColumn,
 } from "typeorm"
 
 /**
@@ -28,6 +31,6 @@ export class Search {
   @Column({ type: "varchar", nullable: true })
   categoryId: string
 
-  @CreateDateColumn()
-  createdAt: Date
+  @UpdateDateColumn({ type: "datetime" })
+  metadataUpdatedAt: Date
 }

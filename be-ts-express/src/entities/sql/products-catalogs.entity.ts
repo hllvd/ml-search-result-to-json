@@ -7,6 +7,9 @@ import {
   OneToOne,
   OneToMany,
   JoinColumn,
+  BeforeUpdate,
+  BeforeInsert,
+  UpdateDateColumn,
 } from "typeorm"
 import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
@@ -111,6 +114,9 @@ export class ProductsCatalogs {
 
   @Column({ nullable: true, type: "float" })
   dailyRevenue: number
+
+  @UpdateDateColumn({ type: "datetime" })
+  metadataUpdatedAt: Date
 
   @ManyToOne(() => Categories, (category) => category.id, { nullable: true })
   category: Categories | null

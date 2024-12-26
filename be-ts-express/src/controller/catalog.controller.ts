@@ -47,12 +47,9 @@ const catalog = async (
   const response = {
     ...catalogSummaryResponse,
   }
-  res.status(200).json(response)
-  if (!req.persistency) {
-    req.persistency = {} as PersistencyInfo
-    req.persistency.catalogInfo = response
-    next()
-  }
+  req.persistency = {} as PersistencyInfo
+  req.persistency.catalogInfo = response
+  next()
 }
 
 const views = async (

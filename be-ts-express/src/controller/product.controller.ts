@@ -19,14 +19,11 @@ const product = async (
     productId,
     userId,
   })
-  res.status(200).json({
-    ...productInfo,
-  })
-  if (!req.persistency) {
-    req.persistency = {} as PersistencyInfo
-    req.persistency.productInfo = { ...productInfo, productId }
-    next()
-  }
+
+  req.persistency = {} as PersistencyInfo
+  req.persistency.productInfo = { ...productInfo, productId }
+  next()
+  console.log("GO NEXT from product controller")
 }
 
 const views = async (
@@ -42,9 +39,6 @@ const views = async (
     productId,
   })
 
-  res.status(200).json({
-    ...catalogVisitsSummary,
-  })
   if (!req.persistency) {
     req.persistency = {} as PersistencyInfo
     req.persistency.productViewInfo = { ...catalogVisitsSummary, productId }

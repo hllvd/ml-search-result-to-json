@@ -12,7 +12,7 @@ const entityFromDbMiddleware = async (
 
   const productCatalogFromDb = await productCatalogPersistence.get(productId)
   const daysToExpire = 30
-  const expireDate: Date = productCatalogFromDb.metadataUpdatedAt
+  const expireDate: Date = productCatalogFromDb?.metadataUpdatedAt
     ? new Date(productCatalogFromDb.metadataUpdatedAt)
     : new Date("1988-05-02")
   expireDate.setDate(expireDate.getDate() + daysToExpire)

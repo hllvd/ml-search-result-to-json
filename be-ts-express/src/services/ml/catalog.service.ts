@@ -86,11 +86,6 @@ const catalogSummary = async ({
 
   const categoryId = products[0]?.category_id ?? null
 
-  // if (categoryId) {
-  //   const category = await getPersistentCategoryInfo({ userId, categoryId })
-  //   return { catalogId, ...catalogReducerWithSummary, hasVideo, category }
-  // }
-
   return {
     catalogId,
     ...catalogReducerWithSummary,

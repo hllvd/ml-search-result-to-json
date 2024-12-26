@@ -58,6 +58,7 @@ export const saveProductToDb = async (productInfo: ProductApiResponse) => {
 }
 
 export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
+  console.log("saveCatalogToDb 1")
   let catalog = new ProductsCatalogs()
   catalog = convertCatalogApiResponseToProductCatalogEntity(
     catalogInfo,
@@ -147,7 +148,7 @@ const upsert = async (
     // Create or get existing catalog
     let catalog = await catalogRepository.findOne({
       where: { id: catalogInfo.id },
-      relations: ["catalogFields", "brandModel"],
+      relations: ["brandModel"],
     })
 
     if (!catalog) {

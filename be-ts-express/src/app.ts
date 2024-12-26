@@ -16,18 +16,15 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Get Entity From DB
-app.use(entityFromDbMiddleware)
+//app.use(entityFromDbMiddleware)
 
 // Routes
 app.use("/", routes)
-//app.post("/notification", notificationController.notification)
-
+//app.post("/notification", notificationController.notification) d
 // Persistent middleware
 app.use(persistentMiddleware)
-
 // Get Entity From DB
 app.use(entityFromDbMiddleware)
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack)

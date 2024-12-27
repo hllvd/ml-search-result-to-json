@@ -2,7 +2,6 @@ import { ScrapeType } from "../../enums/scrap-type.enum"
 import { CatalogApiResponse } from "../../models/api-response/api/catalog-response.models"
 import { CatalogReducerResponse } from "../../models/reducers/catalog-reducer.models"
 import { roundNumber } from "../../utils/math.util"
-import { getPersistentCategoryInfo } from "./categories.service"
 
 import {
   calculateCommissions,
@@ -82,9 +81,6 @@ const catalogSummary = async ({
     catalog: { ...catalogReducerValues, length: amountOfProducts },
     sales: productSales,
   })
-  const { has_video: hasVideo } = productSales
-
-  const categoryId = products[0]?.category_id ?? null
 
   return {
     catalogId,

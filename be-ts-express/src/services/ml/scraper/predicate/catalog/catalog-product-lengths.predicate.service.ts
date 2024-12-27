@@ -23,7 +23,7 @@ const webScrapeCatalogProductLengthPredicate = async (
     if (!pageMetadata.hasNext) break
   }
   const amountOfProduct = calculateHowManyProducts(pageMetadata)
-
+  console.log("=====> amountOfProduct", amountOfProduct)
   return { response: amountOfProduct }
 }
 
@@ -53,17 +53,22 @@ const getCatalogPageMetadata = (htmlPage): PageMetadata => {
 
   const lastElement = validElements.pop()
 
-  const hasNext = !htmlPage.querySelector(
-    ".andes-pagination__button--next.andes-pagination__button--disabled"
-  )
+  const hasNext =
+    !!htmlPage.querySelector(
+      ".andes-pagination__button.andes-pagination__button--next"
+    ) &&
+    !htmlPage.querySelector(
+      ".andes-pagination__button--next.andes-pagination__button--disabled"
+    )
 
   const productsCount =
     Array.from(htmlPage.querySelectorAll(".ui-pdp-s-results form")).length ?? 1
 
-  console.log("productsCount", productsCount)
+  console.log(" productsCount", productsCount)
+  console.log(" validElements", validElements)
   return {
-    lastPageNumber: lastElement.page,
-    lastPageUrl: lastElement.url,
+    lastPageNumber: lastElement?.page ?? 1,
+    lastPageUrl: lastElement?.url ?? null,
     hasNext,
     productsCount,
   }

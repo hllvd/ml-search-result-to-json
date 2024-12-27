@@ -172,8 +172,8 @@ const upsert = async (
       const views = await viewsPersistence.upsert(catalogInfo.views)
       catalog.views = catalogInfo?.views
     }
-
     if (catalogInfo?.catalogFields) {
+      console.log("================>", catalogInfo.catalogFields)
       await catalogFieldsPersistence.upsert(catalogInfo.catalogFields)
       catalog.catalogFields = catalogInfo.catalogFields
     }

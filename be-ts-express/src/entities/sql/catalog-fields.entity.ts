@@ -5,38 +5,38 @@ import { ProductsCatalogs } from "./products-catalogs.entity"
   engine: "InnoDB",
 })
 export class CatalogFields {
-  @Column({ nullable: true, type: "float" })
-  priceBest: number
+  @Column({ nullable: true, type: "float", default: null })
+  priceBest?: number
 
-  @Column({ nullable: true, type: "float" })
-  priceSecond: number
+  @Column({ nullable: true, type: "float", default: null })
+  priceSecond?: number
 
-  @Column({ nullable: true, type: "float" })
-  priceTop5Avg: number
+  @Column({ nullable: true, type: "float", default: null })
+  priceTop5Avg?: number
 
-  @Column({ nullable: true, type: "float" })
-  priceFull: number
+  @Column({ nullable: true, type: "float", default: null })
+  priceFull?: number
 
-  @Column({ nullable: true, type: "int" })
-  positionFull: number
+  @Column({ nullable: true, type: "int", default: null })
+  positionFull?: number
 
-  @Column({ nullable: true, type: "int" })
-  positionMedalGold: number
+  @Column({ nullable: true, type: "int", default: null })
+  positionMedalGold?: number
 
-  @Column({ nullable: true, type: "int" })
-  positionMedalPlatinum: number
+  @Column({ nullable: true, type: "int", default: null })
+  positionMedalPlatinum?: number
 
-  @Column({ nullable: true, type: "int" })
-  positionMedalLider: number
+  @Column({ nullable: true, type: "int", default: null })
+  positionMedalLider?: number
 
-  @Column({ nullable: true, type: "int" })
-  positionOfficialStore: number
+  @Column({ nullable: true, type: "int", default: null })
+  positionOfficialStore?: number
 
   @Column({ nullable: true, type: "int" })
   length: number
 
   @Column({ nullable: true })
-  mlOwner: boolean
+  mlOwner?: boolean
 
   @OneToOne(() => ProductsCatalogs, (product) => product.catalogFields)
   @PrimaryColumn()

@@ -49,6 +49,7 @@ const catalog = async (
   }
   req.persistency = {} as PersistencyInfo
   req.persistency.catalogInfo = response
+
   next()
 }
 

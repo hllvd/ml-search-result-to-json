@@ -7,8 +7,11 @@ const entityFromDbMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
+  const requestPath = req.path
   const productId =
     req.query?.productId?.toString() ?? req.query.catalogId?.toString()
+
+  if (requestPath.includes("views")) return next() // Skip views endpoint
 
   const productCatalogFromDb = await productCatalogPersistence.get(productId)
   const daysToExpire = 30

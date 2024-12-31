@@ -1,6 +1,6 @@
-import dataSource from "../../../db/data-source"
-import { BrandModel } from "../../../entities/sql/brand-model.entity"
-import { MLProduct } from "../../../models/dto/ml-product.models"
+import dataSource from "../db/data-source"
+import { BrandModel } from "../entities/sql/brand-model.entity"
+import { MLProduct } from "../models/dto/ml-product.models"
 
 export const brandModelFieldHandler = async ({
   brand,

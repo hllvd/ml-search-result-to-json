@@ -20,21 +20,17 @@ const persistentMiddleware = async (
     catalogInfo = null,
     catalogViewsInfo = null,
     productViewInfo = null,
+    // searchResultInfo = null
   } = req.persistency || {}
   console.log("persistentMiddleware 2")
-  if (
-    productInfo == null &&
-    catalogInfo == null &&
-    catalogViewsInfo == null &&
-    productViewInfo == null
-  )
-    console.log("persistentMiddleware 3")
+
   try {
     console.log("persistentMiddleware 4")
     if (productInfo) await saveProductToDb(productInfo)
     if (catalogInfo) await saveCatalogToDb(catalogInfo)
     if (catalogViewsInfo) await saveCatalogViewsDb(catalogViewsInfo)
     if (productViewInfo) await saveProductViewToDb(productViewInfo)
+    //if (searchResultInfo) await saveSearchResultToDb(searchResultInfo)
     console.log("persistentMiddleware 5")
   } catch (e) {
     console.log("persistentMiddleware 6")

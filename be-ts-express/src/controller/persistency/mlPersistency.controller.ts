@@ -13,8 +13,7 @@ import {
   StateFieldType,
 } from "../../enums/state-field-type.enum"
 import { RequestExtended } from "../../models/extends/params/request-custom.model"
-import persistencyService from "../../services/persistence/product-catalog.persistence"
-import stateFieldPersistence from "../../services/persistence/services/state-field.persistence"
+import productsCatalogsRepository from "../../repository/products-catalogs.repository"
 
 const items = async (
   req: RequestExtended,
@@ -23,7 +22,7 @@ const items = async (
 ) => {
   const productId = req.query?.productId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
-  const productListFromDb = await persistencyService.get(productId)
+  const productListFromDb = await productsCatalogsRepository.get(productId)
   res.status(200).json({ ...productListFromDb })
 }
 

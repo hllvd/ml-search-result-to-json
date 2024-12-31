@@ -11,7 +11,6 @@ import {
   CategoryWebCrawlerPredicateResult,
   ScrapCategoryMetadata,
 } from "../../models/predicate/category-tree.models"
-import categoryPersistence from "../persistence/category.persistence"
 
 import {
   fetchCategoryInfo,
@@ -127,39 +126,6 @@ const _getRootCategory = async ({
   const rootCategory = categoryInfo?.path_from_root?.[0]
   if (rootCategory.id === categoryInfo.id) return Promise.resolve(categoryInfo)
   return await getCategoryInfo({ categoryId: rootCategory.id, userId })
-}
-
-/**
- * Try to get the category info from the cache/db, if not found, fetch it from the API
- * @param categoryId
- * @param userId
- */
-export const getPersistentCategoryInfo = async ({
-  categoryId,
-  userId,
-}): Promise<Categories> => {
-  const categoryFromDb: Categories = await categoryPersistence.get(categoryId)
-  //TODO
-  //if (!categoryFromDb) {
-  if (true) {
-    const fetchedCategoryInfo = await getCategoryInfo({
-      categoryId,
-      userId,
-    })
-    const permaLink = fetchedCategoryInfo.permalink
-    const categoryFetch: Categories = {
-      id: fetchedCategoryInfo.id,
-      name: fetchedCategoryInfo.name,
-      totalItems: fetchedCategoryInfo.total_items_in_this_category,
-      permaLink: "",
-      hasItems: false,
-      hasChildren: false,
-      parentId: "",
-    }
-    // categoryPersistent.upsert(categoryFetch)
-    return categoryFetch
-  }
-  return categoryFromDb
 }
 
 const _getParentIdFromCategory = (

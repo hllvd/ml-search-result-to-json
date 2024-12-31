@@ -1,5 +1,5 @@
-import dataSource from "../../db/data-source"
-import { Search } from "../../entities/sql/search.entity"
+import dataSource from "../db/data-source"
+import { Search } from "../entities/sql/search.entity"
 
 const get = async (searchTerm: string): Promise<Search> => {
   const existingSearchItem = await dataSource.manager

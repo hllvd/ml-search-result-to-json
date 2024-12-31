@@ -1,7 +1,7 @@
-import dataSource from "../../db/data-source"
-import { SearchSummaryFields } from "../../entities/sql/search-summary-fields.entity"
-import { Search } from "../../entities/sql/search.entity"
-import { SearchSummaryFieldsType } from "../../enums/search-summary-fields-types.enum"
+import dataSource from "../db/data-source"
+import { SearchSummaryFields } from "../entities/sql/search-summary-fields.entity"
+import { Search } from "../entities/sql/search.entity"
+import { SearchSummaryFieldsType } from "../enums/search-summary-fields-types.enum"
 
 const get = async (
   search: Search,

@@ -1,19 +1,9 @@
 import { Request, Response } from "express"
 import { getMe } from "../services/ml/api/users"
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs"
-import { fetchMl } from "../services/ml/fetcher-api.ml.service"
-import dataSource from "../db/data-source"
-import { StateFields } from "../entities/sql/state-fields.entity"
-import { ProductsCatalogs } from "../entities/sql/products-catalogs.entity"
-import { EntityType } from "../enums/entity-type.enum"
-import {
-  StateFieldType,
-  StateFieldSubType,
-} from "../enums/state-field-type.enum"
-import searchPersistence from "../services/persistence/search.persistence"
-import searchSummaryFieldsPersistence from "../services/persistence/search-summary-fields.persistence"
+
 import { Search } from "../entities/sql/search.entity"
-import { SearchSummaryFieldsType } from "../enums/search-summary-fields-types.enum"
+import searchRepository from "../repository/search.repository"
 
 const me = async (req: Request, res: Response) => {
   const userId = req.query?.userId?.toString() ?? "1334843159"
@@ -33,7 +23,7 @@ const test = async (req: Request, res: Response) => {
   search.categoryId = "Este é o teste4512"
   search.searchTerm = searchTerm
   search.url = "https://test2"
-  const r = await searchPersistence.upsert(search)
+  const r = await searchRepository.upsert(search)
   //const r = await searchPersistence.get(searchTerm)
 
   // const r2 = await searchSummaryFieldsPersistence.upsert({

@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express"
 import { RequestExtended } from "../models/extends/params/request-custom.model"
-import productCatalogPersistence from "../services/persistence/product-catalog.persistence"
+import productsCatalogsRepository from "../repository/products-catalogs.repository"
 
 const entityFromDbMiddleware = async (
   req: RequestExtended,
@@ -13,7 +13,7 @@ const entityFromDbMiddleware = async (
 
   if (requestPath.includes("views")) return next() // Skip views endpoint
 
-  const productCatalogFromDb = await productCatalogPersistence.get(productId)
+  const productCatalogFromDb = await productsCatalogsRepository.get(productId)
   const daysToExpire = 30
   const expireDate: Date = productCatalogFromDb?.metadataUpdatedAt
     ? new Date(productCatalogFromDb.metadataUpdatedAt)

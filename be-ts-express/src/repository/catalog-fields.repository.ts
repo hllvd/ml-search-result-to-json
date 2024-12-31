@@ -1,5 +1,5 @@
-import dataSource from "../../../db/data-source"
-import { CatalogFields } from "../../../entities/sql/catalog-fields.entity"
+import dataSource from "../db/data-source"
+import { CatalogFields } from "../entities/sql/catalog-fields.entity"
 
 const upsert = async (catalogFieldsInfo: CatalogFields) => {
   const catalogFieldsRepository = dataSource.getRepository(CatalogFields)

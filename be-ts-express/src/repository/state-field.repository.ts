@@ -1,9 +1,5 @@
-import dataSource from "../../../db/data-source"
-import { StateFields } from "../../../entities/sql/state-fields.entity"
-import {
-  StateFieldType,
-  StateFieldSubType,
-} from "../../../enums/state-field-type.enum"
+import dataSource from "../db/data-source"
+import { StateFields } from "../entities/sql/state-fields.entity"
 
 const flushAndInsert = async (stateFieldInfo: StateFields[]) => {
   await dataSource.manager.delete(StateFields, {

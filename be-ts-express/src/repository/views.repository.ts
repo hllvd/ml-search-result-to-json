@@ -1,6 +1,6 @@
-import dataSource from "../../../db/data-source"
-import { ProductsCatalogs } from "../../../entities/sql/products-catalogs.entity"
-import { ProductViewsSummary } from "../../../entities/sql/views-summary.entity"
+import dataSource from "../db/data-source"
+import { ProductsCatalogs } from "../entities/sql/products-catalogs.entity"
+import { ProductViewsSummary } from "../entities/sql/views-summary.entity"
 
 const upsert = async (viewsInfo: ProductViewsSummary) => {
   const { id } = viewsInfo

@@ -3,31 +3,38 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
   PrimaryColumn,
   PrimaryGeneratedColumn,
+  Unique,
+  UpdateDateColumn,
 } from "typeorm"
+import { ProductsCatalogs } from "./products-catalogs.entity"
+import { Search } from "./search.entity"
 
 /**
  * @description
  */
-
-@Index("IDX_CUSTOM_INDEX", ["searchId", "position", "productId"])
+//@Index("IDX_CUSTOM_INDEX", ["search", "position", "productId"])
 @Entity({
   engine: "InnoDB",
 })
+@Unique(["search", "position", "productId"])
 export class SearchPosition {
-  @PrimaryGeneratedColumn()
-  id: number
+  @ManyToOne(() => Search, (search) => search, {
+    nullable: true,
+  })
+  @JoinColumn()
+  search: Search | null
 
-  @Column({ type: "varchar" })
-  searchId: string
-
-  @Column({ type: "integer" })
+  @PrimaryColumn({ type: "integer" })
   position: number
 
-  @Column({ type: "varchar" })
+  @PrimaryColumn({ type: "varchar" })
   productId: string
 
-  @CreateDateColumn()
-  createdAt: Date
+  @UpdateDateColumn({ type: "datetime" })
+  metadataUpdatedAt: Date
 }

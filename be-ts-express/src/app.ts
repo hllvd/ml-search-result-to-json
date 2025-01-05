@@ -16,7 +16,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Get Entity From DB
-app.use(entityFromDbMiddleware)
+//app.use(entityFromDbMiddleware)
 
 // Routes
 app.use("/", routes)

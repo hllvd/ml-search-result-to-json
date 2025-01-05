@@ -4,6 +4,8 @@ import dataSource from "../../db/data-source"
 import { BrandModel } from "../../entities/sql/brand-model.entity"
 import { CatalogFields } from "../../entities/sql/catalog-fields.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
+import { SearchPosition } from "../../entities/sql/search-positions.entity"
+import { Search } from "../../entities/sql/search.entity"
 import { Seller } from "../../entities/sql/seller.entity"
 import { StateFields } from "../../entities/sql/state-fields.entity"
 import { ProductViewsSummary } from "../../entities/sql/views-summary.entity"
@@ -14,16 +16,41 @@ import {
 } from "../../enums/state-field-type.enum"
 import { RequestExtended } from "../../models/extends/params/request-custom.model"
 import productsCatalogsRepository from "../../repository/products-catalogs.repository"
+import searchPositionRepository from "../../repository/search-position.repository"
+import searchRepository from "../../repository/search.repository"
 
 const items = async (
   req: RequestExtended,
   res: Response,
   next: NextFunction
 ) => {
-  const productId = req.query?.productId?.toString()
-  const userId = req.query?.userId?.toString() ?? "1231084821"
-  const productListFromDb = await productsCatalogsRepository.get(productId)
-  res.status(200).json({ ...productListFromDb })
+  // const productId = req.query?.productId?.toString()
+  // const userId = req.query?.userId?.toString() ?? "1231084821"
+  // const productListFromDb = await productsCatalogsRepository.get(productId)
+
+  const search = new Search()
+  search.id = 1
+  search.searchTerm = "term"
+  search.url = "url"
+  await searchRepository.upsert(search)
+  const searchRecord = await searchRepository.get(search.searchTerm)
+
+  const searchResult = new SearchPosition()
+  searchResult.position = 1
+  searchResult.productId = "MLB19722322"
+  searchResult.search = search
+
+  const searchResult2 = new SearchPosition()
+  searchResult2.position = 2
+  searchResult2.productId = "MLB2760464532"
+  searchResult2.search = search
+
+  await dataSource.manager
+    .getRepository(SearchPosition)
+    .save([searchResult, searchResult2])
+  console.log("here")
+
+  res.status(200).json({ searchRecord })
 }
 
 const items_ = async (

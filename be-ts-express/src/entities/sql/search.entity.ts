@@ -1,14 +1,13 @@
 import {
-  BeforeInsert,
-  BeforeUpdate,
   Column,
-  CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from "typeorm"
+import { SearchPosition } from "./search-positions.entity"
 
 /**
  * @description
@@ -22,7 +21,7 @@ export class Search {
   @PrimaryGeneratedColumn()
   id: number
 
-  @PrimaryColumn({ type: "varchar", unique: true })
+  @PrimaryColumn({ type: "varchar" })
   searchTerm: string
 
   @Column({ type: "varchar" })
@@ -30,6 +29,11 @@ export class Search {
 
   @Column({ type: "varchar", nullable: true })
   categoryId?: string
+
+  @OneToMany(() => SearchPosition, (sp) => sp.search, {
+    cascade: true,
+  })
+  searchPosition?: SearchPosition[] | null
 
   @UpdateDateColumn({ type: "datetime" })
   metadataUpdatedAt: Date

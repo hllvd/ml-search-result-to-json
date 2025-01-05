@@ -1,4 +1,5 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
+import { SearchResultApiResponse } from "../../models/api-response/api/search-results-response.models"
 import { webScrapeSearchResultMetadata } from "./scraper/predicate/list/list.scaper.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
@@ -8,7 +9,7 @@ export const searchItems = async ({
   searchTerm?: string
   categoryId?: string
   userId: string
-}): Promise<{ searchTerm: string; url: string; items: Array<any> }> => {
+}): Promise<SearchResultApiResponse> => {
   const maxPage = 5
 
   const { result: productListFromCategory, pages } = await webScrapeMlPage(

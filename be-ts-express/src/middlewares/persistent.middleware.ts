@@ -4,6 +4,7 @@ import {
   saveCatalogToDb,
   saveProductToDb,
 } from "../services/persistence/product-catalog.persistence"
+import { saveSearchResultToDb } from "../services/persistence/search-results.persistence"
 import {
   saveCatalogViewsDb,
   saveProductViewToDb,
@@ -20,7 +21,7 @@ const persistentMiddleware = async (
     catalogInfo = null,
     catalogViewsInfo = null,
     productViewInfo = null,
-    // searchResultInfo = null
+    searchResultsInfo = null,
   } = req.persistency || {}
   console.log("persistentMiddleware 2")
 
@@ -30,7 +31,7 @@ const persistentMiddleware = async (
     if (catalogInfo) await saveCatalogToDb(catalogInfo)
     if (catalogViewsInfo) await saveCatalogViewsDb(catalogViewsInfo)
     if (productViewInfo) await saveProductViewToDb(productViewInfo)
-    //if (searchResultInfo) await saveSearchResultToDb(searchResultInfo)
+    if (searchResultsInfo) await saveSearchResultToDb(searchResultsInfo)
     console.log("persistentMiddleware 5")
   } catch (e) {
     console.log("persistentMiddleware 6")

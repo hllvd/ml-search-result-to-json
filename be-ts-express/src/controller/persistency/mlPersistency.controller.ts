@@ -38,12 +38,12 @@ const items = async (
   const searchResult = new SearchPosition()
   searchResult.position = 1
   searchResult.productId = "MLB19722322"
-  searchResult.search = search
+  searchResult.search = searchRecord
 
   const searchResult2 = new SearchPosition()
   searchResult2.position = 2
   searchResult2.productId = "MLB2760464532"
-  searchResult2.search = search
+  searchResult2.search = searchRecord
 
   await dataSource.manager
     .getRepository(SearchPosition)

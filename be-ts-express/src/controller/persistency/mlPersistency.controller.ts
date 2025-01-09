@@ -27,6 +27,13 @@ const items = async (
   // const productId = req.query?.productId?.toString()
   // const userId = req.query?.userId?.toString() ?? "1231084821"
   // const productListFromDb = await productsCatalogsRepository.get(productId)
+  const prod1 = new ProductsCatalogs()
+  prod1.type = 0
+  prod1.id = "MLB2760464532"
+
+  const prod2 = new ProductsCatalogs()
+  prod2.type = 1
+  prod2.id = "MLB19722322"
 
   const search = new Search()
   search.id = 1
@@ -37,12 +44,12 @@ const items = async (
 
   const searchResult = new SearchPosition()
   searchResult.position = 1
-  searchResult.productId = "MLB19722322"
+  searchResult.product = prod1
   searchResult.search = searchRecord
 
   const searchResult2 = new SearchPosition()
   searchResult2.position = 2
-  searchResult2.productId = "MLB2760464532"
+  searchResult2.product = prod2
   searchResult2.search = searchRecord
 
   await dataSource.manager
@@ -50,7 +57,7 @@ const items = async (
     .save([searchResult, searchResult2])
   console.log("here")
 
-  res.status(200).json({ searchRecord })
+  res.status(200).json({ ...searchRecord })
 }
 
 const items_ = async (

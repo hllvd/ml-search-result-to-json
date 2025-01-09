@@ -17,23 +17,24 @@ import { Search } from "./search.entity"
 /**
  * @description
  */
-//@Index("IDX_CUSTOM_INDEX", ["search", "position", "productId"])
+//@Index("IDX_CUSTOM_INDEX", ["search", "position", "product"])
 @Entity({
   engine: "InnoDB",
 })
-@Unique(["search", "position", "productId"])
+@Unique(["search", "position", "product"])
 export class SearchPosition {
-  @ManyToOne(() => Search, (search) => search, {
-    nullable: true,
-  })
+  @ManyToOne(() => Search, (search) => search)
   @JoinColumn()
   search: Search | null
 
   @PrimaryColumn({ type: "integer" })
   position: number
 
-  @PrimaryColumn({ type: "varchar" })
-  productId: string
+  @OneToOne(() => ProductsCatalogs, (pc) => pc, {
+    cascade: true,
+  })
+  @JoinColumn()
+  product: ProductsCatalogs | null
 
   @UpdateDateColumn({ type: "datetime" })
   metadataUpdatedAt: Date

@@ -15,6 +15,7 @@ import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
 import { CatalogFields } from "./catalog-fields.entity"
 import { Categories } from "./categories.entity"
+import { SearchPosition } from "./search-positions.entity"
 import { Seller } from "./seller.entity"
 import { StateFields } from "./state-fields.entity"
 import { ProductViewsSummary } from "./views-summary.entity"
@@ -117,6 +118,9 @@ export class ProductsCatalogs {
 
   @UpdateDateColumn({ type: "datetime" })
   metadataUpdatedAt: Date
+
+  @OneToOne(() => SearchPosition, (sp) => sp.product, { nullable: true })
+  searchPosition: SearchPosition | null
 
   @ManyToOne(() => Categories, (category) => category.id, { nullable: true })
   category: Categories | null

@@ -11,19 +11,35 @@ import searchRepository from "./search.repository"
 // }
 
 const upsert = async (
-  searchTerm: string,
-  search: SearchPosition
-): Promise<SearchPosition | Array<SearchPosition> | null> => {
+  searchPosition: SearchPosition | Array<SearchPosition>
+): Promise<boolean> => {
   try {
-    const arraySearch = Array.isArray(search) ? search : [search]
-    console.log("Search SearchPosition", arraySearch)
-    return await dataSource.manager.getRepository(SearchPosition).save(search)
+    const arraySearchPosition = Array.isArray(searchPosition)
+      ? searchPosition
+      : [searchPosition]
+
+    await dataSource.manager.upsert(
+      SearchPosition,
+      [...arraySearchPosition],
+      ["search", "position", "product"]
+    )
+    return true
   } catch (e) {
     console.log("Search SearchPosition already exist", e)
-    return null
-  } finally {
-    console.log("Search SearchPosition finally")
+    return false
   }
 }
 
-export default { upsert }
+const del = async (search: Search): Promise<boolean> => {
+  try {
+    await dataSource.manager
+      .getRepository(SearchPosition)
+      .delete({ search: { id: search.id } })
+    return true
+  } catch (e) {
+    console.log("Search SearchPosition already exist", e)
+    return false
+  }
+}
+
+export default { upsert, del }

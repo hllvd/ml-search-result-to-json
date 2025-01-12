@@ -126,7 +126,7 @@ export class ProductsCatalogs {
   category: Categories | null
 
   @ManyToOne(() => Seller, (seller) => seller.id)
-  seller: Seller
+  seller: Seller | null
 
   @ManyToOne(() => BrandModel, (brandModel) => brandModel, {
     nullable: true,

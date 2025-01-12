@@ -49,22 +49,17 @@ const get = async (productId): Promise<ProductsCatalogs> => {
     .getOne()
   return productsCatalogs
 }
-
 const upsert = async (
-  catalogInfo: ProductsCatalogs,
-  type: EntityType,
-  {
-    catalogFields,
-    brandModel,
-    views,
-    stateFields,
-  }: {
-    catalogFields?: CatalogFields
-    brandModel?: BrandModel
-    views?: ProductViewsSummary
-    stateFields?: StateFields
-  } = {}
+  catalogInfo: ProductsCatalogs | Array<ProductsCatalogs>
 ) => {
+  const catalogs = Array.isArray(catalogInfo) ? catalogInfo : [catalogInfo]
+  const catalogsResult = catalogs.map((catalog) => {
+    return upsertSingle(catalog)
+  })
+  return catalogsResult
+}
+
+const upsertSingle = async (catalogInfo: ProductsCatalogs) => {
   try {
     const catalogRepository = dataSource.getRepository(ProductsCatalogs)
 
@@ -92,7 +87,8 @@ const upsert = async (
     }
 
     if (catalogInfo?.views) {
-      const views = await viewsRepository.upsert(catalogInfo.views)
+      console.log("views here")
+      await viewsRepository.upsert(catalogInfo.views)
       catalog.views = catalogInfo?.views
     }
     if (catalogInfo?.catalogFields) {
@@ -103,11 +99,7 @@ const upsert = async (
 
     catalog = catalogRepository.merge(catalog, {
       ...catalogInfo,
-      type,
       title: catalogInfo.title,
-      catalogFields,
-      views,
-      brandModel,
     })
 
     const result = await dataSource.manager.upsert(

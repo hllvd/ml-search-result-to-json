@@ -45,7 +45,7 @@ export const saveProductToDb = async (productInfo: ProductApiResponse) => {
 
   product.seller = existingUser || seller
   //await dataSource.manager.save(product)
-  await productsCatalogsRepository.upsert(product, product.type)
+  await productsCatalogsRepository.upsert(product)
   console.log("saved saveProductToDb to db")
 }
 
@@ -76,6 +76,6 @@ export const saveCatalogToDb = async (catalogInfo: CatalogApiResponse) => {
   console.log("catalogFieldConverted", catalogFieldConverted)
   catalog.catalogFields = catalogFieldConverted
 
-  await productsCatalogsRepository.upsert(catalog, catalog.type)
+  await productsCatalogsRepository.upsert(catalog)
   console.log("save saveCatalogToDb to db")
 }

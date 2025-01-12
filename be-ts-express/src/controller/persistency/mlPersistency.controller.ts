@@ -55,7 +55,6 @@ const items = async (
   await dataSource.manager
     .getRepository(SearchPosition)
     .save([searchResult, searchResult2])
-  console.log("here")
 
   res.status(200).json({ ...searchRecord })
 }

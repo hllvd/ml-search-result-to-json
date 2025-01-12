@@ -17,17 +17,19 @@ import { Search } from "./search.entity"
 /**
  * @description
  */
-//@Index("IDX_CUSTOM_INDEX", ["search", "position", "product"])
+@Unique(["search", "position", "product"])
 @Entity({
   engine: "InnoDB",
 })
-@Unique(["search", "position", "product"])
 export class SearchPosition {
+  @PrimaryGeneratedColumn()
+  id: number
+
   @ManyToOne(() => Search, (search) => search)
   @JoinColumn()
   search: Search | null
 
-  @PrimaryColumn({ type: "integer" })
+  @Column({ type: "integer" })
   position: number
 
   @OneToOne(() => ProductsCatalogs, (pc) => pc, {

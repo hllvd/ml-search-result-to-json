@@ -1,6 +1,8 @@
 import {
   Column,
+  ColumnTypeUndefinedError,
   Entity,
+  Index,
   OneToMany,
   PrimaryColumn,
   PrimaryGeneratedColumn,
@@ -16,12 +18,12 @@ import { SearchPosition } from "./search-positions.entity"
 @Entity({
   engine: "InnoDB",
 })
-@Unique(["searchTerm"])
+@Unique(["searchTerm", "url"])
 export class Search {
   @PrimaryGeneratedColumn()
   id: number
 
-  @PrimaryColumn({ type: "varchar" })
+  @Column({ type: "varchar" })
   searchTerm: string
 
   @Column({ type: "varchar" })

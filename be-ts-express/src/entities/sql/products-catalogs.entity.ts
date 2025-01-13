@@ -119,8 +119,8 @@ export class ProductsCatalogs {
   @UpdateDateColumn({ type: "datetime" })
   metadataUpdatedAt: Date
 
-  @OneToOne(() => SearchPosition, (sp) => sp.product, { nullable: true })
-  searchPosition: SearchPosition | null
+  @OneToMany(() => SearchPosition, (sp) => sp.product, { nullable: true })
+  searchPosition: SearchPosition[] | null
 
   @ManyToOne(() => Categories, (category) => category.id, { nullable: true })
   category: Categories | null

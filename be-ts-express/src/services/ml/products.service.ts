@@ -9,10 +9,7 @@ import {
 import { FetchProductArgument } from "../../models/params/fetch-product.model"
 import { calculateDaysFrom } from "../../utils/day-calculation.util"
 import { roundNumber } from "../../utils/math.util"
-import {
-  convertCatalogIdToProductId,
-  getEanIfExist,
-} from "../../utils/ml.utils"
+import { convertCatalogIdToProductId } from "../../utils/ml.utils"
 import { fetchProduct, fetchProducts } from "./api/products.api.service"
 import { fetchSeller } from "./api/users"
 import { productIdsReducer } from "./reducers/product-urls.reducer.service"
@@ -197,19 +194,6 @@ const getProductInCorrectOrder = (
     const product = products.find((product) => product.id === productId)
     return product
   })
-}
-
-const _webScrapeProductPriceAndQuantitySold = async (
-  productId: string
-): Promise<any> => {
-  const { result: productPrice } = await webScrapeMlPage(
-    webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate,
-    {
-      productId,
-      scrapeType: ScrapeType.ProductPage,
-    }
-  )
-  return productPrice
 }
 
 const _webScrapeProductMetadata = async (productId: string): Promise<any> => {

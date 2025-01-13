@@ -32,7 +32,7 @@ export class SearchPosition {
   @Column({ type: "integer" })
   position: number
 
-  @OneToOne(() => ProductsCatalogs, (pc) => pc, {
+  @ManyToOne(() => ProductsCatalogs, (pc) => pc, {
     cascade: true,
   })
   @JoinColumn()

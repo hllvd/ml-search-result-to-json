@@ -1,5 +1,6 @@
 import { ScrapeType } from "../../enums/scrap-type.enum"
 import { SearchResultApiResponse } from "../../models/api-response/api/search-results-response.models"
+import { removeProductDuplicates } from "../../utils/array.util"
 import { webScrapeSearchResultMetadata } from "./scraper/predicate/list/list.scaper.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
@@ -12,7 +13,7 @@ export const searchItems = async ({
 }): Promise<SearchResultApiResponse> => {
   const maxPage = 5
 
-  const { result: productListFromCategory, pages } = await webScrapeMlPage(
+  const { result: productListFromSearch, pages } = await webScrapeMlPage(
     webScrapeSearchResultMetadata,
     {
       searchTerm,
@@ -23,9 +24,15 @@ export const searchItems = async ({
 
   const url = pages[0] ?? null
 
+  const productList = removeProductDuplicates(productListFromSearch)
+  const productIndexFixes = productList.map((product, index) => ({
+    ...product,
+    index: index + 1,
+  }))
+
   return {
     searchTerm,
     url,
-    items: productListFromCategory,
+    items: productIndexFixes,
   }
 }

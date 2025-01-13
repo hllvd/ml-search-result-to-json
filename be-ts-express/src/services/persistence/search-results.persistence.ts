@@ -57,9 +57,16 @@ const saveSearchResultToDb = async (
     return r
   })
 
-  await searchPositionRepository.upsert(searchPosition)
+  await searchPositionRepository.del(searchRecord)
+  await searchPositionRepository.save(searchPosition)
 
+  console.log("items", items)
+  const indexes = items.map(({ index }) => index)
+  console.log("hasDuplicates", hasDuplicates(indexes))
   // Save Jobs
+}
+const hasDuplicates = (array: any[]): boolean => {
+  return new Set(array).size !== array.length
 }
 
 export { saveSearchResultToDb }

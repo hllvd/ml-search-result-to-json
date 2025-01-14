@@ -7,14 +7,14 @@ import {
   OneToOne,
   OneToMany,
   JoinColumn,
-  BeforeUpdate,
-  BeforeInsert,
   UpdateDateColumn,
+  ManyToMany,
 } from "typeorm"
 import { EntityType } from "../../enums/entity-type.enum"
 import { BrandModel } from "./brand-model.entity"
 import { CatalogFields } from "./catalog-fields.entity"
 import { Categories } from "./categories.entity"
+import { Jobs } from "./jobs.entity"
 import { SearchPosition } from "./search-positions.entity"
 import { Seller } from "./seller.entity"
 import { StateFields } from "./state-fields.entity"
@@ -25,7 +25,6 @@ import { ProductViewsSummary } from "./views-summary.entity"
   engine: "InnoDB",
 })
 export class ProductsCatalogs {
-  [x: string]: any
   @PrimaryColumn({ unique: true })
   id: string
 
@@ -118,6 +117,9 @@ export class ProductsCatalogs {
 
   @UpdateDateColumn({ type: "datetime" })
   metadataUpdatedAt: Date
+
+  @ManyToMany(() => Jobs, (job) => job.products, { nullable: true })
+  jobs: Jobs[]
 
   @OneToMany(() => SearchPosition, (sp) => sp.product, { nullable: true })
   searchPosition: SearchPosition[] | null

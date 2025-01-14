@@ -3,6 +3,8 @@ import { catalogInfoToCatalogFieldsEntityConverter } from "../../converters/ml.c
 import dataSource from "../../db/data-source"
 import { BrandModel } from "../../entities/sql/brand-model.entity"
 import { CatalogFields } from "../../entities/sql/catalog-fields.entity"
+import { JobsDescription } from "../../entities/sql/jobs-description.entity"
+import { Jobs } from "../../entities/sql/jobs.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
 import { SearchPosition } from "../../entities/sql/search-positions.entity"
 import { Search } from "../../entities/sql/search.entity"
@@ -20,6 +22,30 @@ import searchPositionRepository from "../../repository/search-position.repositor
 import searchRepository from "../../repository/search.repository"
 
 const items = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction
+) => {
+  const jobsDescription = new JobsDescription()
+  jobsDescription.description = "description 1"
+  await dataSource.manager.getRepository(JobsDescription).save(jobsDescription)
+
+  const product1 = new ProductsCatalogs()
+  product1.type = 0
+  product1.id = "MLB2760464532"
+  await productsCatalogsRepository.upsert(product1)
+
+  const job1 = new Jobs()
+  job1.products = [product1]
+  job1.jobsDescription = jobsDescription
+
+  await dataSource.manager.getRepository(Jobs).save(job1)
+  await dataSource.manager.getRepository(Jobs).save(job1)
+
+  res.status(200).json({})
+}
+
+const items_product_catalogs = async (
   req: RequestExtended,
   res: Response,
   next: NextFunction

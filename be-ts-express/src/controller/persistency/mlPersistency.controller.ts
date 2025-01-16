@@ -3,7 +3,8 @@ import { catalogInfoToCatalogFieldsEntityConverter } from "../../converters/ml.c
 import dataSource from "../../db/data-source"
 import { BrandModel } from "../../entities/sql/brand-model.entity"
 import { CatalogFields } from "../../entities/sql/catalog-fields.entity"
-import { JobsDescription } from "../../entities/sql/jobs-description.entity"
+import { JobGroups } from "../../entities/sql/job-groups.entity"
+
 import { Jobs } from "../../entities/sql/jobs.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
 import { SearchPosition } from "../../entities/sql/search-positions.entity"
@@ -17,8 +18,9 @@ import {
   StateFieldType,
 } from "../../enums/state-field-type.enum"
 import { RequestExtended } from "../../models/extends/params/request-custom.model"
+import jobGroupsRepository from "../../repository/job-groups.repository"
+import jobsRepository from "../../repository/jobs.repository"
 import productsCatalogsRepository from "../../repository/products-catalogs.repository"
-import searchPositionRepository from "../../repository/search-position.repository"
 import searchRepository from "../../repository/search.repository"
 
 const items = async (
@@ -26,24 +28,28 @@ const items = async (
   res: Response,
   next: NextFunction
 ) => {
-  const jobsDescription = new JobsDescription()
-  jobsDescription.description = "description 1"
-  await dataSource.manager.getRepository(JobsDescription).save(jobsDescription)
+  const jobGroups = await jobGroupsRepository.create("desc 2")
 
   const product1 = new ProductsCatalogs()
   product1.type = 0
-  product1.id = "MLB2760464532"
+  product1.id = "MLB2760464533"
   await productsCatalogsRepository.upsert(product1)
+  const product = await dataSource
+    .getRepository(ProductsCatalogs)
+    .findOne({ where: { id: "MLB2760464533" } })
 
   const job1 = new Jobs()
-  job1.products = [product1]
-  job1.jobsDescription = jobsDescription
+  job1.product = product
+  job1.jobGroups = jobGroups
+  await dataSource.manager.getRepository(Jobs).save(job1)
 
-  await dataSource.manager.getRepository(Jobs).save(job1)
-  await dataSource.manager.getRepository(Jobs).save(job1)
+  // await jobsRepository.save(job1)
+  // await jobsRepository.save(job1)
 
   res.status(200).json({})
 }
+
+const job = async () => {}
 
 const items_product_catalogs = async (
   req: RequestExtended,

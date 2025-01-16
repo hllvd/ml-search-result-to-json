@@ -1,3 +1,4 @@
+import { In } from "typeorm/find-options/operator/In"
 import dataSource from "../db/data-source"
 import { BrandModel } from "../entities/sql/brand-model.entity"
 import { CatalogFields } from "../entities/sql/catalog-fields.entity"
@@ -30,6 +31,16 @@ const list = async (productListQueries?: ProductListQueries): Promise<any> => {
 
   const productList = await productListDb.getMany()
   return [...productList]
+}
+
+const findByIds = async (
+  productIds: Array<string>
+): Promise<ProductsCatalogs[]> => {
+  const products = await dataSource.getRepository(ProductsCatalogs).findBy({
+    id: In(productIds),
+  })
+
+  return products
 }
 
 const get = async (productId): Promise<ProductsCatalogs> => {
@@ -122,4 +133,4 @@ const upsertSingle = async (catalogInfo: ProductsCatalogs) => {
   }
 }
 
-export default { list, get, upsert }
+export default { list, get, upsert, findByIds }

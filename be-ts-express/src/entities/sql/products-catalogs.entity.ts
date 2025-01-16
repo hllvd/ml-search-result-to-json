@@ -118,7 +118,7 @@ export class ProductsCatalogs {
   @UpdateDateColumn({ type: "datetime" })
   metadataUpdatedAt: Date
 
-  @ManyToMany(() => Jobs, (job) => job.products, { nullable: true })
+  @OneToMany(() => Jobs, (job) => job.product, { nullable: true })
   jobs: Jobs[]
 
   @OneToMany(() => SearchPosition, (sp) => sp.product, { nullable: true })

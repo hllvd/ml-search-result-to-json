@@ -15,7 +15,7 @@ import { JobsStatus } from "../../enums/jobs-status.enum"
 @Entity({
   engine: "InnoDB",
 })
-export class JobsDescription {
+export class JobGroups {
   @PrimaryGeneratedColumn("uuid")
   id: string
 

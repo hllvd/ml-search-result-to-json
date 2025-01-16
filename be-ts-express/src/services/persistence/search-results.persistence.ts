@@ -1,3 +1,4 @@
+import { Jobs } from "../../entities/sql/jobs.entity"
 import { ProductsCatalogs } from "../../entities/sql/products-catalogs.entity"
 import { SearchPosition } from "../../entities/sql/search-positions.entity"
 import { Search } from "../../entities/sql/search.entity"
@@ -6,9 +7,12 @@ import {
   SearchResultApiResponse,
   SearchResultItems,
 } from "../../models/api-response/api/search-results-response.models"
+import jobGroupsRepository from "../../repository/job-groups.repository"
+import jobsRepository from "../../repository/jobs.repository"
 import productsCatalogsRepository from "../../repository/products-catalogs.repository"
 import searchPositionRepository from "../../repository/search-position.repository"
 import searchRepository from "../../repository/search.repository"
+import { truncateString } from "../../utils/str.util"
 
 const saveSearchResultToDb = async (
   searchResultsInfo: SearchResultApiResponse
@@ -60,13 +64,23 @@ const saveSearchResultToDb = async (
   await searchPositionRepository.del(searchRecord)
   await searchPositionRepository.save(searchPosition)
 
-  console.log("items", items)
-  const indexes = items.map(({ index }) => index)
-  console.log("hasDuplicates", hasDuplicates(indexes))
   // Save Jobs
-}
-const hasDuplicates = (array: any[]): boolean => {
-  return new Set(array).size !== array.length
+  const limitedSearchTerm = truncateString(searchTerm, 150)
+  const jobGroups = await jobGroupsRepository.create(
+    `Products from Search Result: ${limitedSearchTerm}`
+  )
+
+  const productIds = productsCatalogs.map((p) => p.id)
+  const products = await productsCatalogsRepository.findByIds(productIds)
+
+  const jobs: Array<Jobs> = products.map((pc: ProductsCatalogs): Jobs => {
+    const jobs = new Jobs()
+    jobs.jobGroups = jobGroups
+    jobs.product = pc
+    return jobs
+  })
+
+  await jobsRepository.save(jobs)
 }
 
 export { saveSearchResultToDb }

@@ -2,24 +2,25 @@ import { ProductsCatalogs } from "./products-catalogs.entity"
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
-  UsingJoinColumnIsNotAllowedError,
 } from "typeorm"
-import { JobsDescription } from "./jobs-description.entity"
+
 import { JobsStatus } from "../../enums/jobs-status.enum"
 import { JobsPriority } from "../../enums/jobs-priority.enum"
+import { JobGroups } from "./job-groups.entity"
 
 /**
  * @description
  */
 
-Unique(["products", "jobsDescription"])
+Unique(["product", "jobGroups"])
 @Entity({
   engine: "InnoDB",
 })
@@ -36,15 +37,14 @@ export class Jobs {
   @Column({ type: "tinyint", default: 5 })
   ttl: number
 
-  @ManyToOne(() => JobsDescription, (jobs) => jobs)
+  @ManyToOne(() => JobGroups, (jobs) => jobs)
   @JoinTable()
-  jobsDescription: JobsDescription
+  jobGroups: JobGroups
 
-  @ManyToMany(() => ProductsCatalogs, (pc) => pc)
-  @JoinTable()
-  products: ProductsCatalogs[]
+  @ManyToOne(() => ProductsCatalogs, (pc) => pc.jobs)
+  @JoinColumn()
+  product: ProductsCatalogs
 
   @UpdateDateColumn({ type: "datetime" })
   metadataUpdatedAt: Date
-  job1: ProductsCatalogs
 }

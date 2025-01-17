@@ -1,13 +1,10 @@
 import dataSource from "../db/data-source"
-import { JobGroups } from "../entities/sql/job-groups.entity"
 
 import { JobsStatus } from "../enums/jobs-status.enum"
 import { JobsPriority } from "../enums/jobs-priority.enum"
 import { Jobs } from "../entities/sql/jobs.entity"
-import { ProductsCatalogs } from "../entities/sql/products-catalogs.entity"
 import { FindManyOptions, MoreThan } from "typeorm"
 import { EntityType } from "../enums/entity-type.enum"
-import { JobsType } from "../enums/jobs-type.enum"
 
 const save = async (jobs: Jobs | Array<Jobs>): Promise<void> => {
   const jobsArray = Array.isArray(jobs) ? jobs : [jobs]
@@ -16,20 +13,6 @@ const save = async (jobs: Jobs | Array<Jobs>): Promise<void> => {
   } catch (e) {
     console.log(e)
   }
-}
-
-const list_ = async (): Promise<Array<Jobs>> => {
-  try {
-    return await dataSource.manager.getRepository(Jobs).find()
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-interface ProductType {
-  product
-  catalog
-  all
 }
 
 interface JobsRepositoryListParam {

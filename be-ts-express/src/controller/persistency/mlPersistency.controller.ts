@@ -28,6 +28,16 @@ const items = async (
   res: Response,
   next: NextFunction
 ) => {
+  const jobs = await jobsRepository.list({
+    limit: 22,
+  })
+  res.status(200).json([...jobs])
+}
+const items_jobs_create = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction
+) => {
   const jobGroups = await jobGroupsRepository.create("desc 2")
 
   const product1 = new ProductsCatalogs()

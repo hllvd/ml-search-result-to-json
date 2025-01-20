@@ -13,6 +13,8 @@ import { Seller } from "../../entities/sql/seller.entity"
 import { StateFields } from "../../entities/sql/state-fields.entity"
 import { ProductViewsSummary } from "../../entities/sql/views-summary.entity"
 import { EntityType } from "../../enums/entity-type.enum"
+import { JobsStatus } from "../../enums/jobs-status.enum"
+import { JobsType } from "../../enums/jobs-type.enum"
 import {
   StateFieldSubType,
   StateFieldType,
@@ -22,14 +24,27 @@ import jobGroupsRepository from "../../repository/job-groups.repository"
 import jobsRepository from "../../repository/jobs.repository"
 import productsCatalogsRepository from "../../repository/products-catalogs.repository"
 import searchRepository from "../../repository/search.repository"
+import { JobsService } from "../../services/jobs/jobs.service"
 
 const items = async (
   req: RequestExtended,
   res: Response,
   next: NextFunction
 ) => {
+  const jobsService = new JobsService()
+  const jobs = await jobsService.GetJobs()
+  const jobToUpdate = jobs.slice(0, 1)
+  await jobsService.UpdateStatus(jobToUpdate, JobsStatus.Completed)
+
+  res.status(200).json([...jobs])
+}
+const items_jobs_list = async (
+  req: RequestExtended,
+  res: Response,
+  next: NextFunction
+) => {
   const jobs = await jobsRepository.list({
-    limit: 22,
+    limit: 500,
   })
   res.status(200).json([...jobs])
 }

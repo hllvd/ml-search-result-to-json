@@ -6,10 +6,10 @@ import { Jobs } from "../entities/sql/jobs.entity"
 import { FindManyOptions, MoreThan } from "typeorm"
 import { EntityType } from "../enums/entity-type.enum"
 
-const save = async (jobs: Jobs | Array<Jobs>): Promise<void> => {
+const save = async (jobs: Jobs | Array<Jobs>): Promise<Array<Jobs>> => {
   const jobsArray = Array.isArray(jobs) ? jobs : [jobs]
   try {
-    await dataSource.manager.getRepository(Jobs).save(jobsArray)
+    return await dataSource.manager.getRepository(Jobs).save(jobsArray)
   } catch (e) {
     console.log(e)
   }
@@ -67,9 +67,9 @@ const list = async (
     relations: ["product", "jobGroups"],
     order: {
       jobPriority: "DESC",
-      metadataUpdatedAt: "ASC",
+      metadataCreateAt: "ASC",
     },
-    take: limit,
+    take: limit + 1,
     skip: 0,
   }
   const jobs = await dataSource

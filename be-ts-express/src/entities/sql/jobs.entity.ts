@@ -1,6 +1,7 @@
 import { ProductsCatalogs } from "./products-catalogs.entity"
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   JoinTable,
@@ -47,4 +48,7 @@ export class Jobs {
 
   @UpdateDateColumn({ type: "datetime" })
   metadataUpdatedAt: Date
+
+  @CreateDateColumn({ type: "datetime" })
+  metadataCreateAt: Date
 }

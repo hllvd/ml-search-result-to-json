@@ -1,27 +1,25 @@
-import { JobType } from "aws-sdk/clients/sagemaker"
 import { Jobs } from "../../entities/sql/jobs.entity"
 import { EntityType } from "../../enums/entity-type.enum"
+import { JobServiceType } from "../../enums/jobs-service-type.enum"
 import { JobsStatus } from "../../enums/jobs-status.enum"
 import jobsRepository from "../../repository/jobs.repository"
-
-enum JobsType {
-  Products,
-  Catalogs,
-}
 
 export class JobsService {
   private jobs: Jobs[] = []
 
-  public async GetJobs(jobsType?: JobsType, limit?: number): Promise<Jobs[]> {
-    switch (jobsType) {
-      case JobsType.Products:
+  public async GetJobs(
+    jobServiceType?: JobServiceType,
+    limit?: number
+  ): Promise<Jobs[]> {
+    switch (jobServiceType) {
+      case JobServiceType.Products:
         const limitProducts = limit ?? 15
         this.jobs = await jobsRepository.list({
           filter: { productType: EntityType.Product },
           limit: limitProducts,
         })
         break
-      case JobsType.Catalogs:
+      case JobServiceType.Catalogs:
         const limitCatalogs = limit ?? 2
         this.jobs = await jobsRepository.list({
           filter: { productType: EntityType.Catalog },

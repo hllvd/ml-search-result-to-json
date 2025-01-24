@@ -5,6 +5,7 @@ import cors from "cors"
 import { persistentMiddleware } from "./middlewares/persistent.middleware"
 import dataSource from "./db/data-source"
 import { entityFromDbMiddleware } from "./middlewares/entity-from-db.middleware"
+import { WorkerManagerService } from "./worker/services/worker-manager.service"
 
 // Create an instance of the Express application
 const app = express()
@@ -30,6 +31,33 @@ app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(500).send("Something went wrong!")
 })
+
+const workerManager = new WorkerManagerService()
+
+// Start workers
+workerManager.startWorker({
+  id: "emailWorker",
+  jobServiceType: "email",
+  batchSize: 5,
+  delay: 2000,
+  workerFunction: "exampleWorker",
+})
+workerManager.startWorker({
+  id: "reportWorker",
+  jobServiceType: "report",
+  batchSize: 3,
+  delay: 3000,
+  workerFunction: "exampleWorker",
+})
+
+// List active workers
+console.log("Active workers:", workerManager.getWorkerIds())
+
+// Stop all workers after 10 seconds
+setTimeout(() => {
+  workerManager.stopAllWorkers()
+  console.log("All workers stopped.")
+}, 15000)
 
 // Start the server
 app.listen(port, async () => {

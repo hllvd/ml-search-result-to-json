@@ -6,7 +6,10 @@ import {
   MLProductCommission,
   ProductId,
 } from "../../models/dto/ml-product.models"
-import { FetchProductArgument } from "../../models/params/fetch-product.model"
+import {
+  FetchProductArgument,
+  FetchProductsArgument,
+} from "../../models/params/fetch-product.model"
 import { calculateDaysFrom } from "../../utils/day-calculation.util"
 import { roundNumber } from "../../utils/math.util"
 import { convertCatalogIdToProductId } from "../../utils/ml.utils"
@@ -16,7 +19,63 @@ import { productIdsReducer } from "./reducers/product-urls.reducer.service"
 import { webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate } from "./scraper/predicate/product/product-metadata.predicate.service"
 import { webScrapeMlPage } from "./scraper/web.scraper.service"
 
-const getProductComplete = async ({
+const getFullProducts = async ({
+  userId,
+  productIds,
+}: FetchProductsArgument): Promise<ProductApiResponse[]> => {
+  const productIdsWIthOutDash = productIds.map((id) => id.replaceAll("-", ""))
+
+  const products = await getProducts(userId, productIdsWIthOutDash)
+
+  const productsWithSeller = await Promise.all(
+    products.map(async (p) => {
+      const seller = await fetchSeller({
+        sellerId: p.seller_id.toString(),
+        userId,
+      })
+      return { ...p, seller }
+    })
+  )
+
+  const productsWithSellerAndMetadata = await Promise.all(
+    productsWithSeller.map(async (product) => {
+      const productId = convertCatalogIdToProductId(product.id)
+
+      const [scrapProductPage] = await Promise.all([
+        _webScrapeProductMetadata(convertCatalogIdToProductId(product.id)),
+      ])
+
+      const extraFields = _getProductExtraFields({
+        product,
+        currentPrice: scrapProductPage?.currentPrice,
+        quantitySold: scrapProductPage?.quantitySold,
+      })
+
+      const ean = _getEanFromProductObj(product)
+      extraFields.ean = ean
+      extraFields.has_video = scrapProductPage.hasVideo
+      extraFields.picture_count = product.pictures.length
+      extraFields.supermarket_eligible = product.tags.includes(
+        "supermarket_eligible"
+      )
+
+      const categoryId = product?.category_id ?? null
+      let category = null
+
+      return {
+        category,
+        productId,
+        ...product,
+        ...extraFields,
+      }
+    })
+  )
+
+  // Return the final list of products with all the necessary information
+  return productsWithSellerAndMetadata
+}
+
+const getFullProduct = async ({
   userId,
   productId,
 }: FetchProductArgument): Promise<ProductApiResponse> => {
@@ -197,6 +256,9 @@ const getProductInCorrectOrder = (
 }
 
 const _webScrapeProductMetadata = async (productId: string): Promise<any> => {
+  if (!productId.includes("-")) {
+    throw new Error("Invalid product id")
+  }
   const { result: productPrice } = await webScrapeMlPage(
     webScrapeProductPriceAndQuantitySoldAndHasVideoPredicate,
     {
@@ -211,5 +273,6 @@ export {
   getProducts,
   getProductInCorrectOrder,
   calculateCommissions,
-  getProductComplete,
+  getFullProduct,
+  getFullProducts,
 }

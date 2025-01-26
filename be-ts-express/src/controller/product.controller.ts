@@ -5,7 +5,7 @@ import {
 } from "../models/extends/params/request-custom.model"
 
 import { getProductVisitsSummary } from "../services/ml/products-visits.service"
-import { getProductComplete } from "../services/ml/products.service"
+import { getFullProduct } from "../services/ml/products.service"
 
 const product = async (
   req: RequestExtended,
@@ -15,7 +15,7 @@ const product = async (
   const productId = req.query?.productId?.toString()
   const userId = req.query?.userId?.toString() ?? "1231084821"
 
-  const productInfo = await getProductComplete({
+  const productInfo = await getFullProduct({
     productId,
     userId,
   })
